@@ -86,6 +86,7 @@ import {
 import { GoogleAdBanner } from "./GoogleAdBanner";
 import { MarketplaceComparator } from "./MarketplaceComparator";
 import { SellerFaqAccordion } from "./SellerFaqAccordion";
+import MarketplaceSeoContent from "./MarketplaceSeoContent";
 import { AFFILIATE_CONFIG } from "@/lib/affiliates";
 import {
   SignInButton,
@@ -3985,7 +3986,9 @@ export default function CalculatorDashboard({
         />
 
         {/* Dedicated Page SEO Content or Custom Children */}
-        {children}
+        {children ? children : (activeStore !== "hub" && (
+          <MarketplaceSeoContent store={activeStore} />
+        ))}
       </main>
 
       {/* Pro Upgrade Modal ($5/mo or $50/yr) */}
