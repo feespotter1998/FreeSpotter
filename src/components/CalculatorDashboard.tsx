@@ -735,7 +735,7 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
             <Link
               key={`${store.name}-${idx}`}
               href={STORE_URLS[store.id] || "/"}
-              onClick={() => onSelectStore(store.id)}
+              prefetch={true}
               className={`relative overflow-hidden rounded-3xl border transition-all duration-300 flex flex-col justify-between bg-gradient-to-br ${store.accentBg} ${store.accentBorder} shadow-xl hover:shadow-2xl hover:-translate-y-1 cursor-pointer group`}
             >
               {cardInner}
@@ -3621,28 +3621,15 @@ export default function CalculatorDashboard({
   const [isPro, setIsPro] = useState<boolean>(true);
   const [isProModalOpen, setIsProModalOpen] = useState<boolean>(false);
 
-  // Sync with localStorage for seamless navigation & pro status
+  // Keep activeStore in sync with forceStore and initialStore props
   useEffect(() => {
-    if (forceStore) {
-      setActiveStore(forceStore);
-      return;
-    }
-
-    const savedStore = localStorage.getItem("feespotter_active_store") as StoreId;
-    if (savedStore && ["etsy", "tiktok", "amazon", "ebay", "shopify"].includes(savedStore)) {
-      setActiveStore(savedStore);
-    }
-  }, [forceStore]);
+    setActiveStore(forceStore || initialStore);
+  }, [forceStore, initialStore]);
 
   const handleSelectStore = (store: StoreId) => {
     setActiveStore(store);
     setActiveSubTab("calculator");
     setIsStoreMenuOpen(false);
-    if (store !== "hub") {
-      localStorage.setItem("feespotter_active_store", store);
-    } else {
-      localStorage.removeItem("feespotter_active_store");
-    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -3712,18 +3699,20 @@ export default function CalculatorDashboard({
                     <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
                       Switch Marketplace
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleSelectStore("hub")}
+                    <Link
+                      href="/"
+                      prefetch={true}
+                      onClick={() => setIsStoreMenuOpen(false)}
                       className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors cursor-pointer text-left"
                     >
                       <Layers className="w-4 h-4 text-emerald-400" />
                       <span>All Marketplaces Hub</span>
-                    </button>
+                    </Link>
                     <div className="h-px bg-zinc-800/80 my-1" />
-                    <button
-                      type="button"
-                      onClick={() => handleSelectStore("etsy")}
+                    <Link
+                      href="/etsy-fee-calculator"
+                      prefetch={true}
+                      onClick={() => setIsStoreMenuOpen(false)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer text-left ${
                         activeStore === "etsy"
                           ? "bg-orange-950/60 text-orange-300 border border-orange-800/60"
@@ -3732,10 +3721,11 @@ export default function CalculatorDashboard({
                     >
                       <ShoppingBag className="w-4 h-4 text-orange-400" />
                       <span>Etsy Seller Suite</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSelectStore("tiktok")}
+                    </Link>
+                    <Link
+                      href="/tiktok-shop-fee-calculator"
+                      prefetch={true}
+                      onClick={() => setIsStoreMenuOpen(false)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer text-left ${
                         activeStore === "tiktok"
                           ? "bg-cyan-950/60 text-cyan-300 border border-cyan-800/60"
@@ -3744,10 +3734,11 @@ export default function CalculatorDashboard({
                     >
                       <Store className="w-4 h-4 text-cyan-400" />
                       <span>TikTok Shop Suite</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSelectStore("amazon")}
+                    </Link>
+                    <Link
+                      href="/amazon-fba-fee-calculator"
+                      prefetch={true}
+                      onClick={() => setIsStoreMenuOpen(false)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer text-left ${
                         activeStore === "amazon"
                           ? "bg-amber-950/60 text-amber-300 border border-amber-800/60"
@@ -3756,10 +3747,11 @@ export default function CalculatorDashboard({
                     >
                       <Package className="w-4 h-4 text-amber-400" />
                       <span>Amazon FBA &amp; FBM Suite</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSelectStore("ebay")}
+                    </Link>
+                    <Link
+                      href="/ebay-fee-calculator"
+                      prefetch={true}
+                      onClick={() => setIsStoreMenuOpen(false)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer text-left ${
                         activeStore === "ebay"
                           ? "bg-blue-950/60 text-blue-300 border border-blue-800/60"
@@ -3768,10 +3760,11 @@ export default function CalculatorDashboard({
                     >
                       <Tag className="w-4 h-4 text-blue-400" />
                       <span>eBay Seller Suite</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSelectStore("shopify")}
+                    </Link>
+                    <Link
+                      href="/shopify-fee-calculator"
+                      prefetch={true}
+                      onClick={() => setIsStoreMenuOpen(false)}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer text-left ${
                         activeStore === "shopify"
                           ? "bg-emerald-950/60 text-emerald-300 border border-emerald-800/60"
@@ -3780,7 +3773,7 @@ export default function CalculatorDashboard({
                     >
                       <Layers className="w-4 h-4 text-emerald-400" />
                       <span>Shopify DTC Suite</span>
-                    </button>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -3849,7 +3842,7 @@ export default function CalculatorDashboard({
               <div className="flex items-center gap-3">
                 <Link
                   href="/"
-                  onClick={() => handleSelectStore("hub")}
+                  prefetch={true}
                   className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
                   title="Back to All Marketplaces"
                 >
