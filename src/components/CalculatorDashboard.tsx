@@ -146,12 +146,12 @@ const STORE_CONFIGS: StoreOption[] = [
     icon: <Store className="w-5 h-5 text-cyan-400" />,
     accentBorder: "border-cyan-500/30 hover:border-cyan-500/70",
     accentBg: "from-cyan-950/20 via-zinc-900/60 to-zinc-950",
-    description: "TikTok commission tiers, flat $0.30/order, creator affiliate commission, sample buffer, and exact Break-Even ROAS solver for TikTok Ads.",
+    description: "TikTok 6.0% commission tier, creator affiliate commission, sample buffer, 20% return fee cap, and exact Break-Even ROAS solver for TikTok Ads.",
     keyFees: [
-      "2026 Commission Split",
-      "Flat $0.30/Order Fee",
-      "Break-Even ROAS Solver",
+      "6.0% Unified Commission",
       "Creator Affiliate Split",
+      "Break-Even ROAS Solver",
+      "20% Return Cap ($5 max)",
       "Monthly Volume Projections",
       "Batch CSV Audit",
     ],
@@ -181,15 +181,15 @@ const STORE_CONFIGS: StoreOption[] = [
     id: "ebay",
     name: "eBay Seller Suite",
     shortName: "eBay",
-    badge: "13.25% FVF + Ads",
+    badge: "13.60% FVF + Ads",
     badgeColor: "bg-blue-950 text-blue-400 border-blue-800/60",
     icon: <Tag className="w-5 h-5 text-blue-400" />,
     accentBorder: "border-blue-500/30 hover:border-blue-500/70",
     accentBg: "from-blue-950/20 via-zinc-900/60 to-zinc-950",
-    description: "13.25% category Final Value Fees, $0.30 fixed per order, Promoted Listings Standard ad rates, and store subscription tiers.",
+    description: "13.60% category Final Value Fees, tiered $0.30 / $0.40 per-order fee, Promoted Listings Standard ad rates, and store subscription tiers.",
     keyFees: [
-      "13.25% Final Value Fee",
-      "$0.30 Fixed Order Fee",
+      "13.60% Final Value Fee",
+      "$0.30 / $0.40 Order Fee",
       "Promoted Listings Standard",
       "Store Tier Subscriptions",
       "Return Dispute Clawback",
@@ -978,8 +978,8 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
                     {rate === 0
                       ? "Organic"
                       : rate === 0.12
-                      ? "Under $10k"
-                      : "Mandatory"}
+                      ? "Over $10k (Mandatory)"
+                      : "Under $10k (Optional)"}
                   </div>
                 </button>
               ))}
@@ -1355,7 +1355,7 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
               {
                 label: "Base Referral Fee (6%)",
                 value: result.referralFee,
-                note: "6.0% platform fee",
+                note: "6.0% fee (covers transaction processing)",
               },
               {
                 label: `Creator Affiliate (${(inputs.affiliateCommissionRate * 100).toFixed(0)}%)`,
@@ -1363,9 +1363,9 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
                 note: "Influencer commission",
               },
               {
-                label: "Payment Processing (2.9% + $0.30)",
-                value: result.paymentProcessingFee,
-                note: "Standard processing",
+                label: "Payment Processing",
+                value: 0,
+                note: "Included in 6% referral fee",
               },
               { label: "Ad Spend / CAC", value: result.adSpend, note: "Paid customer acquisition" },
               {
@@ -1663,12 +1663,14 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
                 {(inputs.referralFeeRate * 100).toFixed(0)}%
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
               {[
                 { label: "15% Standard", rate: 0.15, note: "Home/Beauty" },
-                { label: "8% Electronics", rate: 0.08, note: "Under $100" },
-                { label: "17% Apparel", rate: 0.17, note: "Clothing" },
-                { label: "12% Auto/Tools", rate: 0.12, note: "Industrial" },
+                { label: "8% Electronics", rate: 0.08, note: "Devices" },
+                { label: "17% Apparel (> $20)", rate: 0.17, note: "Premium" },
+                { label: "10% Apparel ($15-$20)", rate: 0.10, note: "Mid-Price" },
+                { label: "5% Apparel (< $15)", rate: 0.05, note: "Low-Price" },
+                { label: "12% Tools/Auto", rate: 0.12, note: "Industrial" },
               ].map((cat) => (
                 <button
                   key={cat.label}
@@ -2206,15 +2208,15 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
                 Final Value Fee (FVF) Category
               </label>
               <span className="text-[11px] font-bold text-blue-400">
-                {(inputs.finalValueFeeRate * 100).toFixed(2)}% + 30¢
+                {(inputs.finalValueFeeRate * 100).toFixed(2)}% + ${result.orderPerSaleFee.toFixed(2)}
               </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { label: "13.25% Standard", rate: 0.1325, note: "Most Items" },
-                { label: "9.35% Guitars", rate: 0.0935, note: "Instruments" },
+                { label: "13.60% Standard", rate: 0.136, note: "Most Items" },
+                { label: "6.70% Guitars", rate: 0.067, note: "Instruments" },
                 { label: "15.0% Jewelry", rate: 0.15, note: "Watches" },
-                { label: "12.35% Media", rate: 0.1235, note: "Books/Movies" },
+                { label: "15.3% Media", rate: 0.153, note: "Books/Movies" },
               ].map((cat) => (
                 <button
                   key={cat.label}
@@ -2371,9 +2373,9 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
                 note: "Applied to total sale (item + shipping)",
               },
               {
-                label: "Order Per-Sale Fee",
+                label: `Order Per-Sale Fee ($${result.orderPerSaleFee.toFixed(2)})`,
                 value: result.orderPerSaleFee,
-                note: "Fixed $0.30 per completed order",
+                note: result.grossRevenue > 10 ? "$0.40 (orders > $10)" : "$0.30 (orders ≤ $10)",
               },
               ...(result.promotedListingFee > 0
                 ? [
@@ -2665,7 +2667,7 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
               </div>
             </div>
             <span className="text-xs font-bold text-amber-400">
-              {inputs.planTier === "advanced" ? "+0.5%" : inputs.planTier === "shopify" ? "+1.0%" : "+2.0%"}
+              {inputs.planTier === "advanced" ? "+0.6%" : inputs.planTier === "shopify" ? "+1.0%" : "+2.0%"}
             </span>
           </label>
 

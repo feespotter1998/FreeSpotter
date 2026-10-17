@@ -137,9 +137,9 @@ const FAQS_BY_PLATFORM: Record<
   ],
   ebay: [
     {
-      question: "Does eBay really charge the 13.25% Final Value Fee on shipping and sales tax?",
+      question: "Does eBay really charge the 13.60% Final Value Fee on shipping and sales tax?",
       answer:
-        "Yes. eBay charges the category Final Value Fee (typically 13.25%) on the total amount of the sale—including the item price, shipping charged to the buyer, and state sales tax collected. This is eBay's most infamous fee shock for new sellers. For example, if you sell an item for $20 with $10 shipping and the buyer pays $2.50 in sales tax, eBay assesses the 13.25% fee on the full $32.50 order total ($4.31 fee) plus the $0.30 per-order fee.",
+        "Yes. eBay charges the category Final Value Fee (standard 13.60% for non-store sellers) on the total amount of the sale—including the item price, shipping charged to the buyer, and state sales tax collected. This is eBay's most infamous fee shock for new sellers. For example, if you sell an item for $20 with $10 shipping and the buyer pays $2.50 in sales tax, eBay assesses the 13.60% fee on the full $32.50 order total ($4.42 fee) plus the fixed per-order fee ($0.40 on orders over $10, or $0.30 on orders $10 and under).",
       tag: "Tax & Shipping FVF",
       tagColor: "bg-blue-950 text-blue-400 border-blue-800/60",
     },
@@ -153,7 +153,7 @@ const FAQS_BY_PLATFORM: Record<
     {
       question: "What happens to eBay fees when a buyer returns an item?",
       answer:
-        "If you issue a full refund to a buyer, eBay credits back your 13.25% Final Value Fee, BUT eBay retains the fixed $0.30 per-order fee. Furthermore, if you offer free returns or the buyer opens an 'Item Not as Described' (INAD) claim, you must pay for both the original outbound postage and the return label postage, plus absorb any packaging or restocking damage.",
+        "If you issue a full refund to a buyer, eBay credits back your percentage Final Value Fee, BUT eBay retains the fixed per-order fee ($0.30 or $0.40). Furthermore, if you offer free returns or the buyer opens an 'Item Not as Described' (INAD) claim, you must pay for both the original outbound postage and the return label postage, plus absorb any packaging or restocking damage.",
       tag: "Returns & Disputes",
       tagColor: "bg-blue-950 text-blue-400 border-blue-800/60",
     },
@@ -183,7 +183,7 @@ const FAQS_BY_PLATFORM: Record<
     {
       question: "What is the 3rd-Party Payment Gateway Surcharge and how do I avoid it?",
       answer:
-        "If you use an external payment gateway like PayPal Express, Stripe, or Authorize.net instead of Shopify Payments, Shopify penalizes you with an additional transaction surcharge: +2.0% on Basic ($39/mo), +1.0% on Shopify ($105/mo), and +0.5% on Advanced ($399/mo). To avoid this extra fee, enable Shopify Payments as your primary processor.",
+        "If you use an external payment gateway like PayPal Express, Stripe, or Authorize.net instead of Shopify Payments, Shopify penalizes you with an additional transaction surcharge: +2.0% on Basic ($39/mo), +1.0% on Shopify ($105/mo), and +0.6% on Advanced ($399/mo). To avoid this extra fee, enable Shopify Payments as your primary processor.",
       tag: "Gateway Surcharge",
       tagColor: "bg-emerald-950 text-emerald-400 border-emerald-800/60",
     },

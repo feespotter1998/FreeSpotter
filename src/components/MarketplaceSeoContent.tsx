@@ -64,7 +64,7 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         "Listing Renewal: $0.20 flat per unit sold",
         "Transaction Fee: 6.5% × (Item Price + Shipping Charged)",
         "Payment Processing: 3.0% × (Total Charged) + $0.25",
-        "Offsite Ads (if applicable): 12% or 15% of Item Price (Max $100 cap)",
+        "Offsite Ads (if applicable): 12% or 15% of (Item Price + Shipping Charged) (Max $100 cap)",
         "Net Profit = Item Price + Shipping Charged − Listing Fee − Transaction Fee − Processing Fee − Offsite Ads − COGS − Actual Shipping Cost − Packaging",
       ],
     },
@@ -134,16 +134,16 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
     explanation: {
       heading: "Understanding TikTok Shop's 2026 Fee Structure",
       paragraphs: [
-        "TikTok Shop has rapidly transitioned from an aggressive launch subsidy model to a standard e-commerce marketplace fee structure. In 2026, TikTok charges a standard 6.0% referral fee per sale across most physical merchandise categories, plus standard payment processing (2.9% + $0.30).",
+        "TikTok Shop has transitioned from an introductory subsidy model to a mature e-commerce marketplace structure. In 2026, TikTok charges a standard 6.0% base referral fee per sale across most physical merchandise categories in the US, which encompasses all marketplace commission and payment processing (with fine jewelry at 5.0% and eligible new sellers at a promotional 3.0%).",
         "However, the true financial driver on TikTok Shop is creator affiliate commissions and paid video ad spend. Most successful viral products pay 10% to 20% commission to TikTok creators who create shoppable video content. Sellers also run Spark Ads or Shop Ads directly to video listings.",
         "Without calculating Break-Even ROAS, sellers frequently achieve high GMV numbers while losing money on every single package shipped due to return clawbacks and ad spend fatigue.",
       ],
       formulaSummary: [
-        "Base Marketplace Commission: 6.0% × Selling Price",
-        "Payment Processing: 2.9% × Selling Price + $0.30",
+        "Base Marketplace Commission: 6.0% × Selling Price (inclusive of transaction processing)",
         "Creator Affiliate Commission: Seller-configured % (e.g. 15%) × Selling Price",
         "Ad Spend / CAC: Fixed dollar spend per order",
-        "Break-Even ROAS = Selling Price ÷ (Selling Price − COGS − Shipping − Packaging − TikTok Commission − Processing Fee − Creator Affiliate Fee)",
+        "Refund Administration Fee: 20% of referral fee upon customer returns (capped at $5/SKU)",
+        "Break-Even ROAS = Selling Price ÷ (Selling Price − COGS − Shipping − Packaging − TikTok Commission − Creator Affiliate Fee)",
       ],
     },
     howToGuide: {
@@ -152,7 +152,7 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         {
           number: "1",
           title: "Determine TikTok Baseline Fees",
-          detail: "Calculate the 6.0% marketplace referral fee plus 2.9% + $0.30 payment processing.",
+          detail: "Calculate the 6.0% marketplace referral fee (which covers transaction processing).",
         },
         {
           number: "2",
@@ -175,7 +175,7 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
       {
         question: "What is the standard TikTok Shop referral fee in 2026?",
         answer:
-          "TikTok Shop charges a standard 6.0% base marketplace referral fee on qualified transactions, plus 2.9% + $0.30 payment processing fee.",
+          "TikTok Shop charges a standard 6.0% base marketplace referral fee on qualified transactions, which encompasses all platform and payment processing (fine jewelry is 5.0%, and new seller introductory rates sit at 3.0%).",
       },
       {
         question: "What is Break-Even ROAS and why does it matter on TikTok Shop?",
@@ -290,13 +290,13 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
     explanation: {
       heading: "Mastering eBay's Final Value Fee System",
       paragraphs: [
-        "eBay charges a Final Value Fee (FVF) that consists of a category-specific percentage plus a $0.30 fixed fee per order (or $0.40 on orders under $10). For standard sellers without an eBay Store, the baseline rate is 13.25% on the total amount of the sale, which includes the item price, shipping charged, and sales tax collected by eBay.",
-        "Subscribing to an eBay Store (Basic, Premium, Anchor) reduces Final Value Fees across many categories (often from 13.25% down to 9.0% or 12.0%) and provides monthly insertion fee credits.",
+        "eBay charges a Final Value Fee (FVF) that consists of a category-specific percentage plus a fixed fee per order ($0.30 on orders $10 and under, or $0.40 on orders over $10). For standard sellers without an eBay Store, the baseline rate is 13.60% on the total amount of the sale, which includes the item price, shipping charged, and sales tax collected by eBay.",
+        "Subscribing to an eBay Store (Basic, Premium, Anchor) reduces Final Value Fees across many categories (often from 13.60% down to 9.0% or 12.0%) and provides monthly insertion fee credits.",
         "Advertising is dominated by Promoted Listings Standard, where sellers set an ad rate percentage (e.g. 5% to 12%) charged only when a buyer purchases via a sponsored click within a 30-day window.",
       ],
       formulaSummary: [
-        "Final Value Fee %: 13.25% standard (reduced with Store subscription)",
-        "Fixed Order Fee: $0.30 per transaction (or $0.40 under $10)",
+        "Final Value Fee %: 13.60% standard (reduced with Store subscription)",
+        "Fixed Order Fee: $0.30 per transaction ($0.40 if total sale exceeds $10)",
         "Promoted Listings Standard: Configured % × Final Sale Price",
         "Insertion Fees: Free up to monthly limit, then $0.35/listing",
         "Net Profit = Item Price + Shipping Charged − Final Value Fee − Promoted Listings Fee − COGS − Actual Shipping Cost",
@@ -308,7 +308,7 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         {
           number: "1",
           title: "Calculate Total Transaction Amount",
-          detail: "Remember that eBay assesses the 13.25% fee on item price + shipping charged + estimated state sales tax.",
+          detail: "Remember that eBay assesses the 13.60% fee on item price + shipping charged + estimated state sales tax.",
         },
         {
           number: "2",
@@ -331,7 +331,7 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
       {
         question: "What is eBay's standard Final Value Fee in 2026?",
         answer:
-          "The standard eBay Final Value Fee for sellers without an eBay Store subscription is 13.25% of the total amount of the sale (item price + shipping + sales tax), plus $0.30 per order.",
+          "The standard eBay Final Value Fee for sellers without an eBay Store subscription is 13.60% of the total amount of the sale (item price + shipping + sales tax), plus a fixed per-order fee ($0.30 for orders $10 and under, or $0.40 for orders over $10).",
       },
       {
         question: "Does eBay charge fees on sales tax?",
@@ -346,12 +346,12 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
       {
         question: "Is an eBay Store subscription worth it to save on fees?",
         answer:
-          "Generally, if you generate over $2,500 to $3,000 per month in gross sales, the 1.25% to 4% fee reduction offered by a Basic Store ($21.95/mo billed annually) more than pays for the monthly subscription fee.",
+          "Generally, if you generate over $2,500 to $3,000 per month in gross sales, the fee reduction offered by a Basic Store ($21.95/mo billed annually) more than pays for the monthly subscription fee.",
       },
       {
         question: "How does FeeSpotter calculate eBay net profit?",
         answer:
-          "FeeSpotter dynamically models the 13.25% rate, store tier discounts, Promoted Listings ad rate, and shipping margins in real time with 100% deterministic arithmetic.",
+          "FeeSpotter dynamically models the 13.60% rate, store tier discounts, Promoted Listings ad rate, and shipping margins in real time with 100% deterministic arithmetic.",
       },
     ],
   },

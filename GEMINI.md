@@ -21,11 +21,11 @@ TrueMargin is a high-speed, ad-free SaaS calculator and catalog auditor for Etsy
   - Listing fee: $0.20 per item
   - Transaction fee: 6.5% of (Item Selling Price + Shipping Charged)
   - Payment processing fee: 3.0% of (Item Selling Price + Shipping Charged) + $0.25
-  - Offsite ads fee: 0%, 12%, or 15% of Item Selling Price (capped strictly at $100 per transaction)
+  - Offsite ads fee: 0%, 12%, or 15% of (Item Selling Price + Shipping Charged) (capped strictly at $100 per transaction)
 - **TikTok Shop Fee Stack:**
   - Base referral fee: 6.0% of Selling Price
   - Creator affiliate commission: seller-configured % of Selling Price
-  - Payment processing fee: 2.9% of Selling Price + $0.30
+  - Payment processing fee: Unified in 6.0% referral fee ($0 separate in US TikTok Shop)
   - Ad spend / CAC: flat dollar amount per sale
   - Return / damage buffer: % of Selling Price lost to returns
 - **Reverse Solver:**

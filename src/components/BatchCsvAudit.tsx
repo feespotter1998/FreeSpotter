@@ -233,7 +233,7 @@ export function BatchCsvAudit({
   const [tiktokReturnRate, setTiktokReturnRate] = useState<number>(0.05);
   const [amazonReferralRate, setAmazonReferralRate] = useState<number>(0.15);
   const [amazonFbaFee, setAmazonFbaFee] = useState<number>(4.75);
-  const [ebayFvfRate, setEbayFvfRate] = useState<number>(0.1325);
+  const [ebayFvfRate, setEbayFvfRate] = useState<number>(0.136);
   const [ebayPromotedRate, setEbayPromotedRate] = useState<number>(0.03);
   const [shopifyPlanTier, setShopifyPlanTier] = useState<"basic" | "shopify" | "advanced">("basic");
   const [shopifyAdSpend, setShopifyAdSpend] = useState<number>(10);
@@ -1284,9 +1284,10 @@ export function BatchCsvAudit({
                   }}
                   className="bg-zinc-950 text-zinc-200 border border-zinc-800 rounded-xl px-2 py-1.5 text-xs focus:outline-none cursor-pointer"
                 >
-                  <option value={0.1325}>13.25% (Standard Most Categories)</option>
-                  <option value={0.0935}>9.35% (Guitars & Musical Instruments)</option>
+                  <option value={0.136}>13.60% (Standard Most Categories)</option>
+                  <option value={0.067}>6.70% (Guitars & Musical Instruments)</option>
                   <option value={0.15}>15.0% (Jewelry & Watches)</option>
+                  <option value={0.153}>15.30% (Books, Movies & Music)</option>
                 </select>
               </div>
               <div className="flex items-center gap-1.5">
@@ -1475,7 +1476,9 @@ export function BatchCsvAudit({
                 >
                   <option value={0.15}>15% (Standard)</option>
                   <option value={0.08}>8% (Electronics)</option>
-                  <option value={0.17}>17% (Apparel)</option>
+                  <option value={0.17}>17% (Apparel &gt; $20)</option>
+                  <option value={0.10}>10% (Apparel $15–$20)</option>
+                  <option value={0.05}>5% (Apparel &lt; $15)</option>
                   <option value={0.12}>12% (Automotive)</option>
                 </select>
               </div>

@@ -431,8 +431,8 @@ export function calculateEtsyProfit(inputs: EtsyInputs): EtsyResult {
     (sellingPrice + shippingCharged) * 0.03 + 0.25
   );
 
-  // Offsite ads: percentage of item price only, capped at $100
-  const rawOffsiteAds = sellingPrice * offsiteAdsRate;
+  // Offsite ads: percentage of total order amount (Item Price + Shipping Charged), capped at $100
+  const rawOffsiteAds = (sellingPrice + shippingCharged) * offsiteAdsRate;
   const offsiteAdsFee = round2(Math.min(rawOffsiteAds, 100));
 
   const totalFees = round2(
@@ -563,9 +563,9 @@ function buildEtsyWaterfall(data: {
 
 /**
  * TikTok Shop Hidden Fee Stack:
- * 1. Base Referral Fee:       6.0% of selling price
+ * 1. Base Referral Fee:       6.0% of selling price (unified marketplace commission & payment processing)
  * 2. Creator Affiliate:       custom % of selling price
- * 3. Payment Processing:      2.9% of selling price + $0.30
+ * 3. Payment Processing:      Unified in 6.0% referral fee ($0 separate in US)
  * 4. Ad Spend / CAC:          flat $ per sale
  * 5. Return/Damage Buffer:    % of selling price lost to returns
  */
@@ -620,7 +620,8 @@ export function calculateTikTokProfit(inputs: TikTokInputs): TikTokResult {
     sellingPrice * affiliateCommissionRate
   );
 
-  const paymentProcessingFee = round2(sellingPrice * 0.029 + 0.3);
+  // In native TikTok Shop US, transaction & payment processing is bundled into the 6.0% referral fee
+  const paymentProcessingFee = 0;
 
   const adSpend = round2(adSpendPerSale);
 
@@ -688,8 +689,9 @@ export function calculateTikTokProfit(inputs: TikTokInputs): TikTokResult {
   const monthlyTotalFees = round2(totalFees * monthlyVolume);
   const monthlyTotalCosts = round2(totalCosts * monthlyVolume);
 
+  // TikTok retains a 20% Refund Admin Fee on the referral fee upon customer return, capped at $5.00 per SKU
   const returnClawbackLoss = round2(
-    referralFee * 0.2 + shippingCost + packagingCost + cogs * 0.15
+    Math.min(referralFee * 0.2, 5.0) + shippingCost + packagingCost + cogs * 0.15
   );
 
   return {
@@ -848,13 +850,15 @@ export function calculateAmazonProfit(inputs: AmazonInputs): AmazonResult {
     };
   }
 
-  // Fee calculations
-  const referralFee = round2(grossRevenue * referralFeeRate);
+  // Fee calculations: Amazon charges category % with a standard $0.30 minimum referral fee floor
+  const rawReferral = grossRevenue * referralFeeRate;
+  const referralFee = grossRevenue > 0 ? round2(Math.max(rawReferral, 0.30)) : 0;
   const fulfillmentFee = isFba ? round2(fbaFee) : 0;
   const storageFee = isFba ? round2(storageAndInboundFee) : 0;
   const q4StorageSurgeFee = isFba && inputs.isQ4StorageSurge ? 0.85 : 0;
   const lowInventoryFee = isFba && inputs.hasLowInventoryFee ? 0.45 : 0;
-  const returnsProcessingFee = inputs.isHighReturnCategory ? 1.85 : 0;
+  const fullReturnProcessingFee = inputs.isHighReturnCategory ? 1.85 : 0;
+  const returnsProcessingFee = round2(fullReturnProcessingFee * returnRate);
   const adSpend = round2(adSpendPerSale);
   const returnLoss = round2(grossRevenue * returnRate);
 
@@ -924,7 +928,7 @@ export function calculateAmazonProfit(inputs: AmazonInputs): AmazonResult {
   const returnClawbackLoss = round2(
     Math.min(referralFee * 0.2, 5.0) +
       (isFba ? fulfillmentFee : actualShippingCost) +
-      returnsProcessingFee +
+      fullReturnProcessingFee +
       packagingCost +
       cogs * 0.25
   );
@@ -1084,8 +1088,8 @@ function buildAmazonWaterfall(data: {
 
 /**
  * eBay Marketplace Fee Stack:
- * 1. Final Value Fee (FVF):    Category % (standard 13.25%) applied to total order amount (item + shipping)
- * 2. Per-Order Fee:            $0.30 fixed fee per completed order
+ * 1. Final Value Fee (FVF):    Category % (standard 13.60%, 13.25% historical) applied to total order amount (item + shipping)
+ * 2. Per-Order Fee:            $0.30 for orders <= $10.00, $0.40 for orders > $10.00
  * 3. Promoted Listings:        Ad rate % (e.g. 2% - 10%) on total sale when clicked
  * 4. Insertion Fee:            $0.35 per listing beyond 250 free monthly allocation
  * 5. Store Subscription:       Amortized monthly store fee ($0, $4.95, $21.95, $59.95)
@@ -1099,7 +1103,7 @@ export function calculateEbayProfit(inputs: EbayInputs): EbayResult {
     actualShippingCost,
     packagingCost,
     miscCost = 0,
-    finalValueFeeRate = 0.1325,
+    finalValueFeeRate = 0.136,
     promotedListingRate = 0,
     storeSubscriptionMonthlyCost = 0,
     insertionFee = 0,
@@ -1140,7 +1144,8 @@ export function calculateEbayProfit(inputs: EbayInputs): EbayResult {
   }
 
   const finalValueFee = round2(grossRevenue * finalValueFeeRate);
-  const orderPerSaleFee = 0.3;
+  // eBay official per-order fee: $0.30 for orders <= $10.00, $0.40 for orders > $10.00
+  const orderPerSaleFee = grossRevenue > 10.0 ? 0.40 : 0.30;
   const promotedListingFee = round2(grossRevenue * promotedListingRate);
   const listingInsertionFee = round2(insertionFee);
 
@@ -1201,14 +1206,15 @@ export function calculateEbayProfit(inputs: EbayInputs): EbayResult {
   const monthlyTotalFees = round2(totalFees * monthlyVolume);
   const monthlyTotalCosts = round2(totalCosts * monthlyVolume);
 
-  // Return clawback: eBay retains $0.30 fixed fee on refunds, seller loses outbound + return shipping + packaging + 15% COGS inspection/damage
+  // Return clawback: eBay retains per-order fee ($0.30 or $0.40) on refunds, seller loses outbound + return shipping + packaging + 15% COGS inspection/damage
   const returnClawbackLoss = round2(
-    0.3 + actualShippingCost * 2 + packagingCost + cogs * 0.15
+    orderPerSaleFee + actualShippingCost * 2 + packagingCost + cogs * 0.15
   );
 
   const waterfallSteps = buildEbayWaterfall({
     grossRevenue,
     finalValueFee,
+    finalValueFeeRate,
     orderPerSaleFee,
     promotedListingFee,
     insertionFee: listingInsertionFee,
@@ -1249,6 +1255,7 @@ export function calculateEbayProfit(inputs: EbayInputs): EbayResult {
 function buildEbayWaterfall(data: {
   grossRevenue: number;
   finalValueFee: number;
+  finalValueFeeRate: number;
   orderPerSaleFee: number;
   promotedListingFee: number;
   insertionFee: number;
@@ -1271,8 +1278,16 @@ function buildEbayWaterfall(data: {
   ];
 
   const deductions: { name: string; value: number; type: "fee" | "cost" }[] = [
-    { name: "Final Value Fee (13.25%)", value: data.finalValueFee, type: "fee" },
-    { name: "Per-Order Fee ($0.30)", value: data.orderPerSaleFee, type: "fee" },
+    {
+      name: `Final Value Fee (${(data.finalValueFeeRate * 100).toFixed(1)}%)`,
+      value: data.finalValueFee,
+      type: "fee",
+    },
+    {
+      name: `Per-Order Fee ($${data.orderPerSaleFee.toFixed(2)})`,
+      value: data.orderPerSaleFee,
+      type: "fee",
+    },
   ];
 
   if (data.promotedListingFee > 0) {
@@ -1343,8 +1358,8 @@ function buildEbayWaterfall(data: {
 /**
  * Shopify Direct-to-Consumer (DTC) Fee Stack:
  * 1. Payment Processing (Shopify Payments): Tiered rate (Basic 2.9% + 30¢, Shopify 2.7% + 30¢, Advanced 2.5% + 30¢)
- * 2. 3rd-Party Payment Surcharge:            Optional +2.0%, +1.0%, +0.5% if not using Shopify Payments
- * 3. Subscription Overhead per Order:        Plan monthly fee ($39, $105, $399) amortized over monthly sales volume
+ * 2. 3rd-Party Payment Surcharge:            Optional +2.0%, +1.0%, +0.6% if not using Shopify Payments
+ * 3. Subscription Overhead per Order:        Plan monthly fee ($39, $105, $399, $2300) amortized over monthly sales volume
  * 4. App Stack Monthly Tech Overhead:        Klaviyo, Loox, Recharge, PageFly amortized over volume
  * 5. Paid Advertising CAC (Meta / Google):   Cost to acquire each customer order
  * 6. Return & Chargeback Buffer:             Reserve for refunds & retained processing fees
@@ -1412,10 +1427,10 @@ export function calculateShopifyProfit(inputs: ShopifyInputs): ShopifyResult {
   } else if (planTier === "advanced") {
     processingRate = 0.025;
     planMonthlyCost = 399;
-    thirdPartyGatewayRate = 0.005;
+    thirdPartyGatewayRate = 0.006;
   } else if (planTier === "plus") {
     processingRate = 0.0215;
-    planMonthlyCost = 2000;
+    planMonthlyCost = 2300;
     thirdPartyGatewayRate = 0.002;
   }
 
@@ -1650,12 +1665,36 @@ export function solveEtsyPriceForTargetMargin(
   const fixedFees = round2(0.2 * quantity + 0.25);
   const variableCosts = cogs + actualShippingCost + packagingCost + miscCost;
 
-  // k = portion of revenue that remains after percentage-based platform fees and target margin
-  const k = 1 - 0.095 - targetMargin;
+  // kNoAds = portion of revenue that remains after 6.5% transaction + 3% payment processing and target margin
+  const kNoAds = 1 - 0.095 - targetMargin;
+  const denomUncapped = kNoAds - offsiteAdsRate;
 
-  const denominator = k - offsiteAdsRate;
+  let requiredPrice: number | null = null;
 
-  if (denominator <= 0) {
+  if (offsiteAdsRate > 0) {
+    // 1. Try uncapped branch if denominator > 0
+    if (denomUncapped > 0) {
+      const revUncapped = (fixedFees + variableCosts) / denomUncapped;
+      if (revUncapped * offsiteAdsRate <= 100) {
+        requiredPrice = revUncapped - shippingCharged;
+      }
+    }
+
+    // 2. If uncapped price doesn't hold (or exceeded $100 cap or denomUncapped <= 0), try $100 capped branch
+    if (requiredPrice === null && kNoAds > 0) {
+      const revCapped = (fixedFees + 100 + variableCosts) / kNoAds;
+      if (revCapped * offsiteAdsRate >= 100) {
+        requiredPrice = revCapped - shippingCharged;
+      }
+    }
+  } else {
+    if (kNoAds > 0) {
+      const rev = (fixedFees + variableCosts) / kNoAds;
+      requiredPrice = rev - shippingCharged;
+    }
+  }
+
+  if (requiredPrice === null || !Number.isFinite(requiredPrice)) {
     const impossibleBreakdown = calculateEtsyProfit({
       sellingPrice: 0,
       cogs,
@@ -1672,32 +1711,6 @@ export function solveEtsyPriceForTargetMargin(
       expectedMarginPercent: 0,
       breakdown: impossibleBreakdown,
     };
-  }
-
-  const numerator = fixedFees + variableCosts - k * shippingCharged;
-  let requiredPrice = numerator / denominator;
-
-  if (requiredPrice * offsiteAdsRate > 100 && offsiteAdsRate > 0) {
-    const kNoAds = 1 - 0.095 - targetMargin;
-    if (kNoAds <= 0) {
-      const impossibleBreakdown = calculateEtsyProfit({
-        sellingPrice: 0,
-        cogs,
-        shippingCharged,
-        actualShippingCost,
-        packagingCost,
-        miscCost,
-        offsiteAdsRate,
-        quantity,
-      });
-      return {
-        requiredSellingPrice: Infinity,
-        expectedProfit: 0,
-        expectedMarginPercent: 0,
-        breakdown: impossibleBreakdown,
-      };
-    }
-    requiredPrice = (fixedFees + 100 + variableCosts) / kNoAds - shippingCharged;
   }
 
   requiredPrice = Math.ceil(requiredPrice * 100) / 100;
@@ -1756,8 +1769,8 @@ export function solveTikTokPriceForTargetMargin(
   }
 
   const targetMargin = targetMarginPercent / 100;
-  const pctRate = 0.06 + 0.029 + affiliateCommissionRate + returnRate;
-  const fixedDeductions = 0.30 + adSpendPerSale + cogs + shippingCost + packagingCost + miscCost;
+  const pctRate = 0.06 + affiliateCommissionRate + returnRate;
+  const fixedDeductions = adSpendPerSale + cogs + shippingCost + packagingCost + miscCost;
   const denominator = 1 - pctRate - targetMargin;
 
   if (denominator <= 0) {
@@ -1858,7 +1871,7 @@ export function solveAmazonPriceForTargetMargin(
   const fbaFixed = isFba
     ? fbaFee + storageAndInboundFee + (isQ4StorageSurge ? 0.85 : 0) + (hasLowInventoryFee ? 0.45 : 0)
     : 0;
-  const returnsFee = isHighReturnCategory ? 1.85 : 0;
+  const returnsFee = isHighReturnCategory ? 1.85 * returnRate : 0;
   const shippingPostage = isFba ? 0 : actualShippingCost;
   const totalVariableCosts = cogs + shippingPostage + packagingCost + miscCost;
   const fixedDeductions = fbaFixed + returnsFee + adSpendPerSale + totalVariableCosts;
@@ -1895,7 +1908,7 @@ export function solveAmazonPriceForTargetMargin(
   if (requiredRevenue * referralFeeRate < 0.30) {
     const denomMin = 1 - returnRate - targetMargin;
     if (denomMin > 0) {
-      const revMin = (0.30 + fixedDeductions - fbaFixed) / denomMin;
+      const revMin = (0.30 + fixedDeductions) / denomMin;
       requiredPrice = isFba ? revMin : revMin - shippingCharged;
     }
   }
@@ -1939,7 +1952,7 @@ export function solveEbayPriceForTargetMargin(
     actualShippingCost,
     packagingCost,
     miscCost = 0,
-    finalValueFeeRate = 0.1325,
+    finalValueFeeRate = 0.136,
     promotedListingRate = 0,
     storeSubscriptionMonthlyCost = 0,
     insertionFee = 0,
@@ -1975,8 +1988,7 @@ export function solveEbayPriceForTargetMargin(
   const denominator = 1 - pctRate - targetMargin;
 
   const storeFeePerUnit = storeSubscriptionMonthlyCost > 0 ? storeSubscriptionMonthlyCost / monthlyVolume : 0;
-  const orderPerSaleFee = 0.30;
-  const fixedDeductions = orderPerSaleFee + insertionFee + storeFeePerUnit + cogs + actualShippingCost + packagingCost + miscCost;
+  const baseDeductions = insertionFee + storeFeePerUnit + cogs + actualShippingCost + packagingCost + miscCost;
 
   if (denominator <= 0) {
     const impossible = calculateEbayProfit({
@@ -2001,13 +2013,12 @@ export function solveEbayPriceForTargetMargin(
     };
   }
 
-  const requiredRevenue = fixedDeductions / denominator;
-  let requiredPrice = requiredRevenue - shippingCharged;
-
-  if (requiredRevenue <= 10.0) {
-    const fixedLow = 0.40 + insertionFee + storeFeePerUnit + cogs + actualShippingCost + packagingCost + miscCost;
-    requiredPrice = fixedLow / denominator - shippingCharged;
+  // eBay official per-order fee: $0.30 for orders <= $10.00, $0.40 for orders > $10.00
+  let requiredRevenue = (0.30 + baseDeductions) / denominator;
+  if (requiredRevenue > 10.0) {
+    requiredRevenue = (0.40 + baseDeductions) / denominator;
   }
+  let requiredPrice = requiredRevenue - shippingCharged;
 
   requiredPrice = Math.ceil(requiredPrice * 100) / 100;
   requiredPrice = Math.max(requiredPrice, 0.01);
@@ -2089,10 +2100,10 @@ export function solveShopifyPriceForTargetMargin(
   } else if (planTier === "advanced") {
     processingRate = 0.025;
     planMonthlyCost = 399;
-    thirdPartyGatewayRate = 0.005;
+    thirdPartyGatewayRate = 0.006;
   } else if (planTier === "plus") {
     processingRate = 0.0215;
-    planMonthlyCost = 2000;
+    planMonthlyCost = 2300;
     thirdPartyGatewayRate = 0.002;
   }
 
@@ -2275,7 +2286,7 @@ export const DEFAULT_EBAY_INPUTS: EbayInputs = {
   actualShippingCost: 0,
   packagingCost: 0,
   miscCost: 0,
-  finalValueFeeRate: 0.1325, // 13.25% standard category FVF
+  finalValueFeeRate: 0.136, // 13.60% standard category FVF
   promotedListingRate: 0, // Promoted Listings Standard
   storeSubscriptionMonthlyCost: 0,
   insertionFee: 0, // Within 250 free listings
