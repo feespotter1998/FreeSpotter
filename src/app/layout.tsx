@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FeeSpotter — Etsy, TikTok Shop, Amazon, eBay & Shopify Fee Calculator & Profit Auditor",
+  title: "FeeSpotter — Marketplace Fee & Profit Calculator 2026",
   description:
-    "Spot hidden marketplace fees and calculate your real profit on Etsy, TikTok Shop, Amazon FBA, eBay, and Shopify. Deterministic fee breakdowns, Break-Even ROAS/ACoS solvers, CSV catalog audits, and executive PDF reports.",
+    "Spot hidden marketplace fees and calculate exact net profit on Etsy, TikTok Shop, Amazon FBA, eBay, and Shopify. Reverse margin solvers, Break-Even ROAS, and batch catalog audits.",
 };
 
 const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;

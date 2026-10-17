@@ -394,6 +394,32 @@ export function calculateEtsyProfit(inputs: EtsyInputs): EtsyResult {
 
   const grossRevenue = round2(sellingPrice + shippingCharged);
 
+  if (grossRevenue === 0 && cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0) {
+    const monthlyVolume =
+      inputs.monthlyVolume && inputs.monthlyVolume > 0 ? inputs.monthlyVolume : 100;
+    return {
+      grossRevenue: 0,
+      listingFee: 0,
+      transactionFee: 0,
+      paymentProcessingFee: 0,
+      offsiteAdsFee: 0,
+      totalFees: 0,
+      totalCosts: 0,
+      netProfit: 0,
+      netMarginPercent: 0,
+      waterfallSteps: [
+        { name: "Gross Revenue", value: 0, cumulative: 0, type: "revenue" },
+        { name: "Net Profit", value: 0, cumulative: 0, type: "profit" },
+      ],
+      monthlyVolume,
+      monthlyRevenue: 0,
+      monthlyNetProfit: 0,
+      monthlyTotalFees: 0,
+      monthlyTotalCosts: 0,
+      returnClawbackLoss: 0,
+    };
+  }
+
   // Fee calculations
   const listingFee = round2(0.2 * quantity);
 
@@ -556,6 +582,36 @@ export function calculateTikTokProfit(inputs: TikTokInputs): TikTokResult {
   } = inputs;
 
   const grossRevenue = round2(sellingPrice);
+
+  if (grossRevenue === 0 && cogs === 0 && shippingCost === 0 && packagingCost === 0 && miscCost === 0 && adSpendPerSale === 0) {
+    const monthlyVolume =
+      inputs.monthlyVolume && inputs.monthlyVolume > 0 ? inputs.monthlyVolume : 250;
+    return {
+      grossRevenue: 0,
+      referralFee: 0,
+      affiliateCommission: 0,
+      paymentProcessingFee: 0,
+      adSpend: 0,
+      returnLoss: 0,
+      totalFees: 0,
+      totalCosts: 0,
+      netProfit: 0,
+      netMarginPercent: 0,
+      waterfallSteps: [
+        { name: "Gross Revenue", value: 0, cumulative: 0, type: "revenue" },
+        { name: "Net Profit", value: 0, cumulative: 0, type: "profit" },
+      ],
+      breakEvenRoas: null,
+      breakEvenRoasDisplay: "0.00x",
+      maxAllowableCac: 0,
+      monthlyVolume,
+      monthlyRevenue: 0,
+      monthlyNetProfit: 0,
+      monthlyTotalFees: 0,
+      monthlyTotalCosts: 0,
+      returnClawbackLoss: 0,
+    };
+  }
 
   // Fee calculations
   const referralFee = round2(sellingPrice * 0.06);
@@ -756,6 +812,41 @@ export function calculateAmazonProfit(inputs: AmazonInputs): AmazonResult {
 
   const isFba = fulfillmentMode === "fba";
   const grossRevenue = round2(sellingPrice + (isFba ? 0 : shippingCharged));
+
+  if (grossRevenue === 0 && cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0 && adSpendPerSale === 0) {
+    const monthlyVolume =
+      inputs.monthlyVolume && inputs.monthlyVolume > 0 ? inputs.monthlyVolume : 250;
+    return {
+      grossRevenue: 0,
+      referralFee: 0,
+      fulfillmentFee: 0,
+      storageAndInboundFee: 0,
+      q4StorageSurgeFee: 0,
+      lowInventoryFee: 0,
+      returnsProcessingFee: 0,
+      adSpend: 0,
+      returnLoss: 0,
+      totalFees: 0,
+      totalCosts: 0,
+      netProfit: 0,
+      netMarginPercent: 0,
+      waterfallSteps: [
+        { name: "Gross Revenue", value: 0, cumulative: 0, type: "revenue" },
+        { name: "Net Profit", value: 0, cumulative: 0, type: "profit" },
+      ],
+      breakEvenRoas: null,
+      breakEvenRoasDisplay: "0.00x",
+      breakEvenAcosPercent: null,
+      breakEvenAcosDisplay: "0.0%",
+      maxAllowableCac: 0,
+      monthlyVolume,
+      monthlyRevenue: 0,
+      monthlyNetProfit: 0,
+      monthlyTotalFees: 0,
+      monthlyTotalCosts: 0,
+      returnClawbackLoss: 0,
+    };
+  }
 
   // Fee calculations
   const referralFee = round2(grossRevenue * referralFeeRate);
@@ -1017,6 +1108,37 @@ export function calculateEbayProfit(inputs: EbayInputs): EbayResult {
 
   const grossRevenue = round2(sellingPrice + shippingCharged);
 
+  if (grossRevenue === 0 && cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0) {
+    const monthlyVolume =
+      inputs.monthlyVolume && inputs.monthlyVolume > 0 ? inputs.monthlyVolume : 250;
+    return {
+      grossRevenue: 0,
+      finalValueFee: 0,
+      orderPerSaleFee: 0,
+      promotedListingFee: 0,
+      insertionFee: 0,
+      storeFeePerUnit: 0,
+      returnLoss: 0,
+      totalFees: 0,
+      totalCosts: 0,
+      netProfit: 0,
+      netMarginPercent: 0,
+      waterfallSteps: [
+        { name: "Gross Revenue", value: 0, cumulative: 0, type: "revenue" },
+        { name: "Net Profit", value: 0, cumulative: 0, type: "profit" },
+      ],
+      breakEvenRoas: null,
+      breakEvenRoasDisplay: "0.00x",
+      maxAllowableCac: 0,
+      monthlyVolume,
+      monthlyRevenue: 0,
+      monthlyNetProfit: 0,
+      monthlyTotalFees: 0,
+      monthlyTotalCosts: 0,
+      returnClawbackLoss: 0,
+    };
+  }
+
   const finalValueFee = round2(grossRevenue * finalValueFeeRate);
   const orderPerSaleFee = 0.3;
   const promotedListingFee = round2(grossRevenue * promotedListingRate);
@@ -1243,6 +1365,37 @@ export function calculateShopifyProfit(inputs: ShopifyInputs): ShopifyResult {
   } = inputs;
 
   const grossRevenue = round2(sellingPrice + shippingCharged);
+
+  if (grossRevenue === 0 && cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0 && adSpendPerSale === 0) {
+    const monthlyVolume =
+      inputs.monthlyVolume && inputs.monthlyVolume > 0 ? inputs.monthlyVolume : 250;
+    return {
+      grossRevenue: 0,
+      paymentProcessingFee: 0,
+      thirdPartyGatewayFee: 0,
+      subscriptionPerUnit: 0,
+      appsPerUnit: 0,
+      adSpend: 0,
+      returnLoss: 0,
+      totalFees: 0,
+      totalCosts: 0,
+      netProfit: 0,
+      netMarginPercent: 0,
+      waterfallSteps: [
+        { name: "Gross Revenue", value: 0, cumulative: 0, type: "revenue" },
+        { name: "Net Profit", value: 0, cumulative: 0, type: "profit" },
+      ],
+      breakEvenRoas: null,
+      breakEvenRoasDisplay: "0.00x",
+      maxAllowableCac: 0,
+      monthlyVolume,
+      monthlyRevenue: 0,
+      monthlyNetProfit: 0,
+      monthlyTotalFees: 0,
+      monthlyTotalCosts: 0,
+      returnClawbackLoss: 0,
+    };
+  }
 
   const monthlyVolume =
     inputs.monthlyVolume && inputs.monthlyVolume > 0 ? inputs.monthlyVolume : 250;
@@ -1474,6 +1627,25 @@ export function solveEtsyPriceForTargetMargin(
     quantity,
   } = inputs;
 
+  if (cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0 && shippingCharged === 0) {
+    const emptyBreakdown = calculateEtsyProfit({
+      sellingPrice: 0,
+      cogs: 0,
+      shippingCharged: 0,
+      actualShippingCost: 0,
+      packagingCost: 0,
+      miscCost: 0,
+      offsiteAdsRate,
+      quantity,
+    });
+    return {
+      requiredSellingPrice: 0,
+      expectedProfit: 0,
+      expectedMarginPercent: 0,
+      breakdown: emptyBreakdown,
+    };
+  }
+
   const targetMargin = targetMarginPercent / 100;
   const fixedFees = round2(0.2 * quantity + 0.25);
   const variableCosts = cogs + actualShippingCost + packagingCost + miscCost;
@@ -1564,6 +1736,25 @@ export function solveTikTokPriceForTargetMargin(
     returnRate = 0.05,
   } = inputs;
 
+  if (cogs === 0 && shippingCost === 0 && packagingCost === 0 && miscCost === 0 && adSpendPerSale === 0) {
+    const emptyBreakdown = calculateTikTokProfit({
+      sellingPrice: 0,
+      cogs: 0,
+      shippingCost: 0,
+      packagingCost: 0,
+      miscCost: 0,
+      affiliateCommissionRate,
+      adSpendPerSale: 0,
+      returnRate,
+    });
+    return {
+      requiredSellingPrice: 0,
+      expectedProfit: 0,
+      expectedMarginPercent: 0,
+      breakdown: emptyBreakdown,
+    };
+  }
+
   const targetMargin = targetMarginPercent / 100;
   const pctRate = 0.06 + 0.029 + affiliateCommissionRate + returnRate;
   const fixedDeductions = 0.30 + adSpendPerSale + cogs + shippingCost + packagingCost + miscCost;
@@ -1631,6 +1822,32 @@ export function solveAmazonPriceForTargetMargin(
     hasLowInventoryFee = false,
     isHighReturnCategory = false,
   } = inputs;
+
+  if (cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0 && adSpendPerSale === 0) {
+    const emptyBreakdown = calculateAmazonProfit({
+      sellingPrice: 0,
+      cogs: 0,
+      fulfillmentMode,
+      referralFeeRate,
+      fbaFee,
+      storageAndInboundFee,
+      shippingCharged: 0,
+      actualShippingCost: 0,
+      packagingCost: 0,
+      miscCost: 0,
+      adSpendPerSale: 0,
+      returnRate,
+      isQ4StorageSurge,
+      hasLowInventoryFee,
+      isHighReturnCategory,
+    });
+    return {
+      requiredSellingPrice: 0,
+      expectedProfit: 0,
+      expectedMarginPercent: 0,
+      breakdown: emptyBreakdown,
+    };
+  }
 
   const isFba = fulfillmentMode === "fba";
   const targetMargin = targetMarginPercent / 100;
@@ -1730,6 +1947,29 @@ export function solveEbayPriceForTargetMargin(
     monthlyVolume = 250,
   } = inputs;
 
+  if (cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0 && shippingCharged === 0) {
+    const emptyBreakdown = calculateEbayProfit({
+      sellingPrice: 0,
+      cogs: 0,
+      shippingCharged: 0,
+      actualShippingCost: 0,
+      packagingCost: 0,
+      miscCost: 0,
+      finalValueFeeRate,
+      promotedListingRate,
+      storeSubscriptionMonthlyCost: 0,
+      insertionFee: 0,
+      returnRate,
+      monthlyVolume,
+    });
+    return {
+      requiredSellingPrice: 0,
+      expectedProfit: 0,
+      expectedMarginPercent: 0,
+      breakdown: emptyBreakdown,
+    };
+  }
+
   const targetMargin = targetMarginPercent / 100;
   const pctRate = finalValueFeeRate + promotedListingRate + returnRate;
   const denominator = 1 - pctRate - targetMargin;
@@ -1812,6 +2052,29 @@ export function solveShopifyPriceForTargetMargin(
     returnRate = 0.04,
     monthlyVolume = 250,
   } = inputs;
+
+  if (cogs === 0 && actualShippingCost === 0 && packagingCost === 0 && miscCost === 0 && shippingCharged === 0 && adSpendPerSale === 0) {
+    const emptyBreakdown = calculateShopifyProfit({
+      sellingPrice: 0,
+      cogs: 0,
+      shippingCharged: 0,
+      actualShippingCost: 0,
+      packagingCost: 0,
+      miscCost: 0,
+      planTier,
+      isThirdPartyPaymentGateway,
+      monthlyAppsCost: 0,
+      adSpendPerSale: 0,
+      returnRate,
+      monthlyVolume,
+    });
+    return {
+      requiredSellingPrice: 0,
+      expectedProfit: 0,
+      expectedMarginPercent: 0,
+      breakdown: emptyBreakdown,
+    };
+  }
 
   const targetMargin = targetMarginPercent / 100;
 
@@ -1897,11 +2160,11 @@ export function solveShopifyPriceForTargetMargin(
 // ═══════════════════════════════════════════════════════════════
 
 export const DEFAULT_ETSY_INPUTS: EtsyInputs = {
-  sellingPrice: 25,
-  cogs: 5,
-  shippingCharged: 5.99,
-  actualShippingCost: 4.5,
-  packagingCost: 1.0,
+  sellingPrice: 0,
+  cogs: 0,
+  shippingCharged: 0,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   offsiteAdsRate: 0,
   quantity: 1,
@@ -1909,23 +2172,23 @@ export const DEFAULT_ETSY_INPUTS: EtsyInputs = {
 };
 
 export const DEFAULT_TIKTOK_INPUTS: TikTokInputs = {
-  sellingPrice: 25,
-  cogs: 5,
-  shippingCost: 4.5,
-  packagingCost: 1.0,
+  sellingPrice: 0,
+  cogs: 0,
+  shippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   affiliateCommissionRate: 0.1,
-  adSpendPerSale: 3.0,
+  adSpendPerSale: 0,
   returnRate: 0.05,
   monthlyVolume: 250,
 };
 
 export const DEFAULT_REVERSE_INPUTS: ReverseCalcInputs = {
   targetMarginPercent: 30,
-  cogs: 5,
-  shippingCharged: 5.99,
-  actualShippingCost: 4.5,
-  packagingCost: 1.0,
+  cogs: 0,
+  shippingCharged: 0,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   offsiteAdsRate: 0,
   quantity: 1,
@@ -1933,9 +2196,9 @@ export const DEFAULT_REVERSE_INPUTS: ReverseCalcInputs = {
 
 export const DEFAULT_REVERSE_TIKTOK_INPUTS: ReverseTikTokInputs = {
   targetMarginPercent: 25,
-  cogs: 6,
-  shippingCost: 4.5,
-  packagingCost: 0.8,
+  cogs: 0,
+  shippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   affiliateCommissionRate: 0.1,
   adSpendPerSale: 0,
@@ -1944,25 +2207,25 @@ export const DEFAULT_REVERSE_TIKTOK_INPUTS: ReverseTikTokInputs = {
 
 export const DEFAULT_REVERSE_AMAZON_INPUTS: ReverseAmazonInputs = {
   targetMarginPercent: 25,
-  cogs: 7,
+  cogs: 0,
   fulfillmentMode: "fba",
   referralFeeRate: 0.15,
   fbaFee: 3.86,
   storageAndInboundFee: 0.35,
   shippingCharged: 0,
   actualShippingCost: 0,
-  packagingCost: 0.5,
-  miscCost: 0.5,
+  packagingCost: 0,
+  miscCost: 0,
   adSpendPerSale: 0,
   returnRate: 0.03,
 };
 
 export const DEFAULT_REVERSE_EBAY_INPUTS: ReverseEbayInputs = {
   targetMarginPercent: 25,
-  cogs: 7,
-  shippingCharged: 5.99,
-  actualShippingCost: 5.0,
-  packagingCost: 0.75,
+  cogs: 0,
+  shippingCharged: 0,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   finalValueFeeRate: 0.1325,
   promotedListingRate: 0.02,
@@ -1974,21 +2237,21 @@ export const DEFAULT_REVERSE_EBAY_INPUTS: ReverseEbayInputs = {
 
 export const DEFAULT_REVERSE_SHOPIFY_INPUTS: ReverseShopifyInputs = {
   targetMarginPercent: 30,
-  cogs: 10,
-  shippingCharged: 4.99,
-  actualShippingCost: 5.5,
-  packagingCost: 1.2,
+  cogs: 0,
+  shippingCharged: 0,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   planTier: "basic",
-  monthlyAppsCost: 89,
-  adSpendPerSale: 8.0,
+  monthlyAppsCost: 0,
+  adSpendPerSale: 0,
   returnRate: 0.04,
   monthlyVolume: 250,
 };
 
 export const DEFAULT_AMAZON_INPUTS: AmazonInputs = {
-  sellingPrice: 29.99,
-  cogs: 6.5,
+  sellingPrice: 0,
+  cogs: 0,
   fulfillmentMode: "fba",
   referralFeeRate: 0.15, // 15% Standard category
   fbaFee: 4.75, // Large standard 1-2 lb size tier
@@ -1997,40 +2260,40 @@ export const DEFAULT_AMAZON_INPUTS: AmazonInputs = {
   hasLowInventoryFee: false,
   isHighReturnCategory: false,
   shippingCharged: 0,
-  actualShippingCost: 5.5,
-  packagingCost: 0.75,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
-  adSpendPerSale: 3.5,
+  adSpendPerSale: 0,
   returnRate: 0.03, // 3%
   monthlyVolume: 250,
 };
 
 export const DEFAULT_EBAY_INPUTS: EbayInputs = {
-  sellingPrice: 32.0,
-  cogs: 8.0,
+  sellingPrice: 0,
+  cogs: 0,
   shippingCharged: 0,
-  actualShippingCost: 4.85,
-  packagingCost: 0.65,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   finalValueFeeRate: 0.1325, // 13.25% standard category FVF
-  promotedListingRate: 0.03, // 3% Promoted Listings Standard
-  storeSubscriptionMonthlyCost: 21.95, // Basic Store ($21.95/mo)
+  promotedListingRate: 0, // Promoted Listings Standard
+  storeSubscriptionMonthlyCost: 0,
   insertionFee: 0, // Within 250 free listings
   returnRate: 0.03, // 3%
   monthlyVolume: 250,
 };
 
 export const DEFAULT_SHOPIFY_INPUTS: ShopifyInputs = {
-  sellingPrice: 38.0,
-  cogs: 9.0,
-  shippingCharged: 4.99,
-  actualShippingCost: 5.5,
-  packagingCost: 0.85,
+  sellingPrice: 0,
+  cogs: 0,
+  shippingCharged: 0,
+  actualShippingCost: 0,
+  packagingCost: 0,
   miscCost: 0,
   planTier: "basic",
   isThirdPartyPaymentGateway: false,
-  monthlyAppsCost: 89.0, // Klaviyo, Judge.me, Loox stack
-  adSpendPerSale: 12.0, // Meta / TikTok Ads CAC
+  monthlyAppsCost: 0,
+  adSpendPerSale: 0,
   returnRate: 0.04, // 4% DTC average
   monthlyVolume: 250,
 };

@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import { DollarSign } from "lucide-react";
 import type { WaterfallStep } from "@/lib/calculations";
 
 interface WaterfallChartProps {
@@ -165,6 +166,20 @@ export function WaterfallChart({ steps }: WaterfallChartProps) {
     return (
       <div className="w-full h-64 sm:h-80 flex items-center justify-center bg-zinc-900/30 rounded-xl border border-zinc-800/40 animate-pulse">
         <span className="text-xs text-zinc-500 font-medium">Rendering Profit Waterfall...</span>
+      </div>
+    );
+  }
+
+  if (steps.every((s) => s.value === 0)) {
+    return (
+      <div className="w-full h-64 sm:h-80 flex flex-col items-center justify-center bg-zinc-950/40 rounded-xl border border-dashed border-zinc-800/80 p-6 text-center space-y-2">
+        <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 shadow-inner">
+          <DollarSign className="w-5 h-5 text-zinc-500" />
+        </div>
+        <p className="text-sm font-semibold text-zinc-300">Enter your item selling price &amp; costs</p>
+        <p className="text-xs text-zinc-500 max-w-xs">
+          The interactive waterfall chart will instantly map your revenue, deductions, marketplace cuts, and net profit.
+        </p>
       </div>
     );
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import {
   DollarSign,
   TrendingDown,
@@ -357,8 +358,18 @@ function InputField({
             <input
               type="number"
               value={Number.isInteger(value) ? value : parseFloat(value.toFixed(2))}
+              onFocus={(e) => {
+                if (e.target.value === "0") {
+                  e.target.select();
+                }
+              }}
               onChange={(e) => {
-                const parsed = parseFloat(e.target.value);
+                const val = e.target.value;
+                if (val === "" || val === "-") {
+                  onChange(0);
+                  return;
+                }
+                const parsed = parseFloat(val);
                 onChange(isNaN(parsed) ? 0 : parsed);
               }}
               min={min}
@@ -476,7 +487,11 @@ function FeeBreakdownTable({
             </div>
             <span
               className={`font-semibold tabular-nums ${
-                row.isCost ? "text-orange-400" : "text-rose-400"
+                row.value === 0
+                  ? "text-zinc-500"
+                  : row.isCost
+                  ? "text-orange-400"
+                  : "text-rose-400"
               }`}
             >
               -${row.value.toFixed(2)}
@@ -486,38 +501,56 @@ function FeeBreakdownTable({
 
         <div className="flex justify-between items-center px-4 py-3 bg-zinc-950/30 font-semibold border-t border-zinc-800">
           <span className="text-zinc-400">Total Marketplace Fees</span>
-          <span className="text-rose-400 font-bold tabular-nums">
+          <span className={`font-bold tabular-nums ${totalFees === 0 ? "text-zinc-500" : "text-rose-400"}`}>
             -${totalFees.toFixed(2)}
           </span>
         </div>
         <div className="flex justify-between items-center px-4 py-3 bg-zinc-950/30 font-semibold">
           <span className="text-zinc-400">Total Fulfillment &amp; Product Costs</span>
-          <span className="text-orange-400 font-bold tabular-nums">
+          <span className={`font-bold tabular-nums ${totalCosts === 0 ? "text-zinc-500" : "text-orange-400"}`}>
             -${totalCosts.toFixed(2)}
           </span>
         </div>
 
         <div
           className={`flex justify-between items-center px-4 py-3.5 transition-colors ${
-            isNegative ? "bg-rose-950/40 text-rose-300" : "bg-emerald-950/40 text-emerald-300"
+            isNegative
+              ? "bg-rose-950/40 text-rose-300"
+              : netProfit === 0 && totalFees === 0 && totalCosts === 0
+              ? "bg-zinc-900 text-zinc-300"
+              : "bg-emerald-950/40 text-emerald-300"
           }`}
         >
           <div className="flex items-center gap-2">
             {isNegative ? (
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
             ) : (
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <CheckCircle2
+                className={`w-4 h-4 shrink-0 ${
+                  netProfit === 0 && totalFees === 0 && totalCosts === 0
+                    ? "text-zinc-500"
+                    : "text-emerald-400"
+                }`}
+              />
             )}
             <span className="font-extrabold uppercase tracking-wide">
-              {isNegative ? "NET LOSS PER SALE" : "TAKE-HOME NET PROFIT"}
+              {isNegative
+                ? "NET LOSS PER SALE"
+                : netProfit === 0 && totalFees === 0 && totalCosts === 0
+                ? "NET PROFIT PER SALE"
+                : "TAKE-HOME NET PROFIT"}
             </span>
           </div>
           <span
             className={`text-lg sm:text-xl font-black tabular-nums ${
-              isNegative ? "text-rose-400" : "text-emerald-400"
+              isNegative
+                ? "text-rose-400"
+                : netProfit === 0 && totalFees === 0 && totalCosts === 0
+                ? "text-zinc-300"
+                : "text-emerald-400"
             }`}
           >
-            {isNegative ? "-" : "+"}${Math.abs(netProfit).toFixed(2)}
+            {isNegative ? "-" : netProfit > 0 ? "+" : ""}${Math.abs(netProfit).toFixed(2)}
           </span>
         </div>
       </div>
@@ -540,10 +573,18 @@ function ReturnClawbackCard({
   platformName,
   explanation,
 }: ReturnClawbackCardProps) {
+  const isLoss = clawbackAmount > 0;
+
   return (
     <div className="bg-zinc-950/70 border border-zinc-800/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
       <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-xl bg-rose-950/80 border border-rose-800/60 flex items-center justify-center text-rose-400 shrink-0 mt-0.5">
+        <div
+          className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 mt-0.5 ${
+            isLoss
+              ? "bg-rose-950/80 border-rose-800/60 text-rose-400"
+              : "bg-zinc-900 border-zinc-800 text-zinc-500"
+          }`}
+        >
           <AlertTriangle className="w-4 h-4" />
         </div>
         <div>
@@ -551,8 +592,14 @@ function ReturnClawbackCard({
             <h4 className="text-sm font-bold text-white">
               True Loss per Customer Return ({platformName})
             </h4>
-            <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-950 text-rose-400 border border-rose-800/60">
-              Unrecoverable
+            <span
+              className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                isLoss
+                  ? "bg-rose-950 text-rose-400 border-rose-800/60"
+                  : "bg-zinc-900 text-zinc-500 border-zinc-800"
+              }`}
+            >
+              {isLoss ? "Unrecoverable" : "$0 Loss"}
             </span>
           </div>
           <p className="text-xs text-zinc-400 mt-0.5 max-w-xl">
@@ -561,7 +608,11 @@ function ReturnClawbackCard({
         </div>
       </div>
       <div className="text-left sm:text-right sm:shrink-0 pl-12 sm:pl-0">
-        <span className="text-xl sm:text-2xl font-black text-rose-400 tabular-nums">
+        <span
+          className={`text-xl sm:text-2xl font-black tabular-nums ${
+            isLoss ? "text-rose-400" : "text-zinc-500"
+          }`}
+        >
           -${clawbackAmount.toFixed(2)}
         </span>
         <span className="block text-[10px] text-zinc-500 font-medium">Out-of-Pocket / Unit</span>
@@ -760,20 +811,34 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         <KpiCard
           label="Gross Revenue"
           value={`$${result.grossRevenue.toFixed(2)}`}
-          subValue={`Price + Shipping ($${(inputs.sellingPrice + inputs.shippingCharged).toFixed(2)})`}
+          subValue={
+            result.grossRevenue === 0
+              ? "Price + Shipping"
+              : `Price + Shipping ($${(inputs.sellingPrice + inputs.shippingCharged).toFixed(2)})`
+          }
           icon={<DollarSign className="w-4 h-4" />}
         />
         <KpiCard
           label="Total Hidden Fees"
           value={`$${result.totalFees.toFixed(2)}`}
-          subValue={`${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of revenue`}
+          subValue={
+            result.grossRevenue === 0
+              ? "Awaiting item price"
+              : `${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of revenue`
+          }
           icon={<TrendingDown className="w-4 h-4" />}
-          negative
+          negative={result.totalFees > 0}
         />
         <KpiCard
           label="Net Profit"
-          value={`${isNegative ? "-" : "+"}$${Math.abs(result.netProfit).toFixed(2)}`}
-          subValue={isNegative ? "LOSING MONEY" : "Take-home cash"}
+          value={`${isNegative ? "-" : result.netProfit > 0 ? "+" : ""}$${Math.abs(result.netProfit).toFixed(2)}`}
+          subValue={
+            result.grossRevenue === 0 && result.netProfit === 0
+              ? "Awaiting your price"
+              : isNegative
+              ? "LOSING MONEY"
+              : "Take-home cash"
+          }
           icon={
             isNegative ? (
               <TrendingDown className="w-4 h-4" />
@@ -787,7 +852,9 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
           label="Net Margin"
           value={`${result.netMarginPercent.toFixed(1)}%`}
           subValue={
-            result.netMarginPercent >= 25
+            result.grossRevenue === 0
+              ? "0.0% net margin"
+              : result.netMarginPercent >= 25
               ? "Strong Margin"
               : result.netMarginPercent >= 10
               ? "Healthy Margin"
@@ -800,75 +867,6 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
 
       {/* EverBee Sponsor Card */}
       <EtsyEverbeeSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Monthly Business Projections Card */}
-      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-orange-950 text-orange-400 border border-orange-800/60 flex items-center justify-center shrink-0">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                Monthly Business Projections
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-orange-950 text-orange-400 border border-orange-800/60">
-                  {inputs.monthlyVolume || 100} Orders/Mo
-                </span>
-              </h4>
-              <p className="text-[11px] text-zinc-400">
-                Projected monthly revenue and take-home pay based on your sales volume.
-              </p>
-            </div>
-          </div>
-
-          {/* Quick Volume Preset Buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
-            {[25, 50, 100, 250, 500].map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => update("monthlyVolume", v)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  inputs.monthlyVolume === v
-                    ? "bg-orange-500 text-black shadow-xs font-black"
-                    : "bg-zinc-800 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
-            <span className="text-base sm:text-lg font-black text-white tabular-nums">
-              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Take-Home Profit</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {result.monthlyNetProfit >= 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Etsy Fees Paid</span>
-            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
-              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Return & Cancellation Loss Scenario */}
-      <ReturnClawbackCard
-        clawbackAmount={result.returnClawbackLoss}
-        platformName="Etsy"
-        explanation="Estimated unrecoverable cash loss if a buyer returns this item (lost carrier postage, non-refundable $0.20 listing fee, destroyed packaging, and ~20% restocking/damage loss)."
-      />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
         {/* Input Panel */}
@@ -1000,10 +998,12 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
                 className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                   isNegative
                     ? "bg-rose-950 text-rose-300 border border-rose-800"
+                    : result.grossRevenue === 0
+                    ? "bg-zinc-800 text-zinc-400 border border-zinc-700"
                     : "bg-emerald-950 text-emerald-300 border border-emerald-800"
                 }`}
               >
-                {isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
+                {isNegative ? "BLEEDING MARGIN" : result.grossRevenue === 0 ? "AWAITING INPUT" : "PROFITABLE"}
               </span>
             </div>
             <WaterfallChart steps={result.waterfallSteps} />
@@ -1046,6 +1046,75 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         </div>
       </div>
 
+      {/* Monthly Business Projections Card */}
+      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-orange-950 text-orange-400 border border-orange-800/60 flex items-center justify-center shrink-0">
+              <Calendar className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                Monthly Business Projections
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-orange-950 text-orange-400 border border-orange-800/60">
+                  {inputs.monthlyVolume || 100} Orders/Mo
+                </span>
+              </h4>
+              <p className="text-[11px] text-zinc-400">
+                Projected monthly revenue and take-home pay based on your sales volume.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Volume Preset Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
+            {[25, 50, 100, 250, 500].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => update("monthlyVolume", v)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  inputs.monthlyVolume === v
+                    ? "bg-orange-500 text-black shadow-xs font-black"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
+            <span className="text-base sm:text-lg font-black text-white tabular-nums">
+              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Take-Home Profit</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit > 0 ? "text-emerald-400" : result.monthlyNetProfit < 0 ? "text-rose-400" : "text-zinc-300"}`}>
+              {result.monthlyNetProfit > 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Etsy Fees Paid</span>
+            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
+              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Return & Cancellation Loss Scenario */}
+      <ReturnClawbackCard
+        clawbackAmount={result.returnClawbackLoss}
+        platformName="Etsy"
+        explanation="Estimated unrecoverable cash loss if a buyer returns this item (lost carrier postage, non-refundable $0.20 listing fee, destroyed packaging, and ~20% restocking/damage loss)."
+      />
+
       {/* Hardware Packing Sponsor */}
       <EtsyThermalPrinterSponsorCard isPro={isPro} />
 
@@ -1080,20 +1149,30 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
         <KpiCard
           label="Gross Revenue"
           value={`$${result.grossRevenue.toFixed(2)}`}
-          subValue="Item selling price"
+          subValue={result.grossRevenue === 0 ? "Item selling price" : "Retail selling price"}
           icon={<DollarSign className="w-4 h-4" />}
         />
         <KpiCard
           label="Total Hidden Fees"
           value={`$${result.totalFees.toFixed(2)}`}
-          subValue={`${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of price`}
+          subValue={
+            result.grossRevenue === 0
+              ? "Awaiting item price"
+              : `${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of price`
+          }
           icon={<TrendingDown className="w-4 h-4" />}
-          negative
+          negative={result.totalFees > 0}
         />
         <KpiCard
           label="Net Profit"
-          value={`${isNegative ? "-" : "+"}$${Math.abs(result.netProfit).toFixed(2)}`}
-          subValue={isNegative ? "BLEEDING PER SALE" : "Take-home cash"}
+          value={`${isNegative ? "-" : result.netProfit > 0 ? "+" : ""}$${Math.abs(result.netProfit).toFixed(2)}`}
+          subValue={
+            result.grossRevenue === 0 && result.netProfit === 0
+              ? "Awaiting your price"
+              : isNegative
+              ? "BLEEDING PER SALE"
+              : "Take-home cash"
+          }
           icon={
             isNegative ? (
               <TrendingDown className="w-4 h-4" />
@@ -1107,7 +1186,9 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
           label="Net Margin"
           value={`${result.netMarginPercent.toFixed(1)}%`}
           subValue={
-            result.netMarginPercent >= 20
+            result.grossRevenue === 0
+              ? "0.0% net margin"
+              : result.netMarginPercent >= 20
               ? "Strong Margin"
               : result.netMarginPercent >= 8
               ? "Moderate"
@@ -1120,92 +1201,19 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
           label="Break-Even ROAS"
           value={result.breakEvenRoasDisplay}
           subValue={
-            result.breakEvenRoas
+            result.grossRevenue === 0
+              ? "Min target ROAS"
+              : result.breakEvenRoas
               ? `Need ${result.breakEvenRoas.toFixed(2)}x on TikTok Ads`
               : "Losing $ before ad spend"
           }
           icon={<Target className="w-4 h-4" />}
-          negative={result.breakEvenRoas === null}
+          negative={result.grossRevenue > 0 && result.breakEvenRoas === null}
         />
       </div>
 
       {/* Viral Product Intelligence Tool (Hidden on Pro) */}
       <TikTokKalodataSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Monthly Business Projections Card */}
-      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-cyan-950 text-cyan-400 border border-cyan-800/60 flex items-center justify-center shrink-0">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                Monthly Business Projections
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/60">
-                  {inputs.monthlyVolume || 250} Orders/Mo
-                </span>
-              </h4>
-              <p className="text-[11px] text-zinc-400">
-                Projected monthly revenue, take-home profit, and minimum target ROAS for your ads.
-              </p>
-            </div>
-          </div>
-
-          {/* Quick Volume Preset Buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
-            {[50, 100, 250, 500, 1000].map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => update("monthlyVolume", v)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  inputs.monthlyVolume === v
-                    ? "bg-cyan-500 text-black shadow-xs font-black"
-                    : "bg-zinc-800 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
-            <span className="text-base sm:text-lg font-black text-white tabular-nums">
-              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {result.monthlyNetProfit >= 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly TikTok Fees</span>
-            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
-              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ROAS</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenRoas ? "text-cyan-400" : "text-rose-400"}`}>
-              {result.breakEvenRoasDisplay}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Return & Cancellation Loss Scenario */}
-      <ReturnClawbackCard
-        clawbackAmount={result.returnClawbackLoss}
-        platformName="TikTok Shop"
-        explanation="Estimated unrecoverable cash loss if a customer returns this item (unrefunded platform admin retention, lost outbound carrier shipping, destroyed packaging, and ~15% return inspection loss)."
-      />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
         {/* Input Panel */}
@@ -1331,10 +1339,12 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
                 className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                   isNegative
                     ? "bg-rose-950 text-rose-300 border border-rose-800"
+                    : result.grossRevenue === 0
+                    ? "bg-zinc-800 text-zinc-400 border border-zinc-700"
                     : "bg-emerald-950 text-emerald-300 border border-emerald-800"
                 }`}
               >
-                {isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
+                {isNegative ? "BLEEDING MARGIN" : result.grossRevenue === 0 ? "AWAITING INPUT" : "PROFITABLE"}
               </span>
             </div>
             <WaterfallChart steps={result.waterfallSteps} />
@@ -1377,6 +1387,81 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
         </div>
       </div>
 
+      {/* Monthly Business Projections Card */}
+      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-cyan-950 text-cyan-400 border border-cyan-800/60 flex items-center justify-center shrink-0">
+              <Calendar className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                Monthly Business Projections
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/60">
+                  {inputs.monthlyVolume || 250} Orders/Mo
+                </span>
+              </h4>
+              <p className="text-[11px] text-zinc-400">
+                Projected monthly revenue, take-home profit, and minimum target ROAS for your ads.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Volume Preset Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
+            {[50, 100, 250, 500, 1000].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => update("monthlyVolume", v)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  inputs.monthlyVolume === v
+                    ? "bg-cyan-500 text-black shadow-xs font-black"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
+            <span className="text-base sm:text-lg font-black text-white tabular-nums">
+              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit > 0 ? "text-emerald-400" : result.monthlyNetProfit < 0 ? "text-rose-400" : "text-zinc-300"}`}>
+              {result.monthlyNetProfit > 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly TikTok Fees</span>
+            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
+              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ROAS</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenRoas ? "text-cyan-400" : "text-zinc-400"}`}>
+              {result.breakEvenRoasDisplay}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Return & Cancellation Loss Scenario */}
+      <ReturnClawbackCard
+        clawbackAmount={result.returnClawbackLoss}
+        platformName="TikTok Shop"
+        explanation="Estimated unrecoverable cash loss if a customer returns this item (unrefunded platform admin retention, lost outbound carrier shipping, destroyed packaging, and ~15% return inspection loss)."
+      />
+
       {/* Zero-Inventory POD Supplier */}
       <TikTokPrintifySponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
@@ -1412,20 +1497,30 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
         <KpiCard
           label="Gross Revenue"
           value={`$${result.grossRevenue.toFixed(2)}`}
-          subValue={isFba ? "FBA Retail Price" : "Price + Shipping"}
+          subValue={result.grossRevenue === 0 ? "Item selling price" : isFba ? "FBA Retail Price" : "Price + Shipping"}
           icon={<DollarSign className="w-4 h-4" />}
         />
         <KpiCard
           label="Total Amazon Fees"
           value={`$${result.totalFees.toFixed(2)}`}
-          subValue={`${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of price`}
+          subValue={
+            result.grossRevenue === 0
+              ? "Awaiting item price"
+              : `${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of price`
+          }
           icon={<TrendingDown className="w-4 h-4" />}
-          negative
+          negative={result.totalFees > 0}
         />
         <KpiCard
           label="Net Profit"
-          value={`${isNegative ? "-" : "+"}$${Math.abs(result.netProfit).toFixed(2)}`}
-          subValue={isNegative ? "BLEEDING PER UNIT" : "Take-home cash"}
+          value={`${isNegative ? "-" : result.netProfit > 0 ? "+" : ""}$${Math.abs(result.netProfit).toFixed(2)}`}
+          subValue={
+            result.grossRevenue === 0 && result.netProfit === 0
+              ? "Awaiting your price"
+              : isNegative
+              ? "BLEEDING PER UNIT"
+              : "Take-home cash"
+          }
           icon={
             isNegative ? (
               <TrendingDown className="w-4 h-4" />
@@ -1439,7 +1534,9 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
           label="Net Margin"
           value={`${result.netMarginPercent.toFixed(1)}%`}
           subValue={
-            result.netMarginPercent >= 25
+            result.grossRevenue === 0
+              ? "0.0% net margin"
+              : result.netMarginPercent >= 25
               ? "Strong Margin"
               : result.netMarginPercent >= 12
               ? "Healthy Margin"
@@ -1452,103 +1549,32 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
           label="Break-Even ACoS"
           value={result.breakEvenAcosDisplay}
           subValue={
-            result.breakEvenAcosPercent !== null
+            result.grossRevenue === 0
+              ? "Target PPC ACoS"
+              : result.breakEvenAcosPercent !== null
               ? `Keep PPC under ${result.breakEvenAcosPercent.toFixed(1)}%`
               : "Losing money before ads"
           }
           icon={<Target className="w-4 h-4" />}
-          negative={result.breakEvenAcosPercent === null}
+          negative={result.grossRevenue > 0 && result.breakEvenAcosPercent === null}
         />
         <KpiCard
           label="Break-Even ROAS"
           value={result.breakEvenRoasDisplay}
           subValue={
-            result.breakEvenRoas !== null
+            result.grossRevenue === 0
+              ? "Target PPC ROAS"
+              : result.breakEvenRoas !== null
               ? `Need ${result.breakEvenRoas.toFixed(2)}x on Amazon PPC`
               : "Losing money before ads"
           }
           icon={<Target className="w-4 h-4" />}
-          negative={result.breakEvenRoas === null}
+          negative={result.grossRevenue > 0 && result.breakEvenRoas === null}
         />
       </div>
 
       {/* Helium 10 Intelligence Sponsor Card */}
       <AmazonHelium10SponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Monthly Business Projections Card */}
-      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-950 text-amber-400 border border-amber-800/60 flex items-center justify-center shrink-0">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                Monthly Business Projections
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-950 text-amber-400 border border-amber-800/60">
-                  {inputs.monthlyVolume || 250} Units/Mo
-                </span>
-              </h4>
-              <p className="text-[11px] text-zinc-400">
-                Projected monthly revenue, take-home profit, and maximum allowable PPC targets.
-              </p>
-            </div>
-          </div>
-
-          {/* Quick Volume Preset Buttons */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
-            {[50, 100, 250, 500, 1000].map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => update("monthlyVolume", v)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  inputs.monthlyVolume === v
-                    ? "bg-amber-500 text-black shadow-xs font-black"
-                    : "bg-zinc-800 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
-            <span className="text-base sm:text-lg font-black text-white tabular-nums">
-              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {result.monthlyNetProfit >= 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Amazon Fees</span>
-            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
-              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ACoS</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenAcosPercent !== null ? "text-amber-400" : "text-rose-400"}`}>
-              {result.breakEvenAcosDisplay}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Return & Cancellation Loss Scenario */}
-      <ReturnClawbackCard
-        clawbackAmount={result.returnClawbackLoss}
-        platformName="Amazon FBA"
-        explanation="Estimated unrecoverable cash loss if an Amazon buyer returns this item (Amazon retains 20% referral holdback up to $5, keeps FBA Pick & Pack fee, charges returns processing for apparel/shoes, plus packaging & unfulfillable inventory shrinkage)."
-      />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
         {/* Input Panel */}
@@ -1863,10 +1889,12 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
                 className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                   isNegative
                     ? "bg-rose-950 text-rose-300 border border-rose-800"
+                    : result.grossRevenue === 0
+                    ? "bg-zinc-800 text-zinc-400 border border-zinc-700"
                     : "bg-emerald-950 text-emerald-300 border border-emerald-800"
                 }`}
               >
-                {isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
+                {isNegative ? "BLEEDING MARGIN" : result.grossRevenue === 0 ? "AWAITING INPUT" : "PROFITABLE"}
               </span>
             </div>
             <WaterfallChart steps={result.waterfallSteps} />
@@ -1946,6 +1974,81 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
         </div>
       </div>
 
+      {/* Monthly Business Projections Card */}
+      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-amber-950 text-amber-400 border border-amber-800/60 flex items-center justify-center shrink-0">
+              <Calendar className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                Monthly Business Projections
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-950 text-amber-400 border border-amber-800/60">
+                  {inputs.monthlyVolume || 250} Units/Mo
+                </span>
+              </h4>
+              <p className="text-[11px] text-zinc-400">
+                Projected monthly revenue, take-home profit, and maximum allowable PPC targets.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Volume Preset Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
+            {[50, 100, 250, 500, 1000].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => update("monthlyVolume", v)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  inputs.monthlyVolume === v
+                    ? "bg-amber-500 text-black shadow-xs font-black"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
+            <span className="text-base sm:text-lg font-black text-white tabular-nums">
+              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit > 0 ? "text-emerald-400" : result.monthlyNetProfit < 0 ? "text-rose-400" : "text-zinc-300"}`}>
+              {result.monthlyNetProfit > 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Amazon Fees</span>
+            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
+              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ACoS</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenAcosPercent !== null ? "text-amber-400" : "text-zinc-400"}`}>
+              {result.breakEvenAcosDisplay}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Return & Cancellation Loss Scenario */}
+      <ReturnClawbackCard
+        clawbackAmount={result.returnClawbackLoss}
+        platformName="Amazon FBA"
+        explanation="Estimated unrecoverable cash loss if an Amazon buyer returns this item (Amazon retains 20% referral holdback up to $5, keeps FBA Pick & Pack fee, charges returns processing for apparel/shoes, plus packaging & unfulfillable inventory shrinkage)."
+      />
+
       {/* Jungle Scout Supplier & Sales Estimator */}
       <AmazonJungleScoutSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
@@ -1980,20 +2083,30 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         <KpiCard
           label="Gross Revenue"
           value={`$${result.grossRevenue.toFixed(2)}`}
-          subValue="Price + Shipping"
+          subValue={result.grossRevenue === 0 ? "Item selling price" : "Price + Shipping"}
           icon={<DollarSign className="w-4 h-4" />}
         />
         <KpiCard
           label="Total eBay Fees"
           value={`$${result.totalFees.toFixed(2)}`}
-          subValue={`${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of price`}
+          subValue={
+            result.grossRevenue === 0
+              ? "Awaiting item price"
+              : `${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of price`
+          }
           icon={<TrendingDown className="w-4 h-4" />}
-          negative
+          negative={result.totalFees > 0}
         />
         <KpiCard
           label="Net Profit"
-          value={`${isNegative ? "-" : "+"}$${Math.abs(result.netProfit).toFixed(2)}`}
-          subValue={isNegative ? "BLEEDING PER UNIT" : "Take-home cash"}
+          value={`${isNegative ? "-" : result.netProfit > 0 ? "+" : ""}$${Math.abs(result.netProfit).toFixed(2)}`}
+          subValue={
+            result.grossRevenue === 0 && result.netProfit === 0
+              ? "Awaiting your price"
+              : isNegative
+              ? "BLEEDING PER UNIT"
+              : "Take-home cash"
+          }
           icon={
             isNegative ? (
               <TrendingDown className="w-4 h-4" />
@@ -2007,7 +2120,9 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
           label="Net Margin"
           value={`${result.netMarginPercent.toFixed(1)}%`}
           subValue={
-            result.netMarginPercent >= 25
+            result.grossRevenue === 0
+              ? "0.0% net margin"
+              : result.netMarginPercent >= 25
               ? "Strong Margin"
               : result.netMarginPercent >= 12
               ? "Healthy Margin"
@@ -2020,12 +2135,14 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
           label="Break-Even ROAS"
           value={result.breakEvenRoasDisplay}
           subValue={
-            result.breakEvenRoas !== null
+            result.grossRevenue === 0
+              ? "Target Ad ROAS"
+              : result.breakEvenRoas !== null
               ? "Min Promoted Ad Return"
               : "Losing money before ads"
           }
           icon={<Target className="w-4 h-4" />}
-          negative={result.breakEvenRoas === null}
+          negative={result.grossRevenue > 0 && result.breakEvenRoas === null}
         />
         <KpiCard
           label="Final Value Fee"
@@ -2037,80 +2154,6 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
 
       {/* ZIK Analytics Sponsor Card */}
       <EbayZikAnalyticsSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Monthly Business Projections Card */}
-      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-950 text-blue-400 border border-blue-800/60 flex items-center justify-center shrink-0">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                Monthly Business Projections
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 border border-blue-800/60">
-                  {inputs.monthlyVolume || 250} Units/Mo
-                </span>
-              </h4>
-              <p className="text-[11px] text-zinc-400">
-                Projected monthly volume, gross revenue, net payout, and eBay fee totals.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
-            {[50, 100, 250, 500, 1000].map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => update("monthlyVolume", v)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  inputs.monthlyVolume === v
-                    ? "bg-blue-500 text-white shadow-xs font-black"
-                    : "bg-zinc-800 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Revenue</span>
-            <span className="text-base sm:text-lg font-black text-white tabular-nums">
-              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {result.monthlyNetProfit >= 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly eBay Fees</span>
-            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
-              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ROAS</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenRoas !== null ? "text-blue-400" : "text-rose-400"}`}>
-              {result.breakEvenRoasDisplay}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Return & Dispute Loss Scenario */}
-      <ReturnClawbackCard
-        clawbackAmount={result.returnClawbackLoss}
-        platformName="eBay"
-        explanation="Estimated unrecoverable cash loss if an eBay buyer initiates a return or dispute (eBay refunds percentage FVF but retains the $0.30 fixed fee; seller pays original shipping + return shipping label on remorse/INAD claims, plus packaging and 15% restocking damage)."
-      />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
         {/* Input Panel */}
@@ -2307,12 +2350,14 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
               </h3>
               <span
                 className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                  isNegative
+                  result.grossRevenue === 0
+                    ? "bg-zinc-800 text-zinc-400 border border-zinc-700"
+                    : isNegative
                     ? "bg-rose-950 text-rose-300 border border-rose-800"
                     : "bg-emerald-950 text-emerald-300 border border-emerald-800"
                 }`}
               >
-                {isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
+                {result.grossRevenue === 0 ? "AWAITING INPUT" : isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
               </span>
             </div>
             <WaterfallChart steps={result.waterfallSteps} />
@@ -2367,6 +2412,80 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         </div>
       </div>
 
+      {/* Monthly Business Projections Card */}
+      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-950 text-blue-400 border border-blue-800/60 flex items-center justify-center shrink-0">
+              <Calendar className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                Monthly eBay Business Projections
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-950 text-blue-400 border border-blue-800/60">
+                  {inputs.monthlyVolume || 250} Orders/Mo
+                </span>
+              </h4>
+              <p className="text-[11px] text-zinc-400">
+                Projected monthly revenue, take-home profit, and Promoted Listings budget.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
+            {[50, 100, 250, 500, 1000].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => update("monthlyVolume", v)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  inputs.monthlyVolume === v
+                    ? "bg-blue-600 text-white shadow-xs font-black"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Gross Sales</span>
+            <span className="text-base sm:text-lg font-black text-white tabular-nums">
+              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit > 0 ? "text-emerald-400" : result.monthlyNetProfit < 0 ? "text-rose-400" : "text-zinc-300"}`}>
+              {result.monthlyNetProfit > 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly eBay Fees</span>
+            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
+              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ROAS</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenRoas !== null ? "text-blue-400" : "text-zinc-400"}`}>
+              {result.breakEvenRoasDisplay}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Return & Processing Clawback Scenario */}
+      <ReturnClawbackCard
+        clawbackAmount={result.returnClawbackLoss}
+        platformName="eBay"
+        explanation="Estimated unrecoverable cash loss if an eBay buyer requests a return (eBay retains the $0.30 per-order fee, seller loses shipping both ways on free return listings, lost packaging, and 15% estimated item restocking depreciation)."
+      />
+
       {/* Seller Traps & Real Answers FAQ Accordion */}
       <SellerFaqAccordion platform="ebay" />
     </div>
@@ -2398,20 +2517,30 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
         <KpiCard
           label="Gross Revenue"
           value={`$${result.grossRevenue.toFixed(2)}`}
-          subValue="Price + Shipping Charged"
+          subValue={result.grossRevenue === 0 ? "Storefront retail price" : "Price + Shipping Charged"}
           icon={<DollarSign className="w-4 h-4" />}
         />
         <KpiCard
           label="Total Fees & CAC"
           value={`$${result.totalFees.toFixed(2)}`}
-          subValue={`${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of revenue`}
+          subValue={
+            result.grossRevenue === 0
+              ? "Awaiting item price"
+              : `${((result.totalFees / (result.grossRevenue || 1)) * 100).toFixed(1)}% of revenue`
+          }
           icon={<TrendingDown className="w-4 h-4" />}
-          negative
+          negative={result.totalFees > 0}
         />
         <KpiCard
           label="Net Profit"
-          value={`${isNegative ? "-" : "+"}$${Math.abs(result.netProfit).toFixed(2)}`}
-          subValue={isNegative ? "BLEEDING PER UNIT" : "Take-home cash"}
+          value={`${isNegative ? "-" : result.netProfit > 0 ? "+" : ""}$${Math.abs(result.netProfit).toFixed(2)}`}
+          subValue={
+            result.grossRevenue === 0 && result.netProfit === 0
+              ? "Awaiting your price"
+              : isNegative
+              ? "BLEEDING PER UNIT"
+              : "Take-home cash"
+          }
           icon={
             isNegative ? (
               <TrendingDown className="w-4 h-4" />
@@ -2425,7 +2554,9 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
           label="Net Margin"
           value={`${result.netMarginPercent.toFixed(1)}%`}
           subValue={
-            result.netMarginPercent >= 30
+            result.grossRevenue === 0
+              ? "0.0% net margin"
+              : result.netMarginPercent >= 30
               ? "Strong DTC Margin"
               : result.netMarginPercent >= 15
               ? "Healthy Margin"
@@ -2438,102 +2569,32 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
           label="Break-Even ROAS"
           value={result.breakEvenRoasDisplay}
           subValue={
-            result.breakEvenRoas !== null
+            result.grossRevenue === 0
+              ? "Target Meta/Google ROAS"
+              : result.breakEvenRoas !== null
               ? `Keep Meta Ads > ${result.breakEvenRoas.toFixed(2)}x`
               : "Losing money before ads"
           }
           icon={<Target className="w-4 h-4" />}
-          negative={result.breakEvenRoas === null}
+          negative={result.grossRevenue > 0 && result.breakEvenRoas === null}
         />
         <KpiCard
           label="Max Allowable CAC"
           value={`$${result.maxAllowableCac.toFixed(2)}`}
           subValue={
-            result.maxAllowableCac > 0
+            result.grossRevenue === 0
+              ? "Max ad spend / customer"
+              : result.maxAllowableCac > 0
               ? "Max ad spend / customer"
               : "Loss before advertising"
           }
           icon={<Layers className="w-4 h-4" />}
-          negative={result.maxAllowableCac <= 0}
+          negative={result.grossRevenue > 0 && result.maxAllowableCac <= 0}
         />
       </div>
 
       {/* Klaviyo Email/SMS Sponsor Card */}
       <ShopifyKlaviyoSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Monthly Business Projections Card */}
-      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-800/60 flex items-center justify-center shrink-0">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                Monthly DTC Business Projections
-                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/60">
-                  {inputs.monthlyVolume || 250} Orders/Mo
-                </span>
-              </h4>
-              <p className="text-[11px] text-zinc-400">
-                Monthly GMV, blended net profit, tech app stack amortization, and ad spend.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
-            {[50, 100, 250, 500, 1000].map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => update("monthlyVolume", v)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  inputs.monthlyVolume === v
-                    ? "bg-emerald-500 text-black shadow-xs font-black"
-                    : "bg-zinc-800 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {v}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Gross Sales</span>
-            <span className="text-base sm:text-lg font-black text-white tabular-nums">
-              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {result.monthlyNetProfit >= 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Processing &amp; Tech Stack</span>
-            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
-              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-          </div>
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
-            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ROAS</span>
-            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenRoas !== null ? "text-emerald-400" : "text-rose-400"}`}>
-              {result.breakEvenRoasDisplay}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Return & Processing Clawback Scenario */}
-      <ReturnClawbackCard
-        clawbackAmount={result.returnClawbackLoss}
-        platformName="Shopify DTC"
-        explanation="Estimated unrecoverable cash loss when a DTC customer returns an order (Shopify Payments NEVER refunds credit card interchange fees [2.9% + 30¢] upon customer refunds, plus merchant pays outbound & return shipping labels, lost packaging, and 15% restocking damage)."
-      />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
         {/* Input Panel */}
@@ -2727,12 +2788,14 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
               </h3>
               <span
                 className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                  isNegative
+                  result.grossRevenue === 0
+                    ? "bg-zinc-800 text-zinc-400 border border-zinc-700"
+                    : isNegative
                     ? "bg-rose-950 text-rose-300 border border-rose-800"
                     : "bg-emerald-950 text-emerald-300 border border-emerald-800"
                 }`}
               >
-                {isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
+                {result.grossRevenue === 0 ? "AWAITING INPUT" : isNegative ? "BLEEDING MARGIN" : "PROFITABLE"}
               </span>
             </div>
             <WaterfallChart steps={result.waterfallSteps} />
@@ -2791,6 +2854,80 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
           />
         </div>
       </div>
+
+      {/* Monthly Business Projections Card */}
+      <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-900/60 to-zinc-950 border border-zinc-800 rounded-2xl p-4 sm:p-5 shadow-xl space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-800/60 flex items-center justify-center shrink-0">
+              <Calendar className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                Monthly DTC Business Projections
+                <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800/60">
+                  {inputs.monthlyVolume || 250} Orders/Mo
+                </span>
+              </h4>
+              <p className="text-[11px] text-zinc-400">
+                Monthly GMV, blended net profit, tech app stack amortization, and ad spend.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] text-zinc-500 font-medium whitespace-nowrap">Volume:</span>
+            {[50, 100, 250, 500, 1000].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => update("monthlyVolume", v)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  inputs.monthlyVolume === v
+                    ? "bg-emerald-500 text-black shadow-xs font-black"
+                    : "bg-zinc-800 text-zinc-400 hover:text-white"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Gross Sales</span>
+            <span className="text-base sm:text-lg font-black text-white tabular-nums">
+              ${result.monthlyRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Monthly Net Profit</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.monthlyNetProfit > 0 ? "text-emerald-400" : result.monthlyNetProfit < 0 ? "text-rose-400" : "text-zinc-300"}`}>
+              {result.monthlyNetProfit > 0 ? "+" : ""}${result.monthlyNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Processing &amp; Tech Stack</span>
+            <span className="text-base sm:text-lg font-bold text-zinc-300 tabular-nums">
+              ${result.monthlyTotalFees.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3">
+            <span className="text-[10px] uppercase font-bold text-zinc-500 block">Break-Even ROAS</span>
+            <span className={`text-base sm:text-lg font-black tabular-nums ${result.breakEvenRoas !== null ? "text-emerald-400" : "text-zinc-400"}`}>
+              {result.breakEvenRoasDisplay}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Return & Processing Clawback Scenario */}
+      <ReturnClawbackCard
+        clawbackAmount={result.returnClawbackLoss}
+        platformName="Shopify DTC"
+        explanation="Estimated unrecoverable cash loss when a DTC customer returns an order (Shopify Payments NEVER refunds credit card interchange fees [2.9% + 30¢] upon customer refunds, plus merchant pays outbound & return shipping labels, lost packaging, and 15% restocking damage)."
+      />
 
       {/* Seller Traps & Real Answers FAQ Accordion */}
       <SellerFaqAccordion platform="shopify" />
@@ -2988,8 +3125,8 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
               <span className="text-zinc-600">&bull;</span>
               <span>
                 Net Profit:{" "}
-                <strong className="text-emerald-400">
-                  +${result.expectedProfit.toFixed(2)}
+                <strong className={result.expectedProfit > 0 ? "text-emerald-400" : "text-zinc-400"}>
+                  {result.expectedProfit > 0 ? "+" : ""}${result.expectedProfit.toFixed(2)}
                 </strong>{" "}
                 per sale
               </span>
@@ -2997,13 +3134,6 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
           </div>
         )}
       </div>
-
-      {/* Return & Dispute Loss Scenario */}
-      <ReturnClawbackCard
-        clawbackAmount={result.breakdown.returnClawbackLoss}
-        platformName={platformName}
-        explanation={clawbackExplanation}
-      />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
         {/* Input Panel */}
@@ -3422,6 +3552,13 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
         )}
       </div>
 
+      {/* Return & Dispute Loss Scenario */}
+      <ReturnClawbackCard
+        clawbackAmount={result.breakdown.returnClawbackLoss}
+        platformName={platformName}
+        explanation={clawbackExplanation}
+      />
+
       {/* Platform-Tailored Sponsor Cards */}
       {platform === "etsy" && (
         <EtsyEverbeeSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
@@ -3446,25 +3583,38 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
 //  MAIN DASHBOARD COMPONENT WITH STORE SELECTOR ARCHITECTURE
 // ═══════════════════════════════════════════════════════════════
 
-export default function CalculatorDashboard() {
-  const [activeStore, setActiveStore] = useState<StoreId>("hub");
-  const [activeSubTab, setActiveSubTab] = useState<SubTabId>("calculator");
+export interface CalculatorDashboardProps {
+  initialStore?: StoreId;
+  initialSubTab?: SubTabId;
+  forceStore?: StoreId;
+  children?: React.ReactNode;
+}
+
+export default function CalculatorDashboard({
+  initialStore = "hub",
+  initialSubTab = "calculator",
+  forceStore,
+  children,
+}: CalculatorDashboardProps = {}) {
+  const [activeStore, setActiveStore] = useState<StoreId>(forceStore || initialStore);
+  const [activeSubTab, setActiveSubTab] = useState<SubTabId>(initialSubTab);
   const [isStoreMenuOpen, setIsStoreMenuOpen] = useState<boolean>(false);
-  const [isPro, setIsPro] = useState<boolean>(false);
+  // Launch Special: Pro features are 100% unlocked for all sellers through Dec 1, 2026!
+  const [isPro, setIsPro] = useState<boolean>(true);
   const [isProModalOpen, setIsProModalOpen] = useState<boolean>(false);
 
   // Sync with localStorage for seamless navigation & pro status
   useEffect(() => {
-    const savedPro = localStorage.getItem("feespotter_is_pro") || localStorage.getItem("truemargin_is_pro");
-    if (savedPro === "true") {
-      setIsPro(true);
+    if (forceStore) {
+      setActiveStore(forceStore);
+      return;
     }
 
     const savedStore = localStorage.getItem("feespotter_active_store") as StoreId;
-    if (savedStore && ["etsy", "tiktok", "amazon"].includes(savedStore)) {
+    if (savedStore && ["etsy", "tiktok", "amazon", "ebay", "shopify"].includes(savedStore)) {
       setActiveStore(savedStore);
     }
-  }, []);
+  }, [forceStore]);
 
   const handleSelectStore = (store: StoreId) => {
     setActiveStore(store);
@@ -3619,43 +3769,16 @@ export default function CalculatorDashboard() {
             )}
           </div>
 
-          {/* Pro Status & CTA */}
+          {/* Launch Special & Pro Status */}
           <div className="flex items-center gap-2 sm:gap-2.5">
-            {isPro ? (
-              <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950 text-emerald-300 border border-emerald-800/80 font-bold text-xs shadow-xs">
-                  <Crown className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Pro Active</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleSetPro(false)}
-                  className="text-[10px] text-zinc-500 hover:text-zinc-300 underline cursor-pointer"
-                  title="Switch to free tier to test paywall limits"
-                >
-                  Test Free
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsProModalOpen(true)}
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-950/60 transition-all cursor-pointer active:scale-95"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
-                  <span>Get Pro ($5/mo)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSetPro(true)}
-                  className="hidden sm:inline-block text-[10px] text-zinc-500 hover:text-zinc-300 underline cursor-pointer"
-                  title="Switch to Pro to test unlimited features"
-                >
-                  Test Pro
-                </button>
-              </div>
-            )}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs">
+              <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="hidden sm:inline">Launch Special: Free Pro Unlocked</span>
+              <span className="sm:hidden">Pro Free</span>
+              <span className="px-1.5 py-0.5 bg-emerald-800/70 text-[10px] text-emerald-100 rounded-md font-extrabold uppercase tracking-wide">
+                Thru Dec 1
+              </span>
+            </div>
 
             {/* Clerk Authentication Controls */}
             <div className="flex items-center gap-2 pl-2 border-l border-zinc-800/80 ml-1">
@@ -3843,6 +3966,9 @@ export default function CalculatorDashboard() {
           onOpenProModal={() => setIsProModalOpen(true)}
           className="mt-8"
         />
+
+        {/* Dedicated Page SEO Content or Custom Children */}
+        {children}
       </main>
 
       {/* Pro Upgrade Modal ($5/mo or $50/yr) */}
@@ -3852,24 +3978,61 @@ export default function CalculatorDashboard() {
         onUpgradeSuccess={() => handleSetPro(true)}
       />
 
-      {/* Global Footer */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950/60 py-8 mt-12 text-center text-xs text-zinc-500">
-        <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 space-y-2">
-          <p className="font-semibold text-zinc-400">
-            FeeSpotter &bull; Deterministic Marketplace Profit Engine &amp; Batch Catalog Auditor
-          </p>
-          <p className="text-zinc-600">
-            Updated for 2026 Etsy, TikTok Shop, Amazon FBA, eBay &amp; Shopify DTC Fee Structures. Calculations are for estimates and not formal financial advice.
-          </p>
-          <div className="pt-2 text-[11px] text-zinc-500 flex justify-center gap-3">
-            <button
-              type="button"
-              onClick={() => handleSetPro(!isPro)}
-              className="text-zinc-400 hover:text-white underline cursor-pointer"
-            >
-              Demo Mode: Switch to {isPro ? "Free Tier" : "Pro Tier"}
-            </button>
+      {/* Global Footer with SEO & Legal Links */}
+      <footer className="border-t border-zinc-800/80 bg-zinc-950/80 py-10 mt-16 text-xs text-zinc-400">
+        <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-zinc-800/70 text-center md:text-left">
+            <div>
+              <div className="flex items-center justify-center md:justify-start gap-2 text-white font-bold text-base">
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white">
+                  <DollarSign className="w-4 h-4" />
+                </div>
+                <span>FeeSpotter</span>
+              </div>
+              <p className="text-zinc-500 text-xs mt-1">
+                Deterministic Marketplace Profit Engine &amp; Batch Catalog Auditor
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-zinc-400 font-medium">
+              <Link href="/about" className="hover:text-emerald-400 transition-colors">
+                About FeeSpotter
+              </Link>
+              <Link href="/privacy" className="hover:text-emerald-400 transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/contact" className="hover:text-emerald-400 transition-colors">
+                Contact &amp; Support
+              </Link>
+            </div>
           </div>
+
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-[11px] text-zinc-500">
+            <span className="font-semibold text-zinc-400">Marketplace Calculators:</span>
+            <Link href="/etsy-fee-calculator" className="hover:text-zinc-300 transition-colors">
+              Etsy Fee Calculator
+            </Link>
+            <span>&bull;</span>
+            <Link href="/tiktok-shop-fee-calculator" className="hover:text-zinc-300 transition-colors">
+              TikTok Shop Fee Calculator
+            </Link>
+            <span>&bull;</span>
+            <Link href="/amazon-fba-fee-calculator" className="hover:text-zinc-300 transition-colors">
+              Amazon FBA Calculator
+            </Link>
+            <span>&bull;</span>
+            <Link href="/ebay-fee-calculator" className="hover:text-zinc-300 transition-colors">
+              eBay Fee Calculator
+            </Link>
+            <span>&bull;</span>
+            <Link href="/shopify-fee-calculator" className="hover:text-zinc-300 transition-colors">
+              Shopify Fee Calculator
+            </Link>
+          </div>
+
+          <p className="text-[11px] text-zinc-600 text-center">
+            &copy; 2026 FeeSpotter. All rights reserved. Calculations are deterministic financial estimates based on official 2026 marketplace fee schedules and do not constitute formal tax or investment advice.
+          </p>
         </div>
       </footer>
     </div>
