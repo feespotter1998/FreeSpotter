@@ -1,20 +1,30 @@
 import type { Metadata } from "next";
 import CalculatorDashboard from "@/components/CalculatorDashboard";
 import MarketplaceSeoContent from "@/components/MarketplaceSeoContent";
+import { getSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "TikTok Shop Fee Calculator 2026: Real Profit & Break-Even ROAS | FeeSpotter",
+  title: "TikTok Shop Fee Calculator 2026: Net Profit & ROAS",
   description:
-    "Calculate exact TikTok Shop profit after the 6.0% referral fee, 2.9% + $0.30 processing, creator affiliate commissions, and ad spend. Includes Break-Even ROAS calculator.",
+    "Calculate exact TikTok Shop net profits after the 6% referral fee, creator affiliate commissions, returns, and ad spend. Includes free Break-Even ROAS solver.",
   alternates: {
-    canonical: "https://feespotter.com/tiktok-shop-fee-calculator",
+    canonical: `${siteUrl}/tiktok-shop-fee-calculator`,
   },
   openGraph: {
     title: "TikTok Shop Fee Calculator 2026: Real Profit & Break-Even ROAS",
     description: "Accurately compute TikTok referral commission, creator affiliates, and ad spend margins.",
-    url: "https://feespotter.com/tiktok-shop-fee-calculator",
+    url: `${siteUrl}/tiktok-shop-fee-calculator`,
     siteName: "FeeSpotter",
+    images: [`${siteUrl}/og-image.png`],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TikTok Shop Fee Calculator 2026: Net Profit & ROAS",
+    description: "Calculate exact TikTok Shop net profits after the 6% referral fee, creator affiliate commissions, returns, and ad spend.",
+    images: [`${siteUrl}/og-image.png`],
   },
 };
 

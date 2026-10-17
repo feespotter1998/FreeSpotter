@@ -125,9 +125,9 @@ export function MarketplaceComparator({
             <Sparkles className="w-3.5 h-3.5" />
             <span>5-Store Interactive Profit Matchup</span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
             Where Should I Sell This Product?
-          </h3>
+          </h2>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1 max-w-2xl">
             Plug in your unit pricing to instantly compare real take-home cash and fee deductions across Etsy, TikTok Shop, Amazon FBA, eBay, and Shopify side-by-side.
           </p>

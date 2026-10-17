@@ -441,8 +441,42 @@ export function MarketplaceSeoContent({ store }: { store: Exclude<StoreId, "hub"
 
   if (!data) return null;
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": data.title,
+        "description": data.tagline,
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": data.faqs.map((faq) => ({
+          "@type": "Question",
+          "name": faq.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer,
+          },
+        })),
+      },
+    ],
+  };
+
   return (
     <section className="mt-12 pt-10 border-t border-zinc-800/80 space-y-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
       {/* 1. Header with Freshness & Verification Trust Signals */}
       <div className="bg-gradient-to-br from-zinc-900/90 via-zinc-950 to-zinc-950 border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">

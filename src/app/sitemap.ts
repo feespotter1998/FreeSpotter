@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/siteUrl";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://feespotter.com";
+  const baseUrl = getSiteUrl();
 
   return [
     {

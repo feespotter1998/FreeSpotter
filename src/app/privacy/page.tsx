@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DollarSign, ShieldCheck, ArrowLeft } from "lucide-react";
 
+import { getSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: "Privacy Policy — FeeSpotter",
+  title: "Privacy Policy",
   description:
     "FeeSpotter's Privacy Policy explains our commitment to data transparency, in-browser catalog processing, cookie policies, and affiliate disclosures.",
   alternates: {
-    canonical: "https://feespotter.com/privacy",
+    canonical: `${siteUrl}/privacy`,
   },
 };
 

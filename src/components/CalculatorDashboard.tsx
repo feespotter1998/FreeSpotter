@@ -104,6 +104,7 @@ export type SubTabId = "calculator" | "reverse" | "audit";
 interface StoreOption {
   id: StoreId;
   name: string;
+  h1Title?: string;
   shortName: string;
   badge: string;
   badgeColor: string;
@@ -120,6 +121,7 @@ const STORE_CONFIGS: StoreOption[] = [
   {
     id: "etsy",
     name: "Etsy Seller Suite",
+    h1Title: "Etsy Fee Calculator & Profit Suite",
     shortName: "Etsy",
     badge: "US 2026 Engine",
     badgeColor: "bg-orange-950 text-orange-400 border-orange-800/60",
@@ -140,6 +142,7 @@ const STORE_CONFIGS: StoreOption[] = [
   {
     id: "tiktok",
     name: "TikTok Shop Suite",
+    h1Title: "TikTok Shop Fee Calculator & Profit Suite",
     shortName: "TikTok Shop",
     badge: "2026 Commission",
     badgeColor: "bg-cyan-950 text-cyan-400 border-cyan-800/60",
@@ -160,6 +163,7 @@ const STORE_CONFIGS: StoreOption[] = [
   {
     id: "amazon",
     name: "Amazon FBA & FBM Suite",
+    h1Title: "Amazon FBA & FBM Fee Calculator & Profit Suite",
     shortName: "Amazon",
     badge: "FBA & FBM 2026",
     badgeColor: "bg-amber-950 text-amber-400 border-amber-800/60",
@@ -180,6 +184,7 @@ const STORE_CONFIGS: StoreOption[] = [
   {
     id: "ebay",
     name: "eBay Seller Suite",
+    h1Title: "eBay Fee Calculator & Profit Suite",
     shortName: "eBay",
     badge: "13.60% FVF + Ads",
     badgeColor: "bg-blue-950 text-blue-400 border-blue-800/60",
@@ -200,6 +205,7 @@ const STORE_CONFIGS: StoreOption[] = [
   {
     id: "shopify",
     name: "Shopify DTC Suite",
+    h1Title: "Shopify DTC Fee Calculator & Profit Suite",
     shortName: "Shopify",
     badge: "DTC 2.9% + CAC",
     badgeColor: "bg-emerald-950 text-emerald-400 border-emerald-800/60",
@@ -234,9 +240,17 @@ const STORE_CONFIGS: StoreOption[] = [
       "WooCommerce Self-Hosted",
     ],
     isAvailable: false,
-    comingSoonNote: "Walmart, Mercari, Poshmark & WooCommerce in 2026",
   },
 ];
+
+export const STORE_URLS: Record<StoreId, string> = {
+  etsy: "/etsy-fee-calculator",
+  tiktok: "/tiktok-shop-fee-calculator",
+  amazon: "/amazon-fba-fee-calculator",
+  ebay: "/ebay-fee-calculator",
+  shopify: "/shopify-fee-calculator",
+  hub: "/",
+};
 
 // ═══════════════════════════════════════════════════════════════
 //  AESTHETIC KPI CARD
@@ -640,12 +654,12 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
           <Sparkles className="w-4 h-4 text-emerald-400" />
           <span>Multi-Channel Profit Engine &bull; Updated for 2026 Fee Schedules</span>
         </div>
-        <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
           Select Your{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
             Selling Marketplace
           </span>
-        </h2>
+        </h1>
         <p className="text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto">
           Audit multi-tiered referral fees, fulfillment overhead, ad break-even ROAS, and hidden deductions before listing a single product.
         </p>
@@ -655,18 +669,8 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-7">
         {STORE_CONFIGS.map((store, idx) => {
           const isLive = store.isAvailable;
-          return (
-            <div
-              key={`${store.name}-${idx}`}
-              className={`relative overflow-hidden rounded-3xl border transition-all duration-300 flex flex-col justify-between ${
-                isLive
-                  ? `bg-gradient-to-br ${store.accentBg} ${store.accentBorder} shadow-xl hover:shadow-2xl hover:-translate-y-1 cursor-pointer group`
-                  : `bg-gradient-to-br ${store.accentBg} ${store.accentBorder} shadow-lg`
-              }`}
-              onClick={() => {
-                if (isLive) onSelectStore(store.id);
-              }}
-            >
+          const cardInner = (
+            <>
               <div className="p-6 sm:p-7 space-y-5">
                 {/* Header: Icon + Badge */}
                 <div className="flex items-center justify-between gap-3">
@@ -682,9 +686,9 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
 
                 {/* Title & Description */}
                 <div className="space-y-1.5">
-                  <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-emerald-300 transition-colors">
+                  <h2 className="text-xl sm:text-2xl font-black text-white group-hover:text-emerald-300 transition-colors">
                     {store.name}
-                  </h3>
+                  </h2>
                   <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
                     {store.description}
                   </p>
@@ -712,17 +716,10 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
               {/* Action Footer */}
               <div className="p-6 sm:p-7 pt-0">
                 {isLive ? (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelectStore(store.id);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-zinc-900 group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-teal-600 border border-zinc-700/80 group-hover:border-emerald-500/50 shadow-md transition-all active:scale-98 cursor-pointer"
-                  >
+                  <div className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-zinc-900 group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-teal-600 border border-zinc-700/80 group-hover:border-emerald-500/50 shadow-md transition-all active:scale-98">
                     <span>Launch {store.shortName} Suite</span>
                     <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  </div>
                 ) : (
                   <div className="w-full py-3 px-4 rounded-xl text-xs font-bold text-center text-purple-300 bg-purple-950/40 border border-purple-800/60 flex items-center justify-center gap-2">
                     <Sparkles className="w-3.5 h-3.5 text-purple-400" />
@@ -730,6 +727,24 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
                   </div>
                 )}
               </div>
+            </>
+          );
+
+          return isLive ? (
+            <Link
+              key={`${store.name}-${idx}`}
+              href={STORE_URLS[store.id] || "/"}
+              onClick={() => onSelectStore(store.id)}
+              className={`relative overflow-hidden rounded-3xl border transition-all duration-300 flex flex-col justify-between bg-gradient-to-br ${store.accentBg} ${store.accentBorder} shadow-xl hover:shadow-2xl hover:-translate-y-1 cursor-pointer group`}
+            >
+              {cardInner}
+            </Link>
+          ) : (
+            <div
+              key={`${store.name}-${idx}`}
+              className={`relative overflow-hidden rounded-3xl border transition-all duration-300 flex flex-col justify-between bg-gradient-to-br ${store.accentBg} ${store.accentBorder} shadow-lg`}
+            >
+              {cardInner}
             </div>
           );
         })}
@@ -3652,8 +3667,8 @@ export default function CalculatorDashboard({
         <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-3.5 flex items-center justify-between gap-3">
           {/* Logo & Store Switcher */}
           <div className="flex items-center gap-3 sm:gap-4">
-            <button
-              type="button"
+            <Link
+              href="/"
               onClick={() => handleSelectStore("hub")}
               className="flex items-center gap-2.5 text-left cursor-pointer group"
               title="Return to Marketplace Selector Hub"
@@ -3674,7 +3689,7 @@ export default function CalculatorDashboard({
                   Multi-Marketplace Profit Auditor
                 </p>
               </div>
-            </button>
+            </Link>
 
             {/* In-Header Store Switcher Pill (When inside a store) */}
             {activeStore !== "hub" && (
@@ -3831,19 +3846,19 @@ export default function CalculatorDashboard({
             {/* Store Header & Sub-Navigation */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-800/80">
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
+                <Link
+                  href="/"
                   onClick={() => handleSelectStore("hub")}
                   className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
                   title="Back to All Marketplaces"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                </button>
+                </Link>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                      {currentStoreConfig.name}
-                    </h2>
+                    <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                      {currentStoreConfig.h1Title || currentStoreConfig.name}
+                    </h1>
                     <span
                       className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${currentStoreConfig.badgeColor}`}
                     >

@@ -11,12 +11,16 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import { getSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: "About FeeSpotter — Why We Built the Multi-Marketplace Profit Auditor",
+  title: "About Our Multi-Marketplace Profit Auditor",
   description:
     "FeeSpotter was created to give Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a 100% deterministic, ad-free calculator to expose hidden fees and protect real net profit.",
   alternates: {
-    canonical: "https://feespotter.com/about",
+    canonical: `${siteUrl}/about`,
   },
 };
 

@@ -10,12 +10,16 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { getSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: "Contact & Support — FeeSpotter",
+  title: "Contact & Support",
   description:
     "Have questions about marketplace fee calculations, feature requests, or partnership inquiries? Contact the FeeSpotter engineering team.",
   alternates: {
-    canonical: "https://feespotter.com/contact",
+    canonical: `${siteUrl}/contact`,
   },
 };
 
