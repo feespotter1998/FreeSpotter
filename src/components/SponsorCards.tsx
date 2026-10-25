@@ -20,7 +20,6 @@ interface SponsorProps {
 // 1. ETSY SPONSOR 1: EVERBEE (ETSY SPY TOOL, 30% RECURRING)
 // ─────────────────────────────────────────────────────────────
 export function EtsyEverbeeSponsorCard({ isPro, onOpenProModal }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.etsy.everbee;
 
   return (
@@ -50,7 +49,7 @@ export function EtsyEverbeeSponsorCard({ isPro, onOpenProModal }: SponsorProps) 
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 shadow-md shadow-orange-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             Try EverBee Free
@@ -66,7 +65,6 @@ export function EtsyEverbeeSponsorCard({ isPro, onOpenProModal }: SponsorProps) 
 // 2. ETSY SPONSOR 2: 4x6 THERMAL PRINTER (AMAZON ASSOCIATES)
 // ─────────────────────────────────────────────────────────────
 export function EtsyThermalPrinterSponsorCard({ isPro }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.etsy.thermalPrinter;
 
   return (
@@ -92,7 +90,7 @@ export function EtsyThermalPrinterSponsorCard({ isPro }: SponsorProps) {
         <a
           href={config.url}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer sponsored"
           className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-700"
         >
           View on Amazon <ExternalLink className="w-3 h-3" />
@@ -106,7 +104,6 @@ export function EtsyThermalPrinterSponsorCard({ isPro }: SponsorProps) {
 // 3. TIKTOK SHOP SPONSOR 1: KALODATA (VIRAL PRODUCT SPY)
 // ─────────────────────────────────────────────────────────────
 export function TikTokKalodataSponsorCard({ isPro, onOpenProModal }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.tiktok.kalodata;
 
   return (
@@ -136,7 +133,7 @@ export function TikTokKalodataSponsorCard({ isPro, onOpenProModal }: SponsorProp
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 shadow-md shadow-cyan-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             Explore Kalodata
@@ -152,7 +149,6 @@ export function TikTokKalodataSponsorCard({ isPro, onOpenProModal }: SponsorProp
 // 4. TIKTOK SHOP SPONSOR 2: PRINTIFY (ZERO INVENTORY SUPPLIER)
 // ─────────────────────────────────────────────────────────────
 export function TikTokPrintifySponsorCard({ isPro }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.tiktok.printify;
 
   return (
@@ -178,7 +174,7 @@ export function TikTokPrintifySponsorCard({ isPro }: SponsorProps) {
         <a
           href={config.url}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer sponsored"
           className="text-xs font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-700"
         >
           Start with Printify <ExternalLink className="w-3 h-3" />
@@ -192,7 +188,6 @@ export function TikTokPrintifySponsorCard({ isPro }: SponsorProps) {
 // 5. AMAZON SPONSOR 1: HELIUM 10 (FBA RESEARCH SUITE, 33% RECURRING)
 // ─────────────────────────────────────────────────────────────
 export function AmazonHelium10SponsorCard({ isPro }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.amazon.helium10;
 
   return (
@@ -222,7 +217,7 @@ export function AmazonHelium10SponsorCard({ isPro }: SponsorProps) {
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-md shadow-amber-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             Try Helium 10 Free
@@ -238,7 +233,6 @@ export function AmazonHelium10SponsorCard({ isPro }: SponsorProps) {
 // 6. AMAZON SPONSOR 2: JUNGLE SCOUT ($150 BOUNTY)
 // ─────────────────────────────────────────────────────────────
 export function AmazonJungleScoutSponsorCard({ isPro }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.amazon.jungleScout;
 
   return (
@@ -264,7 +258,7 @@ export function AmazonJungleScoutSponsorCard({ isPro }: SponsorProps) {
         <a
           href={config.url}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer sponsored"
           className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-700"
         >
           Check Jungle Scout <ExternalLink className="w-3 h-3" />
@@ -278,7 +272,6 @@ export function AmazonJungleScoutSponsorCard({ isPro }: SponsorProps) {
 // 5. EBAY SPONSOR: ZIK ANALYTICS
 // ─────────────────────────────────────────────────────────────
 export function EbayZikAnalyticsSponsorCard({ isPro }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.ebay.zikAnalytics;
 
   return (
@@ -308,7 +301,7 @@ export function EbayZikAnalyticsSponsorCard({ isPro }: SponsorProps) {
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-md shadow-blue-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             Try ZIK Analytics Free
@@ -324,7 +317,6 @@ export function EbayZikAnalyticsSponsorCard({ isPro }: SponsorProps) {
 // 6. SHOPIFY SPONSOR: KLAVIYO
 // ─────────────────────────────────────────────────────────────
 export function ShopifyKlaviyoSponsorCard({ isPro }: SponsorProps) {
-  if (isPro) return null;
   const config = AFFILIATE_CONFIG.shopify.klaviyo;
 
   return (
@@ -354,7 +346,7 @@ export function ShopifyKlaviyoSponsorCard({ isPro }: SponsorProps) {
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-md shadow-emerald-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             Start Free on Klaviyo

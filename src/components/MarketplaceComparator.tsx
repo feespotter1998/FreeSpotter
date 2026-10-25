@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   DollarSign,
   TrendingUp,
@@ -11,15 +12,13 @@ import {
   Crown,
   ArrowRight,
   Sparkles,
-  ShieldAlert,
-  Sliders,
-  CheckCircle2,
 } from "lucide-react";
 import {
   type MarketplaceCompareInputs,
   type MarketplaceCompareResult,
   compareAllMarketplaces,
 } from "@/lib/calculations";
+import { STORE_URLS } from "./CalculatorDashboard";
 
 interface MarketplaceComparatorProps {
   onSelectStore: (store: "etsy" | "tiktok" | "amazon" | "ebay" | "shopify") => void;
@@ -156,12 +155,13 @@ export function MarketplaceComparator({
       {/* Quick Input Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4">
         <div>
-          <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+          <label htmlFor="comp-selling-price" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
             Selling Price
           </label>
           <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
             <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
             <input
+              id="comp-selling-price"
               type="number"
               value={inputs.sellingPrice}
               onChange={(e) => update("sellingPrice", parseFloat(e.target.value) || 0)}
@@ -172,12 +172,13 @@ export function MarketplaceComparator({
         </div>
 
         <div>
-          <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+          <label htmlFor="comp-cogs" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
             Product Cost (COGS)
           </label>
           <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
             <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
             <input
+              id="comp-cogs"
               type="number"
               value={inputs.cogs}
               onChange={(e) => update("cogs", parseFloat(e.target.value) || 0)}
@@ -188,12 +189,13 @@ export function MarketplaceComparator({
         </div>
 
         <div>
-          <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+          <label htmlFor="comp-shipping" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
             Postage / Shipping Cost
           </label>
           <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
             <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
             <input
+              id="comp-shipping"
               type="number"
               value={inputs.actualShippingCost}
               onChange={(e) =>
@@ -206,12 +208,13 @@ export function MarketplaceComparator({
         </div>
 
         <div>
-          <label className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
+          <label htmlFor="comp-packaging" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
             Packaging / Labels
           </label>
           <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
             <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
             <input
+              id="comp-packaging"
               type="number"
               value={inputs.packagingCost}
               onChange={(e) => update("packagingCost", parseFloat(e.target.value) || 0)}
@@ -318,14 +321,14 @@ export function MarketplaceComparator({
 
               {/* Action Button */}
               <div className="pt-5 mt-2">
-                <button
-                  type="button"
+                <Link
+                  href={STORE_URLS[item.platform]}
                   onClick={() => onSelectStore(item.platform)}
-                  className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 ${styles.btn}`}
+                  className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] ${styles.btn}`}
                 >
                   <span>Open {item.name} Calculator</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                </Link>
               </div>
             </div>
           );

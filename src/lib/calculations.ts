@@ -2171,11 +2171,11 @@ export function solveShopifyPriceForTargetMargin(
 // ═══════════════════════════════════════════════════════════════
 
 export const DEFAULT_ETSY_INPUTS: EtsyInputs = {
-  sellingPrice: 0,
-  cogs: 0,
-  shippingCharged: 0,
-  actualShippingCost: 0,
-  packagingCost: 0,
+  sellingPrice: 28,
+  cogs: 6.5,
+  shippingCharged: 4.99,
+  actualShippingCost: 4.2,
+  packagingCost: 1.0,
   miscCost: 0,
   offsiteAdsRate: 0,
   quantity: 1,
@@ -2183,23 +2183,23 @@ export const DEFAULT_ETSY_INPUTS: EtsyInputs = {
 };
 
 export const DEFAULT_TIKTOK_INPUTS: TikTokInputs = {
-  sellingPrice: 0,
-  cogs: 0,
-  shippingCost: 0,
-  packagingCost: 0,
+  sellingPrice: 26,
+  cogs: 5.5,
+  shippingCost: 4.5,
+  packagingCost: 0.8,
   miscCost: 0,
   affiliateCommissionRate: 0.1,
-  adSpendPerSale: 0,
+  adSpendPerSale: 3.5,
   returnRate: 0.05,
   monthlyVolume: 250,
 };
 
 export const DEFAULT_REVERSE_INPUTS: ReverseCalcInputs = {
   targetMarginPercent: 30,
-  cogs: 0,
-  shippingCharged: 0,
-  actualShippingCost: 0,
-  packagingCost: 0,
+  cogs: 6.5,
+  shippingCharged: 4.99,
+  actualShippingCost: 4.2,
+  packagingCost: 1.0,
   miscCost: 0,
   offsiteAdsRate: 0,
   quantity: 1,
@@ -2207,25 +2207,25 @@ export const DEFAULT_REVERSE_INPUTS: ReverseCalcInputs = {
 
 export const DEFAULT_REVERSE_TIKTOK_INPUTS: ReverseTikTokInputs = {
   targetMarginPercent: 25,
-  cogs: 0,
-  shippingCost: 0,
-  packagingCost: 0,
+  cogs: 5.5,
+  shippingCost: 4.5,
+  packagingCost: 0.8,
   miscCost: 0,
   affiliateCommissionRate: 0.1,
-  adSpendPerSale: 0,
+  adSpendPerSale: 3.5,
   returnRate: 0.05,
 };
 
 export const DEFAULT_REVERSE_AMAZON_INPUTS: ReverseAmazonInputs = {
   targetMarginPercent: 25,
-  cogs: 0,
+  cogs: 7.0,
   fulfillmentMode: "fba",
   referralFeeRate: 0.15,
   fbaFee: 3.86,
   storageAndInboundFee: 0.35,
   shippingCharged: 0,
   actualShippingCost: 0,
-  packagingCost: 0,
+  packagingCost: 0.5,
   miscCost: 0,
   adSpendPerSale: 0,
   returnRate: 0.03,
@@ -2233,12 +2233,12 @@ export const DEFAULT_REVERSE_AMAZON_INPUTS: ReverseAmazonInputs = {
 
 export const DEFAULT_REVERSE_EBAY_INPUTS: ReverseEbayInputs = {
   targetMarginPercent: 25,
-  cogs: 0,
+  cogs: 6.5,
   shippingCharged: 0,
-  actualShippingCost: 0,
-  packagingCost: 0,
+  actualShippingCost: 4.5,
+  packagingCost: 0.75,
   miscCost: 0,
-  finalValueFeeRate: 0.1325,
+  finalValueFeeRate: 0.136,
   promotedListingRate: 0.02,
   storeSubscriptionMonthlyCost: 0,
   insertionFee: 0,
@@ -2248,21 +2248,21 @@ export const DEFAULT_REVERSE_EBAY_INPUTS: ReverseEbayInputs = {
 
 export const DEFAULT_REVERSE_SHOPIFY_INPUTS: ReverseShopifyInputs = {
   targetMarginPercent: 30,
-  cogs: 0,
+  cogs: 7.5,
   shippingCharged: 0,
-  actualShippingCost: 0,
-  packagingCost: 0,
+  actualShippingCost: 4.5,
+  packagingCost: 1.0,
   miscCost: 0,
   planTier: "basic",
-  monthlyAppsCost: 0,
-  adSpendPerSale: 0,
+  monthlyAppsCost: 29,
+  adSpendPerSale: 8.0,
   returnRate: 0.04,
   monthlyVolume: 250,
 };
 
 export const DEFAULT_AMAZON_INPUTS: AmazonInputs = {
-  sellingPrice: 0,
-  cogs: 0,
+  sellingPrice: 32,
+  cogs: 7.0,
   fulfillmentMode: "fba",
   referralFeeRate: 0.15, // 15% Standard category
   fbaFee: 4.75, // Large standard 1-2 lb size tier
@@ -2272,7 +2272,7 @@ export const DEFAULT_AMAZON_INPUTS: AmazonInputs = {
   isHighReturnCategory: false,
   shippingCharged: 0,
   actualShippingCost: 0,
-  packagingCost: 0,
+  packagingCost: 0.5,
   miscCost: 0,
   adSpendPerSale: 0,
   returnRate: 0.03, // 3%
@@ -2280,11 +2280,11 @@ export const DEFAULT_AMAZON_INPUTS: AmazonInputs = {
 };
 
 export const DEFAULT_EBAY_INPUTS: EbayInputs = {
-  sellingPrice: 0,
-  cogs: 0,
+  sellingPrice: 29.99,
+  cogs: 6.5,
   shippingCharged: 0,
-  actualShippingCost: 0,
-  packagingCost: 0,
+  actualShippingCost: 4.5,
+  packagingCost: 0.75,
   miscCost: 0,
   finalValueFeeRate: 0.136, // 13.60% standard category FVF
   promotedListingRate: 0, // Promoted Listings Standard
@@ -2295,16 +2295,16 @@ export const DEFAULT_EBAY_INPUTS: EbayInputs = {
 };
 
 export const DEFAULT_SHOPIFY_INPUTS: ShopifyInputs = {
-  sellingPrice: 0,
-  cogs: 0,
+  sellingPrice: 34.99,
+  cogs: 7.5,
   shippingCharged: 0,
-  actualShippingCost: 0,
-  packagingCost: 0,
+  actualShippingCost: 4.5,
+  packagingCost: 1.0,
   miscCost: 0,
   planTier: "basic",
   isThirdPartyPaymentGateway: false,
-  monthlyAppsCost: 0,
-  adSpendPerSale: 0,
+  monthlyAppsCost: 29,
+  adSpendPerSale: 8.0,
   returnRate: 0.04, // 4% DTC average
   monthlyVolume: 250,
 };
@@ -2408,7 +2408,7 @@ export function compareAllMarketplaces(
     actualShippingCost,
     packagingCost,
     miscCost,
-    finalValueFeeRate: 0.1325,
+    finalValueFeeRate: 0.136,
     promotedListingRate: 0.03,
     storeSubscriptionMonthlyCost: 21.95,
     insertionFee: 0,

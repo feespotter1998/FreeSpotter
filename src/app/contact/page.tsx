@@ -120,7 +120,7 @@ export default function ContactPage() {
               </li>
               <li>
                 <Link href="/ebay-fee-calculator" className="text-emerald-400 hover:underline">
-                  &bull; eBay 13.25% Final Value Fee &amp; Promoted Listings
+                  &bull; eBay 13.60% Final Value Fee &amp; Promoted Listings
                 </Link>
               </li>
               <li>

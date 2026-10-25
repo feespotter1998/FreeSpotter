@@ -16,6 +16,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 import type { StoreId } from "./CalculatorDashboard";
+import { STORE_URLS } from "./CalculatorDashboard";
+import { getSiteUrl } from "@/lib/siteUrl";
 
 interface FaqItem {
   question: string;
@@ -447,6 +449,7 @@ export function MarketplaceSeoContent({ store }: { store: Exclude<StoreId, "hub"
       {
         "@type": "WebApplication",
         "name": data.title,
+        "url": `${getSiteUrl()}${STORE_URLS[store]}`,
         "description": data.tagline,
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "All",

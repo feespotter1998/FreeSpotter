@@ -135,7 +135,7 @@ export function ProUpgradeModal({
           >
             <span>Annual ($50/yr)</span>
             <span
-              className={`text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded-md ${
+              className={`text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-md ${
                 billingCycle === "annual"
                   ? "bg-white/20 text-white"
                   : "bg-emerald-950 text-emerald-400"
@@ -213,7 +213,7 @@ export function ProUpgradeModal({
           <button
             onClick={handleUpgrade}
             disabled={isProcessing}
-            className="w-full py-3.5 px-6 rounded-2xl text-sm font-black text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 shadow-xl shadow-emerald-950/60 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-98"
+            className="w-full py-3.5 px-6 rounded-2xl text-sm font-black text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 shadow-xl shadow-emerald-950/60 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]"
           >
             {isProcessing ? (
               <span className="flex items-center gap-2">

@@ -85,7 +85,6 @@ import {
 } from "./SponsorCards";
 import { GoogleAdBanner } from "./GoogleAdBanner";
 import { MarketplaceComparator } from "./MarketplaceComparator";
-import { SellerFaqAccordion } from "./SellerFaqAccordion";
 import MarketplaceSeoContent from "./MarketplaceSeoContent";
 import { AFFILIATE_CONFIG } from "@/lib/affiliates";
 import {
@@ -338,16 +337,22 @@ function InputField({
   presets,
   hint,
 }: InputFieldProps) {
+  const inputId = React.useId();
+  const [localText, setLocalText] = useState<string | null>(null);
+
   const handleStep = (delta: number) => {
     const next = Math.min(max, Math.max(min, Math.round((value + delta) * 100) / 100));
+    setLocalText(null);
     onChange(next);
   };
+
+  const displayVal = localText !== null ? localText : (Number.isInteger(value) ? String(value) : value.toFixed(2));
 
   return (
     <div className="bg-zinc-950/50 border border-zinc-800/80 rounded-2xl p-3.5 sm:p-4 space-y-3 transition-colors hover:border-zinc-700/60">
       <div className="flex flex-wrap justify-between items-center gap-2">
         <div>
-          <label className="text-xs sm:text-sm font-semibold text-zinc-200">
+          <label htmlFor={inputId} className="text-xs sm:text-sm font-semibold text-zinc-200">
             {label}
           </label>
           {hint && <p className="text-[10px] text-zinc-500 mt-0.5">{hint}</p>}
@@ -359,7 +364,7 @@ function InputField({
             type="button"
             onClick={() => handleStep(-step)}
             className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700 transition-colors cursor-pointer"
-            aria-label="Decrease value"
+            aria-label={`Decrease ${label}`}
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
@@ -371,25 +376,35 @@ function InputField({
               </span>
             )}
             <input
-              type="number"
-              value={Number.isInteger(value) ? value : parseFloat(value.toFixed(2))}
+              id={inputId}
+              type="text"
+              inputMode="decimal"
+              value={displayVal}
               onFocus={(e) => {
+                setLocalText(String(value));
                 if (e.target.value === "0") {
                   e.target.select();
                 }
               }}
+              onBlur={() => {
+                if (localText !== null) {
+                  const parsed = parseFloat(localText);
+                  const valid = isNaN(parsed) ? 0 : Math.min(max, Math.max(min, Math.round(parsed * 100) / 100));
+                  onChange(valid);
+                  setLocalText(null);
+                }
+              }}
               onChange={(e) => {
                 const val = e.target.value;
-                if (val === "" || val === "-") {
-                  onChange(0);
+                setLocalText(val);
+                if (val === "" || val === "-" || val.endsWith(".")) {
                   return;
                 }
                 const parsed = parseFloat(val);
-                onChange(isNaN(parsed) ? 0 : parsed);
+                if (!isNaN(parsed)) {
+                  onChange(parsed);
+                }
               }}
-              min={min}
-              max={max}
-              step={step}
               className="w-full bg-transparent text-white font-bold text-xs sm:text-sm text-center focus:outline-none tabular-nums"
             />
             {suffix && (
@@ -403,7 +418,7 @@ function InputField({
             type="button"
             onClick={() => handleStep(step)}
             className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700 transition-colors cursor-pointer"
-            aria-label="Increase value"
+            aria-label={`Increase ${label}`}
           >
             <Plus className="w-3.5 h-3.5" />
           </button>
@@ -413,6 +428,7 @@ function InputField({
       {showSlider && (
         <div className="pt-1">
           <input
+            aria-label={`${label} slider`}
             type="range"
             min={min}
             max={max}
@@ -717,7 +733,7 @@ function StoreHub({ onSelectStore, isPro, onOpenProModal }: StoreHubProps) {
               {/* Action Footer */}
               <div className="p-6 sm:p-7 pt-0">
                 {isLive ? (
-                  <div className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-zinc-900 group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-teal-600 border border-zinc-700/80 group-hover:border-emerald-500/50 shadow-md transition-all active:scale-98">
+                  <div className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-zinc-900 group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-teal-600 border border-zinc-700/80 group-hover:border-emerald-500/50 shadow-md transition-all active:scale-[0.98]">
                     <span>Launch {store.shortName} Suite</span>
                     <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -1042,7 +1058,7 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
               {
                 label: `Offsite Ads (${(inputs.offsiteAdsRate * 100).toFixed(0)}%)`,
                 value: result.offsiteAdsFee,
-                note: inputs.offsiteAdsRate > 0 ? "Applied to item price" : "None",
+                note: inputs.offsiteAdsRate > 0 ? "Applied to Item + Shipping (max $100)" : "None",
               },
               { label: "Cost of Goods (COGS)", value: inputs.cogs, isCost: true },
               {
@@ -1133,9 +1149,6 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
 
       {/* Hardware Packing Sponsor */}
       <EtsyThermalPrinterSponsorCard isPro={isPro} />
-
-      {/* Seller Traps & Real Answers FAQ Accordion */}
-      <SellerFaqAccordion platform="etsy" />
     </div>
   );
 }
@@ -1480,9 +1493,6 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
 
       {/* Zero-Inventory POD Supplier */}
       <TikTokPrintifySponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Seller Traps & Real Answers FAQ Accordion */}
-      <SellerFaqAccordion platform="tiktok" />
     </div>
   );
 }
@@ -2069,9 +2079,6 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
 
       {/* Jungle Scout Supplier & Sales Estimator */}
       <AmazonJungleScoutSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
-
-      {/* Seller Traps & Real Answers FAQ Accordion */}
-      <SellerFaqAccordion platform="amazon" />
     </div>
   );
 }
@@ -2501,11 +2508,9 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
       <ReturnClawbackCard
         clawbackAmount={result.returnClawbackLoss}
         platformName="eBay"
-        explanation="Estimated unrecoverable cash loss if an eBay buyer requests a return (eBay retains the $0.30 per-order fee, seller loses shipping both ways on free return listings, lost packaging, and 15% estimated item restocking depreciation)."
+        explanation="Estimated unrecoverable cash loss if an eBay buyer requests a return (eBay retains the $0.30/$0.40 per-order fee, seller loses shipping both ways on free return listings, lost packaging, and 15% estimated item restocking depreciation)."
       />
 
-      {/* Seller Traps & Real Answers FAQ Accordion */}
-      <SellerFaqAccordion platform="ebay" />
     </div>
   );
 }
@@ -2947,8 +2952,6 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
         explanation="Estimated unrecoverable cash loss when a DTC customer returns an order (Shopify Payments NEVER refunds credit card interchange fees [2.9% + 30¢] upon customer refunds, plus merchant pays outbound & return shipping labels, lost packaging, and 15% restocking damage)."
       />
 
-      {/* Seller Traps & Real Answers FAQ Accordion */}
-      <SellerFaqAccordion platform="shopify" />
     </div>
   );
 }
@@ -2984,10 +2987,10 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
       case "tiktok": {
         const res = solveTikTokPriceForTargetMargin(tiktokInputs);
         const rows: BreakdownRow[] = [
-          { label: "Referral Fee", value: res.breakdown.referralFee, note: "6.0%" },
-          { label: "Payment Processing", value: res.breakdown.paymentProcessingFee, note: "2.9% + $0.30" },
+          { label: "Referral Fee", value: res.breakdown.referralFee, note: "6.0% (includes payment processing)" },
           { label: "Creator Affiliate", value: res.breakdown.affiliateCommission, note: `${(tiktokInputs.affiliateCommissionRate * 100).toFixed(0)}%` },
           ...(tiktokInputs.adSpendPerSale > 0 ? [{ label: "Paid Ad Spend", value: res.breakdown.adSpend, note: "Per Sale" }] : []),
+          { label: `Return Buffer (${(tiktokInputs.returnRate * 100).toFixed(0)}%)`, value: res.breakdown.returnLoss, note: "Return shrinkage reserve" },
           { label: "COGS", value: tiktokInputs.cogs, isCost: true },
           { label: "Shipping Cost", value: tiktokInputs.shippingCost, isCost: true },
           { label: "Packaging", value: tiktokInputs.packagingCost, isCost: true },
@@ -3031,8 +3034,9 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
         const res = solveEbayPriceForTargetMargin(ebayInputs);
         const rows: BreakdownRow[] = [
           { label: "Final Value Fee", value: res.breakdown.finalValueFee, note: `${(ebayInputs.finalValueFeeRate * 100).toFixed(2)}%` },
-          { label: "Order Fixed Fee", value: res.breakdown.orderPerSaleFee, note: "$0.30 per order" },
+          { label: "Order Fixed Fee", value: res.breakdown.orderPerSaleFee, note: res.breakdown.grossRevenue > 10 ? "$0.40 (orders > $10)" : "$0.30 (orders ≤ $10)" },
           ...(ebayInputs.promotedListingRate > 0 ? [{ label: "Promoted Listings", value: res.breakdown.promotedListingFee, note: `${(ebayInputs.promotedListingRate * 100).toFixed(1)}%` }] : []),
+          { label: `Return Reserve (${(ebayInputs.returnRate * 100).toFixed(0)}%)`, value: res.breakdown.returnLoss, note: "Dispute & return buffer" },
           { label: "COGS", value: ebayInputs.cogs, isCost: true },
           { label: "Actual Postage", value: ebayInputs.actualShippingCost, isCost: true },
           { label: "Packaging", value: ebayInputs.packagingCost, isCost: true },
@@ -3448,8 +3452,8 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
                   step={0.25}
                   prefix=""
                   suffix="%"
-                  presets={[9.35, 12.35, 13.25, 15]}
-                  hint="13.25% standard eBay FVF"
+                  presets={[6.7, 13.6, 15, 15.3]}
+                  hint="13.60% standard eBay FVF"
                 />
                 <InputField
                   label="Promoted Listings Standard %"
@@ -3620,11 +3624,36 @@ export default function CalculatorDashboard({
   // Launch Special: Pro features are 100% unlocked for all sellers through Dec 1, 2026!
   const [isPro, setIsPro] = useState<boolean>(true);
   const [isProModalOpen, setIsProModalOpen] = useState<boolean>(false);
+  const storeMenuRef = React.useRef<HTMLDivElement>(null);
 
   // Keep activeStore in sync with forceStore and initialStore props
   useEffect(() => {
     setActiveStore(forceStore || initialStore);
   }, [forceStore, initialStore]);
+
+  // Close dropdown on outside click or Escape key
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (storeMenuRef.current && !storeMenuRef.current.contains(e.target as Node)) {
+        setIsStoreMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsStoreMenuOpen(false);
+      }
+    };
+
+    if (isStoreMenuOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isStoreMenuOpen]);
 
   const handleSelectStore = (store: StoreId) => {
     setActiveStore(store);
@@ -3681,10 +3710,12 @@ export default function CalculatorDashboard({
 
             {/* In-Header Store Switcher Pill (When inside a store) */}
             {activeStore !== "hub" && (
-              <div className="relative">
+              <div ref={storeMenuRef} className="relative">
                 <button
                   type="button"
                   onClick={() => setIsStoreMenuOpen(!isStoreMenuOpen)}
+                  aria-expanded={isStoreMenuOpen}
+                  aria-haspopup="true"
                   className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700/80 hover:border-zinc-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
                   aria-label="Switch Marketplace"
                 >
@@ -3905,7 +3936,7 @@ export default function CalculatorDashboard({
                   <FileSpreadsheet className="w-3.5 h-3.5" />
                   <span>Batch CSV Audit</span>
                   <span
-                    className={`text-[9px] font-black px-1.5 py-0.2 rounded ${
+                    className={`text-[9px] font-black px-1.5 py-0.5 rounded ${
                       isPro
                         ? "bg-emerald-950 text-emerald-400 border border-emerald-800/60"
                         : "bg-amber-950 text-amber-400 border border-amber-800/60"
@@ -4014,6 +4045,9 @@ export default function CalculatorDashboard({
               <Link href="/privacy" className="hover:text-emerald-400 transition-colors">
                 Privacy Policy
               </Link>
+              <Link href="/terms" className="hover:text-emerald-400 transition-colors">
+                Terms of Service
+              </Link>
               <Link href="/contact" className="hover:text-emerald-400 transition-colors">
                 Contact &amp; Support
               </Link>
@@ -4042,6 +4076,14 @@ export default function CalculatorDashboard({
               Shopify Fee Calculator
             </Link>
           </div>
+
+          <p className="text-[11px] text-zinc-500 text-center max-w-3xl mx-auto leading-relaxed">
+            <strong className="text-zinc-400">Affiliate Disclosure:</strong> FeeSpotter is reader-supported. When you click on partner links (including EverBee, Kalodata, Helium 10, ZIK Analytics, Klaviyo, or Amazon) and make a purchase, we may earn an affiliate commission at no extra cost to you. As an Amazon Associate, FeeSpotter earns from qualifying purchases.
+          </p>
+
+          <p className="text-[10px] text-zinc-600 text-center max-w-3xl mx-auto leading-relaxed">
+            FeeSpotter is an independent software tool and is not affiliated with, endorsed by, or sponsored by Etsy, Inc., TikTok, Amazon.com, Inc., eBay Inc., or Shopify Inc. All product names, logos, and trademarks belong to their respective marketplace owners.
+          </p>
 
           <p className="text-[11px] text-zinc-600 text-center">
             &copy; 2026 FeeSpotter. All rights reserved. Calculations are deterministic financial estimates based on official 2026 marketplace fee schedules and do not constitute formal tax or investment advice.

@@ -76,8 +76,8 @@ function buildChartData(steps: WaterfallStep[]): ChartDataPoint[] {
       return {
         name: step.name,
         shortName,
-        spacer: profitValue < 0 ? profitValue : 0,
-        bar: Math.abs(profitValue),
+        spacer: 0,
+        bar: profitValue,
         actualValue: profitValue,
         cumulative: step.cumulative,
         type: step.type,

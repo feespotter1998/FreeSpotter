@@ -739,11 +739,7 @@ export function BatchCsvAudit({
       doc.setTextColor(148, 163, 184);
       doc.text(
         `Generated: ${new Date().toLocaleDateString()} | Platform: ${
-          platform === "etsy"
-            ? "Etsy Marketplace"
-            : platform === "tiktok"
-            ? "TikTok Shop"
-            : "Amazon (FBA)"
+          PLATFORM_SAMPLE_CSV_CONFIG[platform]?.name ?? "Marketplace"
         } | Source: ${fileName ?? "Batch Upload"}`,
         40,
         55
@@ -1029,8 +1025,8 @@ export function BatchCsvAudit({
                 auditedItems.length === 0
                   ? "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-60"
                   : isPro
-                  ? "bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 cursor-pointer shadow-emerald-950/60 active:scale-98"
-                  : "bg-zinc-800 hover:bg-zinc-750 border border-emerald-500/40 text-emerald-300 cursor-pointer"
+                  ? "bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 cursor-pointer shadow-emerald-950/60 active:scale-[0.98]"
+                  : "bg-zinc-800 hover:bg-zinc-700 border border-emerald-500/40 text-emerald-300 cursor-pointer"
               }`}
             >
               {isPro ? (
@@ -1824,7 +1820,7 @@ export function BatchCsvAudit({
                         isItemBlurred
                           ? "filter blur-[5px] select-none pointer-events-none opacity-40 bg-zinc-950 border-zinc-800"
                           : isBleeding
-                          ? "bg-rose-50 text-rose-700 border-rose-300 shadow-md"
+                          ? "bg-rose-950/30 text-rose-100 border-rose-500/40 shadow-md shadow-rose-950/20"
                           : "bg-zinc-950/60 border-zinc-800/80 text-zinc-200"
                       }`}
                     >
@@ -1832,14 +1828,14 @@ export function BatchCsvAudit({
                         <div className="truncate">
                           <span
                             className={`font-mono text-xs font-bold ${
-                              isBleeding ? "text-rose-900" : "text-zinc-400"
+                              isBleeding ? "text-rose-300/80" : "text-zinc-400"
                             }`}
                           >
                             {item.sku}
                           </span>
                           <h4
                             className={`text-sm font-bold truncate ${
-                              isBleeding ? "text-rose-950" : "text-white"
+                              isBleeding ? "text-white" : "text-white"
                             }`}
                             title={item.name}
                           >
@@ -1847,8 +1843,8 @@ export function BatchCsvAudit({
                           </h4>
                         </div>
                         {isBleeding ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-200 text-rose-800 border border-rose-300 shrink-0">
-                            <AlertTriangle className="w-3 h-3 text-rose-700" />
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-950/90 text-rose-300 border border-rose-500/40 shrink-0">
+                            <AlertTriangle className="w-3 h-3 text-rose-400" />
                             BLEEDING CASH
                           </span>
                         ) : (
@@ -1862,7 +1858,7 @@ export function BatchCsvAudit({
                       <div
                         className={`grid grid-cols-2 gap-2 text-xs py-2 my-2 border-y ${
                           isBleeding
-                            ? "border-rose-200 text-rose-800"
+                            ? "border-rose-900/40 text-rose-200"
                             : "border-zinc-800 text-zinc-400"
                         }`}
                       >
@@ -1901,11 +1897,11 @@ export function BatchCsvAudit({
                           <span className="text-[10px] block opacity-70">Net Profit</span>
                           <span
                             className={`text-base font-black tabular-nums flex items-center gap-1 ${
-                              isBleeding ? "text-rose-700" : "text-emerald-400"
+                              isBleeding ? "text-rose-400" : "text-emerald-400"
                             }`}
                           >
                             {isBleeding ? (
-                              <TrendingDown className="w-4 h-4" />
+                              <TrendingDown className="w-4 h-4 text-rose-400" />
                             ) : (
                               <TrendingUp className="w-4 h-4" />
                             )}
@@ -1917,7 +1913,7 @@ export function BatchCsvAudit({
                           <span className="text-[10px] block opacity-70">Net Margin</span>
                           <span
                             className={`text-base font-bold tabular-nums ${
-                              isBleeding ? "text-rose-700" : "text-emerald-400"
+                              isBleeding ? "text-rose-400" : "text-emerald-400"
                             }`}
                           >
                             {item.netMarginPercent.toFixed(1)}%
@@ -1966,7 +1962,7 @@ export function BatchCsvAudit({
                             isRowBlurred
                               ? "filter blur-[5px] select-none pointer-events-none opacity-40 bg-zinc-950 text-zinc-500"
                               : isBleeding
-                              ? "bg-rose-50 text-rose-700 hover:bg-rose-100"
+                              ? "bg-rose-950/30 text-rose-100 hover:bg-rose-950/45"
                               : "text-zinc-200 hover:bg-zinc-800/30"
                           }`}
                         >
@@ -1975,16 +1971,16 @@ export function BatchCsvAudit({
                               isRowBlurred
                                 ? "bg-zinc-950"
                                 : isBleeding
-                                ? "bg-rose-50"
+                                ? "bg-[#1f0a10]"
                                 : "bg-zinc-900/90"
                             }`}
                           >
-                            <div className="font-bold text-sm tracking-tight">
+                            <div className="font-bold text-sm tracking-tight text-white">
                               {item.sku}
                             </div>
                             <div
                               className={`text-xs truncate max-w-[180px] sm:max-w-[260px] lg:max-w-[360px] xl:max-w-[480px] ${
-                                isBleeding ? "text-rose-600/90" : "text-zinc-400"
+                                isBleeding ? "text-rose-300/80" : "text-zinc-400"
                               }`}
                               title={item.name}
                             >
@@ -1994,8 +1990,8 @@ export function BatchCsvAudit({
 
                           <td className="py-3 px-3 whitespace-nowrap">
                             {isBleeding ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-black uppercase tracking-wider bg-rose-200 text-rose-800 border border-rose-300">
-                                <AlertTriangle className="w-3.5 h-3.5 text-rose-700 shrink-0" />
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-black uppercase tracking-wider bg-rose-950/90 text-rose-300 border border-rose-500/40">
+                                <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                                 BLEEDING CASH
                               </span>
                             ) : (
@@ -2013,7 +2009,7 @@ export function BatchCsvAudit({
                           <td className="py-3 px-3 text-center tabular-nums text-xs whitespace-nowrap">
                             <span
                               className={
-                                isBleeding ? "text-rose-600" : "text-zinc-300"
+                                isBleeding ? "text-rose-300" : "text-zinc-300"
                               }
                             >
                               +${item.shippingCharged.toFixed(2)}
@@ -2021,7 +2017,7 @@ export function BatchCsvAudit({
                             <span className="mx-1 text-zinc-500">/</span>
                             <span
                               className={
-                                isBleeding ? "text-rose-800 font-bold" : "text-zinc-400"
+                                isBleeding ? "text-rose-400 font-bold" : "text-zinc-400"
                               }
                             >
                               -${item.actualShippingCost.toFixed(2)}
@@ -2039,11 +2035,11 @@ export function BatchCsvAudit({
                           <td className="py-3 px-4 text-right tabular-nums">
                             <span
                               className={`text-sm font-black inline-flex items-center gap-1 ${
-                                isBleeding ? "text-rose-700" : "text-emerald-400"
+                                isBleeding ? "text-rose-400" : "text-emerald-400"
                               }`}
                             >
                               {isBleeding ? (
-                                <TrendingDown className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                                <TrendingDown className="w-3.5 h-3.5 text-rose-400 shrink-0" />
                               ) : (
                                 <TrendingUp className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                               )}
@@ -2055,7 +2051,7 @@ export function BatchCsvAudit({
                           <td className="py-3 px-3 text-right tabular-nums font-bold">
                             <span
                               className={
-                                isBleeding ? "text-rose-700" : "text-emerald-400"
+                                isBleeding ? "text-rose-400" : "text-emerald-400"
                               }
                             >
                               {item.netMarginPercent.toFixed(1)}%
