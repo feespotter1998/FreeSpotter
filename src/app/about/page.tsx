@@ -6,19 +6,19 @@ import {
   Zap,
   Target,
   ArrowLeft,
-  CheckCircle2,
   HeartHandshake,
   TrendingUp,
 } from "lucide-react";
 
 import { getSiteUrl } from "@/lib/siteUrl";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "About Our Multi-Marketplace Profit Auditor",
   description:
-    "FeeSpotter was created to give Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a 100% deterministic, ad-free calculator to expose hidden fees and protect real net profit.",
+    "FeeSpotter was created to give Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a 100% deterministic, accurate calculator to expose hidden fees and protect real net profit.",
   alternates: {
     canonical: `${siteUrl}/about`,
   },
@@ -55,36 +55,33 @@ export default function AboutPage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 flex-1 space-y-12">
-        <div className="space-y-4 text-center">
+        <div className="space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 text-xs font-bold">
             <ShieldCheck className="w-4 h-4" />
-            Our Mission &amp; Architectural Standard
+            Independent E-Commerce Analytics
           </div>
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Stop Guessing Margins. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-              Spot Every Single Hidden Fee.
-            </span>
+          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            Built for Sellers Who Refuse to Fly Blind on Marketplace Fees
           </h1>
-          <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-            Marketplace platforms make billions in transaction fees, processing surcharges, and ad penalties. We built FeeSpotter so sellers finally know their exact bottom line before shipping an order.
+          <p className="text-zinc-400 text-base sm:text-lg leading-relaxed">
+            Marketplace platforms change rate structures constantly. From multi-tiered payment processing fees and regulatory operating surcharges to offsite ad clawbacks and fulfillment placement fees, real take-home profit is nearly impossible to predict using basic back-of-the-napkin math.
           </p>
         </div>
 
-        {/* 3 Core Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Feature Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-zinc-950/70 border border-zinc-800 rounded-3xl p-6 space-y-3">
             <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/60 flex items-center justify-center">
               <Zap className="w-5 h-5" />
             </div>
             <h2 className="text-base font-bold text-white">100% Deterministic Math</h2>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              No fuzzy AI hallucinations or rough estimates. Every marketplace formula is engineered with pure mathematical precision verified against official 2026 fee rate cards.
+              Every fee formula is modeled strictly from current marketplace merchant documentation. No guesswork, no hidden formulas, and zero floating-point math rounding drift.
             </p>
           </div>
 
           <div className="bg-zinc-950/70 border border-zinc-800 rounded-3xl p-6 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-950 text-teal-400 border border-teal-800/60 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800/60 flex items-center justify-center">
               <Target className="w-5 h-5" />
             </div>
             <h2 className="text-base font-bold text-white">Reverse Target Pricing</h2>
@@ -102,6 +99,16 @@ export default function AboutPage() {
               We never sell your store catalog data, customer information, or sales figures. Your spreadsheet audits process entirely in your client browser for total data privacy.
             </p>
           </div>
+
+          <div className="bg-zinc-950/70 border border-zinc-800 rounded-3xl p-6 space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-950 text-purple-400 border border-purple-800/60 flex items-center justify-center">
+              <DollarSign className="w-5 h-5" />
+            </div>
+            <h2 className="text-base font-bold text-white">Batch CSV Catalog Audits</h2>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Upload your catalog in one click. FeeSpotter scans hundreds of listings in milliseconds to flag cash-bleeding SKUs and export professional PDF audit reports.
+            </p>
+          </div>
         </div>
 
         {/* Story Section */}
@@ -111,7 +118,7 @@ export default function AboutPage() {
             In modern e-commerce, top-line revenue is vanity, and net bank deposits are sanity. Sellers regularly generate tens of thousands of dollars in gross merchandise volume (GMV) on platforms like TikTok Shop and Etsy, only to discover at tax season that their actual margins were negative.
           </p>
           <p>
-            Between Etsy's 6.5% transaction fee on shipping, TikTok's creator affiliate splits, Amazon's Inbound Placement surcharges, eBay's final value fees on sales tax, and Shopify's third-party gateway penalties, managing spreadsheets became an exhausting daily chore.
+            Between Etsy&apos;s 6.5% transaction fee on shipping, TikTok&apos;s creator affiliate splits, Amazon&apos;s Inbound Placement surcharges, eBay&apos;s final value fees on sales tax, and Shopify&apos;s third-party gateway penalties, managing spreadsheets became an exhausting daily chore.
           </p>
           <p>
             FeeSpotter replaces cumbersome spreadsheets with a unified, high-speed profit engine. Whether evaluating a single product or auditing an entire 500-SKU catalog via CSV, FeeSpotter gives you immediate financial clarity in seconds.
@@ -130,17 +137,8 @@ export default function AboutPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
-        <div className="max-w-4xl mx-auto px-4 space-y-2">
-          <p className="font-semibold text-zinc-400">
-            FeeSpotter &bull; Independent Marketplace Profit Auditor
-          </p>
-          <p className="text-zinc-600 text-[11px]">
-            &copy; 2026 FeeSpotter. All trademarks belong to their respective marketplace owners.
-          </p>
-        </div>
-      </footer>
+      {/* Shared Site Footer */}
+      <SiteFooter />
     </div>
   );
 }

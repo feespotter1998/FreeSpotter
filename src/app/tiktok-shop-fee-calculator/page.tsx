@@ -6,14 +6,14 @@ import { getSiteUrl } from "@/lib/siteUrl";
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "TikTok Shop Fee Calculator 2026: Net Profit & ROAS",
+  title: "TikTok Shop Fee & Profit Calculator (2026)",
   description:
     "Calculate exact TikTok Shop net profits after the 6% referral fee, creator affiliate commissions, returns, and ad spend. Includes free Break-Even ROAS solver.",
   alternates: {
     canonical: `${siteUrl}/tiktok-shop-fee-calculator`,
   },
   openGraph: {
-    title: "TikTok Shop Fee Calculator 2026: Real Profit & Break-Even ROAS",
+    title: "TikTok Shop Fee & Profit Calculator 2026 | FeeSpotter",
     description: "Accurately compute TikTok referral commission, creator affiliates, and ad spend margins.",
     url: `${siteUrl}/tiktok-shop-fee-calculator`,
     siteName: "FeeSpotter",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TikTok Shop Fee Calculator 2026: Net Profit & ROAS",
+    title: "TikTok Shop Fee & Profit Calculator (2026)",
     description: "Calculate exact TikTok Shop net profits after the 6% referral fee, creator affiliate commissions, returns, and ad spend.",
     images: [`${siteUrl}/og-image.png`],
   },

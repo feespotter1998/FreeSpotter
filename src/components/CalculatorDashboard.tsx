@@ -14,7 +14,6 @@ import {
   Plus,
   Minus,
   Sparkles,
-  Info,
   CheckCircle2,
   AlertTriangle,
   Crown,
@@ -29,7 +28,6 @@ import {
   Box,
   Truck,
   Layers,
-  ExternalLink,
 } from "lucide-react";
 import {
   type EtsyInputs,
@@ -40,7 +38,6 @@ import {
   type ShopifyInputs,
   type EtsyResult,
   type TikTokResult,
-  type ReverseCalcResult,
   type AmazonResult,
   type EbayResult,
   type ShopifyResult,
@@ -3618,18 +3615,22 @@ export default function CalculatorDashboard({
   forceStore,
   children,
 }: CalculatorDashboardProps = {}) {
-  const [activeStore, setActiveStore] = useState<StoreId>(forceStore || initialStore);
+  const [localStore, setLocalStore] = useState<StoreId>(forceStore || initialStore);
+  const [prevForceStore, setPrevForceStore] = useState<StoreId | undefined>(forceStore);
+  if (forceStore !== prevForceStore) {
+    setPrevForceStore(forceStore);
+    if (forceStore) {
+      setLocalStore(forceStore);
+    }
+  }
+  const activeStore = forceStore || localStore;
+  const setActiveStore = setLocalStore;
   const [activeSubTab, setActiveSubTab] = useState<SubTabId>(initialSubTab);
   const [isStoreMenuOpen, setIsStoreMenuOpen] = useState<boolean>(false);
   // Launch Special: Pro features are 100% unlocked for all sellers through Dec 1, 2026!
   const [isPro, setIsPro] = useState<boolean>(true);
   const [isProModalOpen, setIsProModalOpen] = useState<boolean>(false);
   const storeMenuRef = React.useRef<HTMLDivElement>(null);
-
-  // Keep activeStore in sync with forceStore and initialStore props
-  useEffect(() => {
-    setActiveStore(forceStore || initialStore);
-  }, [forceStore, initialStore]);
 
   // Close dropdown on outside click or Escape key
   useEffect(() => {

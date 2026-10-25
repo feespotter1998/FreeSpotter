@@ -10,7 +10,6 @@ import {
   ChevronUp,
   HelpCircle,
   BookOpen,
-  DollarSign,
   TrendingUp,
   Calculator,
   ArrowRight,

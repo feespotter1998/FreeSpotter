@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 import { AFFILIATE_CONFIG } from "@/lib/affiliates";
-import { Sparkles, Megaphone } from "lucide-react";
 
 interface GoogleAdBannerProps {
   slotId?: string;
@@ -15,7 +14,6 @@ interface GoogleAdBannerProps {
 export function GoogleAdBanner({
   slotId,
   isPro = false,
-  onOpenProModal,
   format = "horizontal",
   className = "",
 }: GoogleAdBannerProps) {

@@ -12,14 +12,14 @@ import {
 import { AFFILIATE_CONFIG } from "@/lib/affiliates";
 
 interface SponsorProps {
-  isPro: boolean;
+  isPro?: boolean;
   onOpenProModal?: () => void;
 }
 
 // ─────────────────────────────────────────────────────────────
 // 1. ETSY SPONSOR 1: EVERBEE (ETSY SPY TOOL, 30% RECURRING)
 // ─────────────────────────────────────────────────────────────
-export function EtsyEverbeeSponsorCard({ isPro, onOpenProModal }: SponsorProps) {
+export function EtsyEverbeeSponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.etsy.everbee;
 
   return (
@@ -33,6 +33,9 @@ export function EtsyEverbeeSponsorCard({ isPro, onOpenProModal }: SponsorProps) 
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-orange-400 bg-orange-950/90 px-2 py-0.5 rounded border border-orange-800/80">
                 Etsy Seller Tool
+              </span>
+              <span className="text-[10px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+                Sponsored
               </span>
               <span className="text-[10px] text-zinc-500 font-medium">Trending</span>
             </div>
@@ -64,7 +67,7 @@ export function EtsyEverbeeSponsorCard({ isPro, onOpenProModal }: SponsorProps) 
 // ─────────────────────────────────────────────────────────────
 // 2. ETSY SPONSOR 2: 4x6 THERMAL PRINTER (AMAZON ASSOCIATES)
 // ─────────────────────────────────────────────────────────────
-export function EtsyThermalPrinterSponsorCard({ isPro }: SponsorProps) {
+export function EtsyThermalPrinterSponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.etsy.thermalPrinter;
 
   return (
@@ -74,9 +77,14 @@ export function EtsyThermalPrinterSponsorCard({ isPro }: SponsorProps) {
           <Printer className="w-4 h-4 text-emerald-400" />
         </div>
         <div>
-          <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-            Essential Seller Hardware
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+              Essential Seller Hardware
+            </span>
+            <span className="text-[9px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+              Sponsored Partner
+            </span>
+          </div>
           <p className="font-bold text-zinc-100 mt-0.5">
             {config.title}
           </p>
@@ -103,7 +111,7 @@ export function EtsyThermalPrinterSponsorCard({ isPro }: SponsorProps) {
 // ─────────────────────────────────────────────────────────────
 // 3. TIKTOK SHOP SPONSOR 1: KALODATA (VIRAL PRODUCT SPY)
 // ─────────────────────────────────────────────────────────────
-export function TikTokKalodataSponsorCard({ isPro, onOpenProModal }: SponsorProps) {
+export function TikTokKalodataSponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.tiktok.kalodata;
 
   return (
@@ -117,6 +125,9 @@ export function TikTokKalodataSponsorCard({ isPro, onOpenProModal }: SponsorProp
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-950/90 px-2 py-0.5 rounded border border-cyan-800/80">
                 TikTok Intelligence
+              </span>
+              <span className="text-[10px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+                Sponsored
               </span>
               <span className="text-[10px] text-zinc-500 font-medium">Top Rated</span>
             </div>
@@ -148,7 +159,7 @@ export function TikTokKalodataSponsorCard({ isPro, onOpenProModal }: SponsorProp
 // ─────────────────────────────────────────────────────────────
 // 4. TIKTOK SHOP SPONSOR 2: PRINTIFY (ZERO INVENTORY SUPPLIER)
 // ─────────────────────────────────────────────────────────────
-export function TikTokPrintifySponsorCard({ isPro }: SponsorProps) {
+export function TikTokPrintifySponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.tiktok.printify;
 
   return (
@@ -158,9 +169,14 @@ export function TikTokPrintifySponsorCard({ isPro }: SponsorProps) {
           <PackageCheck className="w-4 h-4 text-teal-400" />
         </div>
         <div>
-          <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-            Automated Fulfillment
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+              Automated Fulfillment
+            </span>
+            <span className="text-[9px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+              Sponsored Partner
+            </span>
+          </div>
           <p className="font-bold text-zinc-100 mt-0.5">
             {config.title}
           </p>
@@ -187,7 +203,7 @@ export function TikTokPrintifySponsorCard({ isPro }: SponsorProps) {
 // ─────────────────────────────────────────────────────────────
 // 5. AMAZON SPONSOR 1: HELIUM 10 (FBA RESEARCH SUITE, 33% RECURRING)
 // ─────────────────────────────────────────────────────────────
-export function AmazonHelium10SponsorCard({ isPro }: SponsorProps) {
+export function AmazonHelium10SponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.amazon.helium10;
 
   return (
@@ -201,6 +217,9 @@ export function AmazonHelium10SponsorCard({ isPro }: SponsorProps) {
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 bg-amber-950/90 px-2 py-0.5 rounded border border-amber-800/80">
                 Amazon FBA Intelligence
+              </span>
+              <span className="text-[10px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+                Sponsored
               </span>
               <span className="text-[10px] text-zinc-500 font-medium">Industry Standard</span>
             </div>
@@ -232,7 +251,7 @@ export function AmazonHelium10SponsorCard({ isPro }: SponsorProps) {
 // ─────────────────────────────────────────────────────────────
 // 6. AMAZON SPONSOR 2: JUNGLE SCOUT ($150 BOUNTY)
 // ─────────────────────────────────────────────────────────────
-export function AmazonJungleScoutSponsorCard({ isPro }: SponsorProps) {
+export function AmazonJungleScoutSponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.amazon.jungleScout;
 
   return (
@@ -242,9 +261,14 @@ export function AmazonJungleScoutSponsorCard({ isPro }: SponsorProps) {
           <TrendingUp className="w-4 h-4 text-amber-400" />
         </div>
         <div>
-          <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
-            Sales Estimator & Supplier Sourcing
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
+              Sales Estimator & Sourcing
+            </span>
+            <span className="text-[9px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+              Sponsored Partner
+            </span>
+          </div>
           <p className="font-bold text-zinc-100 mt-0.5">
             {config.title}
           </p>
@@ -269,9 +293,9 @@ export function AmazonJungleScoutSponsorCard({ isPro }: SponsorProps) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 5. EBAY SPONSOR: ZIK ANALYTICS
+// 7. EBAY SPONSOR: ZIK ANALYTICS
 // ─────────────────────────────────────────────────────────────
-export function EbayZikAnalyticsSponsorCard({ isPro }: SponsorProps) {
+export function EbayZikAnalyticsSponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.ebay.zikAnalytics;
 
   return (
@@ -285,6 +309,9 @@ export function EbayZikAnalyticsSponsorCard({ isPro }: SponsorProps) {
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-blue-400 bg-blue-950/90 px-2 py-0.5 rounded border border-blue-800/80">
                 eBay Seller Tool
+              </span>
+              <span className="text-[10px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+                Sponsored
               </span>
               <span className="text-[10px] text-zinc-500 font-medium">Market Research</span>
             </div>
@@ -314,9 +341,9 @@ export function EbayZikAnalyticsSponsorCard({ isPro }: SponsorProps) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 6. SHOPIFY SPONSOR: KLAVIYO
+// 8. SHOPIFY SPONSOR: KLAVIYO
 // ─────────────────────────────────────────────────────────────
-export function ShopifyKlaviyoSponsorCard({ isPro }: SponsorProps) {
+export function ShopifyKlaviyoSponsorCard({}: SponsorProps = {}) {
   const config = AFFILIATE_CONFIG.shopify.klaviyo;
 
   return (
@@ -330,6 +357,9 @@ export function ShopifyKlaviyoSponsorCard({ isPro }: SponsorProps) {
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-950/90 px-2 py-0.5 rounded border border-emerald-800/80">
                 Shopify Growth Tool
+              </span>
+              <span className="text-[10px] text-zinc-400 font-semibold bg-zinc-800/80 px-1.5 py-0.5 rounded border border-zinc-700/60 uppercase tracking-wider">
+                Sponsored
               </span>
               <span className="text-[10px] text-zinc-500 font-medium">Email & SMS Marketing</span>
             </div>

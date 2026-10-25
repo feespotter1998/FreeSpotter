@@ -5,7 +5,9 @@ import { getSiteUrl } from "@/lib/siteUrl";
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "Marketplace Fee & Profit Calculator 2026 | FeeSpotter",
+  title: {
+    absolute: "Marketplace Fee & Profit Calculator 2026 | FeeSpotter",
+  },
   description:
     "Calculate exact seller fees and true net profit on Etsy, TikTok Shop, Amazon FBA, eBay, and Shopify. Free reverse price solvers and break-even ROAS tools.",
   alternates: {

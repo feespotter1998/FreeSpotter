@@ -6,10 +6,7 @@ import {
   Sparkles,
   ShieldCheck,
   X,
-  FileSpreadsheet,
-  FileText,
   Zap,
-  Lock,
 } from "lucide-react";
 
 export type BillingCycle = "monthly" | "annual";
@@ -27,7 +24,6 @@ export function ProUpgradeModal({
   onClose,
   onUpgradeSuccess,
   bleedingCount,
-  totalSkus,
 }: ProUpgradeModalProps) {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("annual");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -194,7 +190,7 @@ export function ProUpgradeModal({
               <Check className="w-3.5 h-3.5" />
             </div>
             <span>
-              <strong className="text-white">100% Ad-Free Experience:</strong> Clean, distraction-free environment without any sponsor banners.
+              <strong className="text-white">Distraction-Free Environment:</strong> Clean, focused auditing workflow without sponsor banners.
             </span>
           </div>
 

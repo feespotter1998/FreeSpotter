@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   TrendingDown,
   TrendingUp,
-  DollarSign,
   FileText,
   Search,
   Sparkles,
@@ -227,9 +226,14 @@ export function BatchCsvAudit({
   initialPlatform = "etsy",
 }: BatchCsvAuditProps) {
   const [platform, setPlatform] = useState<AuditPlatform>(initialPlatform);
+  const [prevInitialPlatform, setPrevInitialPlatform] = useState<AuditPlatform>(initialPlatform);
+  if (initialPlatform && initialPlatform !== prevInitialPlatform) {
+    setPrevInitialPlatform(initialPlatform);
+    setPlatform(initialPlatform);
+  }
   const [etsyOffsiteAdsRate, setEtsyOffsiteAdsRate] = useState<0 | 0.12 | 0.15>(0);
   const [tiktokCommissionRate, setTiktokCommissionRate] = useState<number>(0.1);
-  const [tiktokAdSpend, setTiktokAdSpend] = useState<number>(0);
+  const [tiktokAdSpend] = useState<number>(0);
   const [tiktokReturnRate, setTiktokReturnRate] = useState<number>(0.05);
   const [amazonReferralRate, setAmazonReferralRate] = useState<number>(0.15);
   const [amazonFbaFee, setAmazonFbaFee] = useState<number>(4.75);
@@ -263,17 +267,6 @@ export function BatchCsvAudit({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
-  useEffect(() => {
-    if (initialPlatform && initialPlatform !== platform) {
-      setPlatform(initialPlatform);
-      if (fileName && fileName.startsWith("feespotter_")) {
-        handleLoadDemoData(initialPlatform);
-      } else {
-        reauditCurrentData(initialPlatform);
-      }
-    }
-  }, [initialPlatform]);
 
   const showNotification = (
     message: string,

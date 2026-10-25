@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { getSiteUrl } from "@/lib/siteUrl";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const siteUrl = getSiteUrl();
 
@@ -155,17 +156,8 @@ export default function ContactPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
-        <div className="max-w-4xl mx-auto px-4 space-y-2">
-          <p className="font-semibold text-zinc-400">
-            FeeSpotter &bull; Independent Marketplace Profit Auditor
-          </p>
-          <p className="text-zinc-600 text-[11px]">
-            &copy; 2026 FeeSpotter. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* Shared Site Footer */}
+      <SiteFooter />
     </div>
   );
 }

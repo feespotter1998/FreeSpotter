@@ -3,11 +3,6 @@
 import React, { useState } from "react";
 import {
   ChevronDown,
-  HelpCircle,
-  AlertTriangle,
-  Info,
-  DollarSign,
-  TrendingDown,
   ShoppingBag,
   Store,
   Package,

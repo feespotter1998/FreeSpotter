@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DollarSign, ShieldCheck, ArrowLeft } from "lucide-react";
 
 import { getSiteUrl } from "@/lib/siteUrl";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const siteUrl = getSiteUrl();
 
@@ -93,7 +94,7 @@ export default function PrivacyPage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-white">6. Affiliate Disclosure</h2>
             <p>
-              FeeSpotter participates in select partner and affiliate programs (including EverBee, Kalodata, and Amazon Associates). Some links on this site may be affiliate links. If you click a sponsor card and choose to purchase a subscription or product, FeeSpotter may receive an affiliate commission at no additional cost to you. We only recommend tools that our team independently tests and verifies for seller profitability.
+              FeeSpotter participates in select partner and affiliate programs (including EverBee, Kalodata, and Amazon Associates). Some links on this site may be affiliate links. If you click a sponsor card and choose to purchase a subscription or product, FeeSpotter may receive an affiliate commission at no additional cost to you. We strive to highlight reputable, battle-tested tools and services commonly utilized by marketplace sellers to maximize profitability.
             </p>
           </section>
 
@@ -113,17 +114,8 @@ export default function PrivacyPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
-        <div className="max-w-4xl mx-auto px-4 space-y-2">
-          <p className="font-semibold text-zinc-400">
-            FeeSpotter &bull; Independent Marketplace Profit Auditor
-          </p>
-          <p className="text-zinc-600 text-[11px]">
-            &copy; 2026 FeeSpotter. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* Shared Site Footer */}
+      <SiteFooter />
     </div>
   );
 }

@@ -3,9 +3,6 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  DollarSign,
-  TrendingUp,
-  Percent,
   ShoppingBag,
   Store,
   Package,

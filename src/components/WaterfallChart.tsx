@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo, useSyncExternalStore } from "react";
 import {
   BarChart,
   Bar,
@@ -146,23 +146,22 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   );
 }
 
-export function WaterfallChart({ steps }: WaterfallChartProps) {
-  const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+const emptySubscribe = () => () => {};
 
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+export function WaterfallChart({ steps }: WaterfallChartProps) {
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const isMobile = useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("resize", callback);
+      return () => window.removeEventListener("resize", callback);
+    },
+    () => window.innerWidth < 640,
+    () => false
+  );
 
   const data = useMemo(() => buildChartData(steps), [steps]);
 
-  if (!mounted) {
+  if (!isMounted) {
     return (
       <div className="w-full h-64 sm:h-80 flex items-center justify-center bg-zinc-900/30 rounded-xl border border-zinc-800/40 animate-pulse">
         <span className="text-xs text-zinc-500 font-medium">Rendering Profit Waterfall...</span>

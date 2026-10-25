@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DollarSign, FileText, ArrowLeft } from "lucide-react";
 
 import { getSiteUrl } from "@/lib/siteUrl";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const siteUrl = getSiteUrl();
 
@@ -50,15 +51,15 @@ export default function TermsPage() {
             Terms of Service
           </h1>
           <p className="text-xs text-zinc-500">
-            Last Updated: October 2026 &bull; Effective Immediately
+            Last Updated: October 25, 2026 &bull; Effective Immediately
           </p>
         </div>
 
         <div className="space-y-6 text-sm text-zinc-300 leading-relaxed bg-zinc-950/60 border border-zinc-800/80 rounded-3xl p-6 sm:p-8">
           <section className="space-y-2">
-            <h2 className="text-base font-bold text-white">1. Agreement to Terms</h2>
+            <h2 className="text-base font-bold text-white">1. Agreement to Terms &amp; Eligibility</h2>
             <p>
-              By accessing or using FeeSpotter (&ldquo;the Service&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) at feespotter.com, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you do not have permission to access or use the Service.
+              By accessing or using FeeSpotter (&ldquo;the Service&rdquo;, &ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;us&rdquo;) at feespotter.com, you agree to be bound by these Terms of Service. You must be at least 18 years of age or the age of legal majority in your jurisdiction to use this Service. If you disagree with any part of these terms, you do not have permission to access or use the Service.
             </p>
           </section>
 
@@ -99,30 +100,28 @@ export default function TermsPage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-white">6. Pro Memberships &amp; Subscriptions</h2>
             <p>
-              FeeSpotter offers optional paid Pro memberships providing unblurred batch catalog audits and executive PDF exports. During promotional periods, Pro features may be temporarily unlocked for all users at our discretion. Paid subscriptions can be managed or cancelled at any time through your account portal.
+              FeeSpotter offers optional Pro memberships providing unblurred batch catalog audits and executive PDF exports. During promotional periods, Pro features may be temporarily unlocked for all users at our discretion. Paid subscriptions can be managed or cancelled at any time through your account portal.
             </p>
           </section>
 
           <section className="space-y-2">
-            <h2 className="text-base font-bold text-white">7. Changes to Terms &amp; Inquiries</h2>
+            <h2 className="text-base font-bold text-white">7. Governing Law &amp; Jurisdiction</h2>
             <p>
-              We reserve the right to modify or replace these Terms at any time. For questions regarding these Terms, contact our team at support@feespotter.com or visit our Contact page.
+              These Terms shall be governed and construed in accordance with the laws of the State of Delaware, United States, without regard to its conflict of law provisions. Any dispute arising from these Terms or your use of the Service shall be subject to the exclusive jurisdiction of the state and federal courts located in the United States.
+            </p>
+          </section>
+
+          <section className="space-y-2">
+            <h2 className="text-base font-bold text-white">8. Inquiries &amp; Contact</h2>
+            <p>
+              For questions regarding these Terms, contact our team at support@feespotter.com or visit our Contact page.
             </p>
           </section>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
-        <div className="max-w-4xl mx-auto px-4 space-y-2">
-          <p className="font-semibold text-zinc-400">
-            FeeSpotter &bull; Independent Marketplace Profit Auditor
-          </p>
-          <p className="text-zinc-600 text-[11px]">
-            &copy; 2026 FeeSpotter. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* Shared Site Footer */}
+      <SiteFooter />
     </div>
   );
 }
