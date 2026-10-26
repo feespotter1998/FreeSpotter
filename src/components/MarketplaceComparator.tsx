@@ -9,6 +9,7 @@ import {
   Crown,
   ArrowRight,
   Sparkles,
+  RotateCcw,
 } from "lucide-react";
 import {
   type MarketplaceCompareInputs,
@@ -36,6 +37,8 @@ export function MarketplaceComparator({
     () => compareAllMarketplaces(inputs),
     [inputs]
   );
+
+  const isCleared = inputs.sellingPrice === 0 && inputs.cogs === 0 && inputs.actualShippingCost === 0;
 
   const update = <K extends keyof MarketplaceCompareInputs>(
     key: K,
@@ -150,7 +153,49 @@ export function MarketplaceComparator({
       </div>
 
       {/* Quick Input Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4">
+      <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">
+            Unit Parameters
+          </span>
+          {isCleared ? (
+            <button
+              type="button"
+              onClick={() =>
+                setInputs({
+                  sellingPrice: 29.99,
+                  cogs: 6.5,
+                  actualShippingCost: 4.5,
+                  packagingCost: 0.75,
+                  miscCost: 0,
+                })
+              }
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-zinc-900 hover:bg-emerald-950/70 border border-zinc-700/80 hover:border-emerald-500/50 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Load Sample</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() =>
+                setInputs({
+                  sellingPrice: 0,
+                  cogs: 0,
+                  actualShippingCost: 0,
+                  packagingCost: 0,
+                  miscCost: 0,
+                })
+              }
+              className="animate-clear-glow-2s inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-zinc-900 hover:bg-rose-950/70 border border-zinc-700/80 hover:border-rose-500/50 text-[11px] font-bold text-zinc-200 hover:text-rose-300 transition-colors cursor-pointer"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Clear All</span>
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div>
           <label htmlFor="comp-selling-price" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
             Selling Price
@@ -221,6 +266,7 @@ export function MarketplaceComparator({
           </div>
         </div>
       </div>
+    </div>
 
       {/* 5 Ranked Platform Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-5">

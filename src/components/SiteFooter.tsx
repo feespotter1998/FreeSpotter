@@ -61,7 +61,7 @@ export function SiteFooter() {
         </div>
 
         <p className="text-[11px] text-zinc-500 text-center max-w-3xl mx-auto leading-relaxed">
-          <strong>FTC Affiliate Disclosure:</strong> FeeSpotter may receive affiliate commissions from featured software tools and hardware partners at no additional cost to you. We only recommend tools that provide measurable value to marketplace sellers. All trademarks, logos, and brand names are the property of their respective owners (Etsy, TikTok, Amazon, eBay, Shopify).
+          <strong>FTC Affiliate Disclosure:</strong> FeeSpotter may receive affiliate commissions from featured software tools and hardware partners at no additional cost to you. As an Amazon Associate, FeeSpotter earns from qualifying purchases. We only recommend tools that provide measurable value to marketplace sellers. All trademarks, logos, and brand names are the property of their respective owners (Etsy, TikTok, Amazon, eBay, Shopify).
         </p>
 
         <p className="text-zinc-600 text-[11px] text-center">

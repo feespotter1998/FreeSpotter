@@ -28,6 +28,7 @@ import {
   Box,
   Truck,
   Layers,
+  RotateCcw,
 } from "lucide-react";
 import {
   type EtsyInputs,
@@ -84,6 +85,8 @@ import { GoogleAdBanner } from "./GoogleAdBanner";
 import { MarketplaceComparator } from "./MarketplaceComparator";
 import MarketplaceSeoContent from "./MarketplaceSeoContent";
 import { AFFILIATE_CONFIG } from "@/lib/affiliates";
+import { useProStatus } from "@/lib/proAccess";
+import { SiteFooter } from "./SiteFooter";
 import {
   SignInButton,
   SignUpButton,
@@ -379,9 +382,7 @@ function InputField({
               value={displayVal}
               onFocus={(e) => {
                 setLocalText(String(value));
-                if (e.target.value === "0") {
-                  e.target.select();
-                }
+                e.target.select();
               }}
               onBlur={() => {
                 if (localText !== null) {
@@ -461,6 +462,47 @@ function InputField({
         </div>
       )}
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// CLEAR INPUTS / LOAD SAMPLE BUTTON WITH 2S GLOW
+// ─────────────────────────────────────────────────────────────
+interface ClearInputsButtonProps {
+  onClear: () => void;
+  onResetSample?: () => void;
+  isCleared: boolean;
+}
+
+export function ClearInputsButton({
+  onClear,
+  onResetSample,
+  isCleared,
+}: ClearInputsButtonProps) {
+  if (isCleared && onResetSample) {
+    return (
+      <button
+        type="button"
+        onClick={onResetSample}
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-zinc-900 hover:bg-emerald-950/70 border border-zinc-700/80 hover:border-emerald-500/50 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+        title="Restore realistic product sample inputs"
+      >
+        <RotateCcw className="w-3 h-3" />
+        <span>Load Sample</span>
+      </button>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onClear}
+      className="animate-clear-glow-2s inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-zinc-900 hover:bg-rose-950/70 border border-zinc-700/80 hover:border-rose-500/50 text-[11px] font-bold text-zinc-200 hover:text-rose-300 transition-colors cursor-pointer"
+      title="Clear all inputs to calculate your own product"
+    >
+      <RotateCcw className="w-3 h-3" />
+      <span>Clear All</span>
+    </button>
   );
 }
 
@@ -905,7 +947,25 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
               <ShoppingBag className="w-4 h-4 text-orange-400" />
               Listing Parameters &amp; Costs
             </h3>
-            <span className="text-[11px] text-zinc-500 font-medium">Etsy US 2026</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-zinc-500 font-medium">Etsy US 2026</span>
+              <ClearInputsButton
+                onClear={() =>
+                  setInputs((prev) => ({
+                    ...prev,
+                    sellingPrice: 0,
+                    cogs: 0,
+                    shippingCharged: 0,
+                    actualShippingCost: 0,
+                    packagingCost: 0,
+                    miscCost: 0,
+                    offsiteAdsRate: 0,
+                  }))
+                }
+                onResetSample={() => setInputs(DEFAULT_ETSY_INPUTS)}
+                isCleared={inputs.sellingPrice === 0 && inputs.cogs === 0 && inputs.actualShippingCost === 0}
+              />
+            </div>
           </div>
 
           <InputField
@@ -1249,7 +1309,24 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
               <Store className="w-4 h-4 text-cyan-400" />
               TikTok Shop Fee Stack
             </h3>
-            <span className="text-[11px] text-zinc-500 font-medium">US 2026 Engine</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-zinc-500 font-medium">US 2026 Engine</span>
+              <ClearInputsButton
+                onClear={() =>
+                  setInputs((prev) => ({
+                    ...prev,
+                    sellingPrice: 0,
+                    cogs: 0,
+                    shippingCost: 0,
+                    packagingCost: 0,
+                    miscCost: 0,
+                    adSpendPerSale: 0,
+                  }))
+                }
+                onResetSample={() => setInputs(DEFAULT_TIKTOK_INPUTS)}
+                isCleared={inputs.sellingPrice === 0 && inputs.cogs === 0 && inputs.shippingCost === 0}
+              />
+            </div>
           </div>
 
           <InputField
@@ -1607,7 +1684,25 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
               <Package className="w-4 h-4 text-amber-400" />
               Amazon Fee Parameters
             </h3>
-            <span className="text-[11px] text-zinc-500 font-medium">US 2026 Schedule</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-zinc-500 font-medium">US 2026 Schedule</span>
+              <ClearInputsButton
+                onClear={() =>
+                  setInputs((prev) => ({
+                    ...prev,
+                    sellingPrice: 0,
+                    cogs: 0,
+                    shippingCharged: 0,
+                    actualShippingCost: 0,
+                    packagingCost: 0,
+                    miscCost: 0,
+                    adSpendPerSale: 0,
+                  }))
+                }
+                onResetSample={() => setInputs(DEFAULT_AMAZON_INPUTS)}
+                isCleared={inputs.sellingPrice === 0 && inputs.cogs === 0 && inputs.actualShippingCost === 0}
+              />
+            </div>
           </div>
 
           {/* FBA vs FBM Toggle Switch */}
@@ -2185,7 +2280,24 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
               <Tag className="w-4 h-4 text-blue-400" />
               eBay Fee Parameters
             </h3>
-            <span className="text-[11px] text-zinc-500 font-medium">Standard Schedule</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-zinc-500 font-medium">Standard Schedule</span>
+              <ClearInputsButton
+                onClear={() =>
+                  setInputs((prev) => ({
+                    ...prev,
+                    sellingPrice: 0,
+                    cogs: 0,
+                    shippingCharged: 0,
+                    actualShippingCost: 0,
+                    packagingCost: 0,
+                    miscCost: 0,
+                  }))
+                }
+                onResetSample={() => setInputs(DEFAULT_EBAY_INPUTS)}
+                isCleared={inputs.sellingPrice === 0 && inputs.cogs === 0 && inputs.actualShippingCost === 0}
+              />
+            </div>
           </div>
 
           <InputField
@@ -2624,7 +2736,26 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
               <Layers className="w-4 h-4 text-emerald-400" />
               Shopify DTC Parameters
             </h3>
-            <span className="text-[11px] text-zinc-500 font-medium">Shopify Payments</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-zinc-500 font-medium">Shopify Payments</span>
+              <ClearInputsButton
+                onClear={() =>
+                  setInputs((prev) => ({
+                    ...prev,
+                    sellingPrice: 0,
+                    cogs: 0,
+                    shippingCharged: 0,
+                    actualShippingCost: 0,
+                    packagingCost: 0,
+                    miscCost: 0,
+                    adSpendPerSale: 0,
+                    monthlyAppsCost: 0,
+                  }))
+                }
+                onResetSample={() => setInputs(DEFAULT_SHOPIFY_INPUTS)}
+                isCleared={inputs.sellingPrice === 0 && inputs.cogs === 0 && inputs.actualShippingCost === 0}
+              />
+            </div>
           </div>
 
           {/* Plan Tier Selector */}
@@ -2970,6 +3101,64 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
   const [ebayInputs, setEbayInputs] = useState<ReverseEbayInputs>(DEFAULT_REVERSE_EBAY_INPUTS);
   const [shopifyInputs, setShopifyInputs] = useState<ReverseShopifyInputs>(DEFAULT_REVERSE_SHOPIFY_INPUTS);
 
+  const isReverseCleared = useMemo(() => {
+    switch (platform) {
+      case "tiktok":
+        return tiktokInputs.cogs === 0 && tiktokInputs.shippingCost === 0;
+      case "amazon":
+        return amazonInputs.cogs === 0 && amazonInputs.actualShippingCost === 0;
+      case "ebay":
+        return ebayInputs.cogs === 0 && ebayInputs.actualShippingCost === 0;
+      case "shopify":
+        return shopifyInputs.cogs === 0 && shopifyInputs.actualShippingCost === 0;
+      case "etsy":
+      default:
+        return etsyInputs.cogs === 0 && etsyInputs.actualShippingCost === 0;
+    }
+  }, [platform, etsyInputs, tiktokInputs, amazonInputs, ebayInputs, shopifyInputs]);
+
+  const handleClearReverse = () => {
+    switch (platform) {
+      case "tiktok":
+        setTiktokInputs((p) => ({ ...p, cogs: 0, shippingCost: 0, packagingCost: 0, miscCost: 0, adSpendPerSale: 0 }));
+        break;
+      case "amazon":
+        setAmazonInputs((p) => ({ ...p, cogs: 0, shippingCharged: 0, actualShippingCost: 0, packagingCost: 0, miscCost: 0, adSpendPerSale: 0 }));
+        break;
+      case "ebay":
+        setEbayInputs((p) => ({ ...p, cogs: 0, shippingCharged: 0, actualShippingCost: 0, packagingCost: 0, miscCost: 0 }));
+        break;
+      case "shopify":
+        setShopifyInputs((p) => ({ ...p, cogs: 0, shippingCharged: 0, actualShippingCost: 0, packagingCost: 0, miscCost: 0, adSpendPerSale: 0, monthlyAppsCost: 0 }));
+        break;
+      case "etsy":
+      default:
+        setEtsyInputs((p) => ({ ...p, cogs: 0, shippingCharged: 0, actualShippingCost: 0, packagingCost: 0, miscCost: 0 }));
+        break;
+    }
+  };
+
+  const handleResetReverse = () => {
+    switch (platform) {
+      case "tiktok":
+        setTiktokInputs(DEFAULT_REVERSE_TIKTOK_INPUTS);
+        break;
+      case "amazon":
+        setAmazonInputs(DEFAULT_REVERSE_AMAZON_INPUTS);
+        break;
+      case "ebay":
+        setEbayInputs(DEFAULT_REVERSE_EBAY_INPUTS);
+        break;
+      case "shopify":
+        setShopifyInputs(DEFAULT_REVERSE_SHOPIFY_INPUTS);
+        break;
+      case "etsy":
+      default:
+        setEtsyInputs(DEFAULT_REVERSE_INPUTS);
+        break;
+    }
+  };
+
   const {
     name: platformName,
     badge,
@@ -3162,9 +3351,16 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
               <Target className="w-4 h-4 text-emerald-400" />
               Target Goals &amp; Cost Inputs
             </h3>
-            <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${badgeColor}`}>
-              {badge}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${badgeColor}`}>
+                {badge}
+              </span>
+              <ClearInputsButton
+                onClear={handleClearReverse}
+                onResetSample={handleResetReverse}
+                isCleared={isReverseCleared}
+              />
+            </div>
           </div>
 
           {/* 1. ETSY INPUT CONTROLS */}
@@ -3627,8 +3823,8 @@ export default function CalculatorDashboard({
   const setActiveStore = setLocalStore;
   const [activeSubTab, setActiveSubTab] = useState<SubTabId>(initialSubTab);
   const [isStoreMenuOpen, setIsStoreMenuOpen] = useState<boolean>(false);
-  // Launch Special: Pro features are 100% unlocked for all sellers through Dec 1, 2026!
-  const [isPro, setIsPro] = useState<boolean>(true);
+  // Centralized Pro entitlement via Clerk & Launch Promo Dec 1 logic
+  const { isPro, isSignedIn, isPromoActive, isExpiredPromoUser } = useProStatus();
   const [isProModalOpen, setIsProModalOpen] = useState<boolean>(false);
   const storeMenuRef = React.useRef<HTMLDivElement>(null);
 
@@ -3661,11 +3857,6 @@ export default function CalculatorDashboard({
     setActiveSubTab("calculator");
     setIsStoreMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleSetPro = (val: boolean) => {
-    setIsPro(val);
-    localStorage.setItem("feespotter_is_pro", String(val));
   };
 
   const currentStoreConfig = useMemo(() => {
@@ -3814,14 +4005,43 @@ export default function CalculatorDashboard({
 
           {/* Launch Special & Pro Status */}
           <div className="flex items-center gap-2 sm:gap-2.5">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs">
-              <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span className="hidden sm:inline">Launch Special: Free Pro Unlocked</span>
-              <span className="sm:hidden">Pro Free</span>
-              <span className="px-1.5 py-0.5 bg-emerald-800/70 text-[10px] text-emerald-100 rounded-md font-extrabold uppercase tracking-wide">
-                Thru Dec 1
-              </span>
-            </div>
+            {isPro && isPromoActive && (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs">
+                <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span className="hidden sm:inline">Pro Unlocked (Free Thru Dec 1)</span>
+                <span className="sm:hidden">Pro Active</span>
+              </div>
+            )}
+
+            {isPro && !isPromoActive && (
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs">
+                <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span>FeeSpotter Pro Active</span>
+              </div>
+            )}
+
+            {!isPro && isPromoActive && (
+              <button
+                type="button"
+                onClick={() => setIsProModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95"
+              >
+                <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                <span className="hidden sm:inline">Unlock Free Pro (Thru Dec 1)</span>
+                <span className="sm:hidden">Unlock Free Pro</span>
+              </button>
+            )}
+
+            {!isPro && !isPromoActive && (
+              <button
+                type="button"
+                onClick={() => setIsProModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95"
+              >
+                <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                <span>Upgrade to Pro ($5/mo)</span>
+              </button>
+            )}
 
             {/* Clerk Authentication Controls */}
             <div className="flex items-center gap-2 pl-2 border-l border-zinc-800/80 ml-1">
@@ -4016,81 +4236,16 @@ export default function CalculatorDashboard({
         ))}
       </main>
 
-      {/* Pro Upgrade Modal ($5/mo or $50/yr) */}
+      {/* Pro Upgrade Modal */}
       <ProUpgradeModal
         isOpen={isProModalOpen}
         onClose={() => setIsProModalOpen(false)}
-        onUpgradeSuccess={() => handleSetPro(true)}
+        isSignedIn={isSignedIn}
+        isExpiredPromoUser={isExpiredPromoUser}
       />
 
-      {/* Global Footer with SEO & Legal Links */}
-      <footer className="border-t border-zinc-800/80 bg-zinc-950/80 py-10 mt-16 text-xs text-zinc-400">
-        <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 space-y-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-zinc-800/70 text-center md:text-left">
-            <div>
-              <div className="flex items-center justify-center md:justify-start gap-2 text-white font-bold text-base">
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white">
-                  <DollarSign className="w-4 h-4" />
-                </div>
-                <span>FeeSpotter</span>
-              </div>
-              <p className="text-zinc-500 text-xs mt-1">
-                Deterministic Marketplace Profit Engine &amp; Batch Catalog Auditor
-              </p>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-zinc-400 font-medium">
-              <Link href="/about" className="hover:text-emerald-400 transition-colors">
-                About FeeSpotter
-              </Link>
-              <Link href="/privacy" className="hover:text-emerald-400 transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-emerald-400 transition-colors">
-                Terms of Service
-              </Link>
-              <Link href="/contact" className="hover:text-emerald-400 transition-colors">
-                Contact &amp; Support
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-[11px] text-zinc-500">
-            <span className="font-semibold text-zinc-400">Marketplace Calculators:</span>
-            <Link href="/etsy-fee-calculator" className="hover:text-zinc-300 transition-colors">
-              Etsy Fee Calculator
-            </Link>
-            <span>&bull;</span>
-            <Link href="/tiktok-shop-fee-calculator" className="hover:text-zinc-300 transition-colors">
-              TikTok Shop Fee Calculator
-            </Link>
-            <span>&bull;</span>
-            <Link href="/amazon-fba-fee-calculator" className="hover:text-zinc-300 transition-colors">
-              Amazon FBA Calculator
-            </Link>
-            <span>&bull;</span>
-            <Link href="/ebay-fee-calculator" className="hover:text-zinc-300 transition-colors">
-              eBay Fee Calculator
-            </Link>
-            <span>&bull;</span>
-            <Link href="/shopify-fee-calculator" className="hover:text-zinc-300 transition-colors">
-              Shopify Fee Calculator
-            </Link>
-          </div>
-
-          <p className="text-[11px] text-zinc-500 text-center max-w-3xl mx-auto leading-relaxed">
-            <strong className="text-zinc-400">Affiliate Disclosure:</strong> FeeSpotter is reader-supported. When you click on partner links (including EverBee, Kalodata, Helium 10, ZIK Analytics, Klaviyo, or Amazon) and make a purchase, we may earn an affiliate commission at no extra cost to you. As an Amazon Associate, FeeSpotter earns from qualifying purchases.
-          </p>
-
-          <p className="text-[10px] text-zinc-600 text-center max-w-3xl mx-auto leading-relaxed">
-            FeeSpotter is an independent software tool and is not affiliated with, endorsed by, or sponsored by Etsy, Inc., TikTok, Amazon.com, Inc., eBay Inc., or Shopify Inc. All product names, logos, and trademarks belong to their respective marketplace owners.
-          </p>
-
-          <p className="text-[11px] text-zinc-600 text-center">
-            &copy; 2026 FeeSpotter. All rights reserved. Calculations are deterministic financial estimates based on official 2026 marketplace fee schedules and do not constitute formal tax or investment advice.
-          </p>
-        </div>
-      </footer>
+      {/* Global Shared Footer */}
+      <SiteFooter />
     </div>
   );
 }

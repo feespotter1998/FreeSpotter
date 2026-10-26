@@ -19,7 +19,8 @@ interface SponsorProps {
 // ─────────────────────────────────────────────────────────────
 // 1. ETSY SPONSOR 1: EVERBEE (ETSY SPY TOOL, 30% RECURRING)
 // ─────────────────────────────────────────────────────────────
-export function EtsyEverbeeSponsorCard({}: SponsorProps = {}) {
+export function EtsyEverbeeSponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.etsy.everbee;
 
   return (
@@ -67,7 +68,8 @@ export function EtsyEverbeeSponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 2. ETSY SPONSOR 2: 4x6 THERMAL PRINTER (AMAZON ASSOCIATES)
 // ─────────────────────────────────────────────────────────────
-export function EtsyThermalPrinterSponsorCard({}: SponsorProps = {}) {
+export function EtsyThermalPrinterSponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.etsy.thermalPrinter;
 
   return (
@@ -111,7 +113,8 @@ export function EtsyThermalPrinterSponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 3. TIKTOK SHOP SPONSOR 1: KALODATA (VIRAL PRODUCT SPY)
 // ─────────────────────────────────────────────────────────────
-export function TikTokKalodataSponsorCard({}: SponsorProps = {}) {
+export function TikTokKalodataSponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.tiktok.kalodata;
 
   return (
@@ -159,7 +162,8 @@ export function TikTokKalodataSponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 4. TIKTOK SHOP SPONSOR 2: PRINTIFY (ZERO INVENTORY SUPPLIER)
 // ─────────────────────────────────────────────────────────────
-export function TikTokPrintifySponsorCard({}: SponsorProps = {}) {
+export function TikTokPrintifySponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.tiktok.printify;
 
   return (
@@ -203,7 +207,8 @@ export function TikTokPrintifySponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 5. AMAZON SPONSOR 1: HELIUM 10 (FBA RESEARCH SUITE, 33% RECURRING)
 // ─────────────────────────────────────────────────────────────
-export function AmazonHelium10SponsorCard({}: SponsorProps = {}) {
+export function AmazonHelium10SponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.amazon.helium10;
 
   return (
@@ -251,7 +256,8 @@ export function AmazonHelium10SponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 6. AMAZON SPONSOR 2: JUNGLE SCOUT ($150 BOUNTY)
 // ─────────────────────────────────────────────────────────────
-export function AmazonJungleScoutSponsorCard({}: SponsorProps = {}) {
+export function AmazonJungleScoutSponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.amazon.jungleScout;
 
   return (
@@ -295,7 +301,8 @@ export function AmazonJungleScoutSponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 7. EBAY SPONSOR: ZIK ANALYTICS
 // ─────────────────────────────────────────────────────────────
-export function EbayZikAnalyticsSponsorCard({}: SponsorProps = {}) {
+export function EbayZikAnalyticsSponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.ebay.zikAnalytics;
 
   return (
@@ -343,7 +350,8 @@ export function EbayZikAnalyticsSponsorCard({}: SponsorProps = {}) {
 // ─────────────────────────────────────────────────────────────
 // 8. SHOPIFY SPONSOR: KLAVIYO
 // ─────────────────────────────────────────────────────────────
-export function ShopifyKlaviyoSponsorCard({}: SponsorProps = {}) {
+export function ShopifyKlaviyoSponsorCard({ isPro = false }: SponsorProps = {}) {
+  if (isPro) return null;
   const config = AFFILIATE_CONFIG.shopify.klaviyo;
 
   return (
