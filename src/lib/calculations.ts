@@ -2378,6 +2378,7 @@ export function compareAllMarketplaces(
     shippingCost: actualShippingCost,
     packagingCost,
     miscCost,
+    adSpendPerSale: 0,
   });
 
   const amazon = calculateAmazonProfit({
@@ -2408,6 +2409,7 @@ export function compareAllMarketplaces(
     actualShippingCost,
     packagingCost,
     miscCost,
+    adSpendPerSale: 0,
   });
 
   const rawPlatforms: Omit<PlatformRankItem, "rank" | "isBest">[] = [
