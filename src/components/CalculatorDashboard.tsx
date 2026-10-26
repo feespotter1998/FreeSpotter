@@ -371,29 +371,29 @@ function InputField({
   const displayVal = localText !== null ? localText : (Number.isInteger(value) ? String(value) : value.toFixed(2));
 
   return (
-    <div className="bg-zinc-950/50 border border-zinc-800/80 rounded-2xl p-3.5 sm:p-4 space-y-3 transition-colors hover:border-zinc-700/60">
-      <div className="flex flex-wrap justify-between items-center gap-2">
-        <div>
-          <label htmlFor={inputId} className="text-xs sm:text-sm font-semibold text-zinc-200">
+    <div className="bg-zinc-950/50 border border-zinc-800/80 rounded-2xl p-3.5 sm:p-4 space-y-3 transition-colors hover:border-zinc-700/60 min-w-0">
+      <div className="flex items-center justify-between gap-2 min-w-0">
+        <div className="min-w-0 flex-1">
+          <label htmlFor={inputId} className="text-xs sm:text-sm font-semibold text-zinc-200 block truncate">
             {label}
           </label>
-          {hint && <p className="text-[10px] text-zinc-500 mt-0.5">{hint}</p>}
+          {hint && <p className="text-[10px] text-zinc-500 mt-0.5 leading-snug">{hint}</p>}
         </div>
 
         {/* Stepper + Numeric Input Container */}
-        <div className="flex items-center gap-1 bg-zinc-900 border border-zinc-700/70 rounded-xl p-1 shadow-inner">
+        <div className="flex items-center gap-0.5 bg-zinc-900 border border-zinc-700/70 rounded-xl p-1 shadow-inner shrink-0">
           <button
             type="button"
             onClick={() => handleStep(-step)}
-            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700 transition-colors cursor-pointer"
+            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700 transition-colors cursor-pointer shrink-0"
             aria-label={`Decrease ${label}`}
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
 
-          <div className="flex items-center justify-center px-2 min-w-[75px] sm:min-w-[85px]">
+          <div className="flex items-center justify-center px-1 w-16 sm:w-20">
             {prefix && (
-              <span className="text-zinc-400 text-xs sm:text-sm font-medium mr-0.5 select-none">
+              <span className="text-zinc-400 text-xs sm:text-sm font-medium mr-0.5 select-none shrink-0">
                 {prefix}
               </span>
             )}
@@ -425,10 +425,10 @@ function InputField({
                   onChange(parsed);
                 }
               }}
-              className="w-full bg-transparent text-white font-bold text-xs sm:text-sm text-center focus:outline-none tabular-nums"
+              className="w-full min-w-0 bg-transparent text-white font-bold text-xs sm:text-sm text-center focus:outline-none tabular-nums"
             />
             {suffix && (
-              <span className="text-zinc-400 text-xs sm:text-sm font-medium ml-0.5 select-none">
+              <span className="text-zinc-400 text-[10px] sm:text-xs font-medium ml-0.5 select-none shrink-0">
                 {suffix}
               </span>
             )}
@@ -437,7 +437,7 @@ function InputField({
           <button
             type="button"
             onClick={() => handleStep(step)}
-            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700 transition-colors cursor-pointer"
+            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 active:bg-zinc-700 transition-colors cursor-pointer shrink-0"
             aria-label={`Increase ${label}`}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -461,7 +461,7 @@ function InputField({
       )}
 
       {presets && presets.length > 0 && (
-        <div className="flex items-center gap-1.5 pt-1 overflow-x-auto no-scrollbar">
+        <div className="flex flex-wrap items-center gap-1.5 pt-1">
           <span className="text-[10px] text-zinc-500 font-medium uppercase mr-1">
             Quick:
           </span>
@@ -961,9 +961,9 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
       {/* EverBee Sponsor Card */}
       <EtsyEverbeeSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start min-w-0">
         {/* Input Panel */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
             <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
               <ShoppingBag className="w-4 h-4 text-orange-400" />
@@ -1099,8 +1099,8 @@ function EtsyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         </div>
 
         {/* Waterfall Chart & Visual Breakdown */}
-        <div className="space-y-6">
-          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="space-y-6 min-w-0 overflow-hidden">
+          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0 overflow-hidden">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
               <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider">
                 Profit Waterfall Breakdown
@@ -1325,9 +1325,9 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
       {/* Viral Product Intelligence Tool (Hidden on Pro) */}
       <TikTokKalodataSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start min-w-0">
         {/* Input Panel */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
             <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
               <Store className="w-4 h-4 text-cyan-400" />
@@ -1456,8 +1456,8 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
         </div>
 
         {/* Waterfall Chart */}
-        <div className="space-y-6">
-          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="space-y-6 min-w-0 overflow-hidden">
+          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0 overflow-hidden">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
               <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider">
                 TikTok Profit Waterfall
@@ -1700,9 +1700,9 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
       {/* Helium 10 Intelligence Sponsor Card */}
       <AmazonHelium10SponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start min-w-0">
         {/* Input Panel */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
             <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
               <Package className="w-4 h-4 text-amber-400" />
@@ -2023,8 +2023,8 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
         </div>
 
         {/* Waterfall Chart & Table */}
-        <div className="space-y-6">
-          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="space-y-6 min-w-0 overflow-hidden">
+          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0 overflow-hidden">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
               <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider">
                 Amazon Profit Waterfall
@@ -2296,9 +2296,9 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
       {/* ZIK Analytics Sponsor Card */}
       <EbayZikAnalyticsSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start min-w-0">
         {/* Input Panel */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
             <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
               <Tag className="w-4 h-4 text-blue-400" />
@@ -2500,8 +2500,8 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         </div>
 
         {/* Waterfall Chart & Table */}
-        <div className="space-y-6">
-          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="space-y-6 min-w-0 overflow-hidden">
+          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0 overflow-hidden">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
               <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider">
                 eBay Profit Waterfall
@@ -2754,9 +2754,9 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
       {/* Klaviyo Email/SMS Sponsor Card */}
       <ShopifyKlaviyoSponsorCard isPro={isPro} onOpenProModal={onOpenProModal} />
 
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start min-w-0">
         {/* Input Panel */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
             <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
               <Layers className="w-4 h-4 text-emerald-400" />
@@ -2957,8 +2957,8 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
         </div>
 
         {/* Waterfall Chart & Table */}
-        <div className="space-y-6">
-          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="space-y-6 min-w-0 overflow-hidden">
+          <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0 overflow-hidden">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
               <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider">
                 Shopify Profit Waterfall
@@ -3373,9 +3373,9 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
         )}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start min-w-0">
         {/* Input Panel */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl min-w-0 overflow-hidden">
           <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
             <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
               <Target className="w-4 h-4 text-emerald-400" />
@@ -3774,8 +3774,8 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
 
         {/* Solved Waterfall & Table */}
         {!isImpossible && (
-          <div className="space-y-6">
-            <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+          <div className="space-y-6 min-w-0 overflow-hidden">
+            <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4 min-w-0 overflow-hidden">
               <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
                 <h3 className="text-xs sm:text-sm font-bold text-zinc-300 uppercase tracking-wider">
                   Projected Profit at ${result.requiredSellingPrice.toFixed(2)}
@@ -3894,7 +3894,7 @@ export default function CalculatorDashboard({
   }, [activeStore]);
 
   return (
-    <div className="min-h-dvh bg-transparent text-white flex flex-col overflow-x-clip selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-dvh w-full max-w-[100vw] overflow-x-hidden bg-transparent text-white flex flex-col selection:bg-emerald-500 selection:text-black">
       {/* Ambient background glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px]" />
@@ -3902,25 +3902,25 @@ export default function CalculatorDashboard({
       </div>
 
       {/* Floating Glass Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-zinc-950/85 border-b border-zinc-800/80 transition-all">
-        <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 py-3 sm:py-3.5 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-zinc-950/85 border-b border-zinc-800/80 transition-all">
+        <div className="max-w-[1536px] mx-auto px-3 sm:px-6 lg:px-8 xl:px-12 py-2.5 sm:py-3.5 flex items-center justify-between gap-1.5 sm:gap-3">
           {/* Logo & Store Switcher */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             <Link
               href="/"
               onClick={() => handleSelectStore("hub")}
-              className="flex items-center gap-2.5 text-left cursor-pointer group"
+              className="flex items-center gap-2 text-left cursor-pointer group shrink-0"
               title="Return to Marketplace Selector Hub"
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md shadow-emerald-950/40 group-hover:scale-105 transition-transform">
-                <DollarSign className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md shadow-emerald-950/40 group-hover:scale-105 transition-transform shrink-0">
+                <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </div>
-              <div>
+              <div className={activeStore !== "hub" ? "hidden sm:block" : "block"}>
                 <div className="flex items-center gap-2">
-                  <span className={`${activeStore !== "hub" ? "hidden sm:inline" : "inline"} text-base sm:text-lg font-black tracking-tight text-white group-hover:text-emerald-400 transition-colors`}>
+                  <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-emerald-400 transition-colors">
                     FeeSpotter
                   </span>
-                  <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-800/60 rounded-full">
+                  <span className="hidden md:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-800/60 rounded-full">
                     2026 Engine
                   </span>
                 </div>
@@ -3932,18 +3932,18 @@ export default function CalculatorDashboard({
 
             {/* In-Header Store Switcher Pill (When inside a store) */}
             {activeStore !== "hub" && (
-              <div ref={storeMenuRef} className="relative">
+              <div ref={storeMenuRef} className="relative shrink-0">
                 <button
                   type="button"
                   onClick={() => setIsStoreMenuOpen(!isStoreMenuOpen)}
                   aria-expanded={isStoreMenuOpen}
                   aria-haspopup="true"
-                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700/80 hover:border-zinc-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer whitespace-nowrap shrink-0"
+                  className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700/80 hover:border-zinc-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer whitespace-nowrap"
                   aria-label="Switch Marketplace"
                 >
                   <span className="shrink-0">{currentStoreConfig.icon}</span>
                   <span className="font-extrabold">{currentStoreConfig.shortName}</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-0.5" />
+                  <ChevronDown className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
                 </button>
 
                 {/* Dropdown Menu */}
@@ -4054,11 +4054,11 @@ export default function CalculatorDashboard({
               <button
                 type="button"
                 onClick={() => setIsProModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-[11px] sm:text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0"
               >
                 <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                 <span className="hidden sm:inline">Unlock Free Pro (Thru Dec 1)</span>
-                <span className="sm:hidden">Unlock Free Pro</span>
+                <span className="sm:hidden">Free Pro</span>
               </button>
             )}
 
@@ -4066,20 +4066,21 @@ export default function CalculatorDashboard({
               <button
                 type="button"
                 onClick={() => setIsProModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
+                className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-[11px] sm:text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95 whitespace-nowrap shrink-0"
               >
                 <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                <span>Upgrade to Pro ($5/mo)</span>
+                <span className="hidden sm:inline">Upgrade to Pro ($5/mo)</span>
+                <span className="sm:hidden">Pro</span>
               </button>
             )}
 
             {/* Clerk Authentication Controls */}
-            <div className="flex items-center gap-2 pl-2 border-l border-zinc-800/80 ml-1 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 sm:pl-2 sm:border-l sm:border-zinc-800/80 sm:ml-1 shrink-0">
               <Show when="signed-out">
                 <SignInButton mode="modal">
                   <button
                     type="button"
-                    className="px-3 py-1.5 rounded-xl text-xs font-bold text-zinc-300 hover:text-white bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/70 transition-all cursor-pointer whitespace-nowrap shrink-0"
+                    className="px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold text-zinc-300 hover:text-white bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/70 transition-all cursor-pointer whitespace-nowrap"
                   >
                     Sign In
                   </button>
@@ -4148,46 +4149,46 @@ export default function CalculatorDashboard({
               </div>
 
               {/* Sub-Tab Navigation for Selected Store */}
-              <div className="flex items-center gap-1 p-1 bg-zinc-900/90 border border-zinc-800 rounded-xl overflow-x-auto no-scrollbar shadow-inner w-full sm:w-auto max-w-full shrink-0">
+              <div className="grid grid-cols-3 sm:flex items-center gap-1 p-1 bg-zinc-900/90 border border-zinc-800 rounded-xl shadow-inner w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={() => setActiveSubTab("calculator")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                     activeSubTab === "calculator"
                       ? "bg-zinc-800 text-white shadow-xs"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
-                  <Calculator className="w-3.5 h-3.5" />
-                  <span>Fee Calculator</span>
+                  <Calculator className="w-3.5 h-3.5 shrink-0" />
+                  <span>Calculator</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveSubTab("reverse")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                     activeSubTab === "reverse"
                       ? "bg-zinc-800 text-white shadow-xs"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
-                  <Target className="w-3.5 h-3.5" />
+                  <Target className="w-3.5 h-3.5 shrink-0" />
                   <span>Price Solver</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setActiveSubTab("audit")}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`flex items-center justify-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                     activeSubTab === "audit"
                       ? "bg-zinc-800 text-white shadow-xs"
                       : "text-zinc-400 hover:text-white"
                   }`}
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5" />
-                  <span>Batch CSV Audit</span>
+                  <FileSpreadsheet className="w-3.5 h-3.5 shrink-0" />
+                  <span>CSV Audit</span>
                   <span
-                    className={`text-[9px] font-black px-1.5 py-0.5 rounded ${
+                    className={`hidden sm:inline-block text-[9px] font-black px-1.5 py-0.5 rounded ${
                       isPro
                         ? "bg-emerald-950 text-emerald-400 border border-emerald-800/60"
                         : "bg-amber-950 text-amber-400 border border-amber-800/60"
