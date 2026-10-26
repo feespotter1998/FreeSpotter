@@ -21,21 +21,52 @@ export const AFFILIATE_CONFIG = {
     // EverBee: Etsy Product Research & Competitor Sales Spy (30% recurring monthly)
     everbee: {
       name: "EverBee",
-      title: "Spy on Top-Selling Etsy Listings & Keywords",
-      description: "Find high-demand, low-competition keywords and analyze competitor monthly revenue in 1 click.",
+      title: "Spy on Top-Selling Etsy Listings & Untapped Keywords",
+      description:
+        "Want to see what's actually selling on Etsy? EverBee reveals competitor monthly revenue, sales volume, and low-competition search tags in 1 click before you launch your products.",
       url: process.env.NEXT_PUBLIC_EVERBEE_AFFILIATE_URL || "https://www.everbee.io/?via=FeeSpotter",
       payoutNote: "30% recurring monthly",
     },
     // Thermal Label Printers (Amazon Associates 4-8%)
     thermalPrinter: {
       name: "JADENS Bluetooth Thermal Printer",
-      title: "Save Hours Shipping with a 4x6 Bluetooth Thermal Printer",
-      description: "Direct wireless label printing from iPhone, Android, or Mac. Zero ink, zero toner.",
+      title: "Save Hours Shipping with a 4x6 Wireless Thermal Label Printer",
+      description:
+        "Stop cutting and taping paper labels to packages. Print crystal-clear 4x6 shipping labels wirelessly from iPhone, Android, or Mac with zero ink or toner.",
       url:
         process.env.NEXT_PUBLIC_PRINTER_AFFILIATE_URL ||
         process.env.NEXT_PUBLIC_MUNBYN_AFFILIATE_URL ||
         "https://www.amazon.com/Bluetooth-Thermal-Shipping-Label-Printer/dp/B099MLDBKJ?tag=feespotter-20&linkCode=ll2&linkId=6f91121640066af7fd37104da8e3246e&language=en_US&ref_=as_li_ss_tl",
       payoutNote: "Amazon Associates",
+    },
+  },
+
+  // 3. TrueProfit — Real-Time Net Profit & Ad Spend Analytics (Shopify, TikTok Shop, Amazon)
+  trueprofit: {
+    name: "TrueProfit",
+    url:
+      process.env.NEXT_PUBLIC_TRUEPROFIT_AFFILIATE_URL ||
+      "https://trueprof.it/trueprofit/2014ec63-57b2-47db-a312-cab84951a105/fee-spotter",
+    payoutNote: "Recurring partner commission",
+    shopify: {
+      title: "Track Real-Time Shopify Net Profit & Multi-Channel Ad Spend",
+      description:
+        "Want to see what's actually making money in your Shopify store? TrueProfit syncs automatically to track your true net profit, TikTok/Meta ad spend, shipping costs, and transaction fees in real time.",
+    },
+    tiktok: {
+      title: "Track Real-Time TikTok Shop Net Profit & Creator ROAS",
+      description:
+        "Want to see which TikTok Shop items are actually profitable? TrueProfit connects directly to track real-time net profit after 6% referral fees, TikTok ad spend, and creator affiliate commissions.",
+    },
+    amazon: {
+      title: "Automate True Amazon Net Profit & Inbound FBA Tracking",
+      description:
+        "Tired of hidden Amazon fees eating your margins? TrueProfit syncs with Amazon Seller Central to track your real net profit, PPC ad spend, and SKU-level FBA profitability automatically.",
+    },
+    general: {
+      title: "Track Real-Time Net Profit Across All Your Online Stores",
+      description:
+        "See exactly which products are profitable and which are bleeding cash. TrueProfit connects to Shopify, TikTok Shop, and Amazon to give you a live net profit dashboard.",
     },
   },
 

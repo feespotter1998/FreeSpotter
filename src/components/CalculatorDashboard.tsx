@@ -101,6 +101,7 @@ import {
   AmazonJungleScoutSponsorCard,
   EbayZikAnalyticsSponsorCard,
   ShopifyKlaviyoSponsorCard,
+  TrueProfitSponsorCard,
 } from "./SponsorCards";
 import { GoogleAdBanner } from "./GoogleAdBanner";
 import { MarketplaceComparator } from "./MarketplaceComparator";
@@ -2641,6 +2642,8 @@ function EbayTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: ()
         explanation="Estimated unrecoverable cash loss if an eBay buyer requests a return (eBay retains the $0.30/$0.40 per-order fee, seller loses shipping both ways on free return listings, lost packaging, and 15% estimated item restocking depreciation)."
       />
 
+      {/* Multi-Channel Profit Analytics */}
+      <TrueProfitSponsorCard isPro={isPro} platform="ebay" />
     </div>
   );
 }
@@ -3101,6 +3104,8 @@ function ShopifyTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal:
         explanation="Estimated unrecoverable cash loss when a DTC customer returns an order (Shopify Payments NEVER refunds credit card interchange fees [2.9% + 30¢] upon customer refunds, plus merchant pays outbound & return shipping labels, lost packaging, and 15% restocking damage)."
       />
 
+      {/* Hardware Packing Sponsor */}
+      <EtsyThermalPrinterSponsorCard isPro={isPro} />
     </div>
   );
 }
