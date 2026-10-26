@@ -65,6 +65,9 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/icon.png", sizes: "512x512", type: "image/png" }],
   },
+  other: {
+    "impact-site-verification": "fe649a87-8800-4d16-9a53-c0c458e1741b",
+  },
 };
 
 const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
@@ -81,6 +84,7 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
+        <meta {...({ name: "impact-site-verification", value: "fe649a87-8800-4d16-9a53-c0c458e1741b" } as Record<string, string>)} />
         {adsenseClientId && (
           <Script
             async
