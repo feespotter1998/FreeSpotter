@@ -53,7 +53,7 @@ export function EtsyEverbeeSponsorCard({ isPro = false }: SponsorProps = {}) {
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="noopener sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 shadow-md shadow-orange-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             Try EverBee Free
@@ -100,7 +100,7 @@ export function EtsyThermalPrinterSponsorCard({ isPro = false }: SponsorProps = 
         <a
           href={config.url}
           target="_blank"
-          rel="noopener noreferrer sponsored"
+          rel="noopener sponsored"
           className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 cursor-pointer bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-800 hover:border-zinc-700"
         >
           View on Amazon <ExternalLink className="w-3 h-3" />
@@ -180,7 +180,7 @@ export function TrueProfitSponsorCard({
           <a
             href={config.url}
             target="_blank"
-            rel="noopener noreferrer sponsored"
+            rel="noopener sponsored"
             className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 shadow-md shadow-emerald-950/50 transition-all cursor-pointer whitespace-nowrap active:scale-95"
           >
             {buttonText}
