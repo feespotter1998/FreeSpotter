@@ -28,10 +28,13 @@ export const AFFILIATE_CONFIG = {
     },
     // Thermal Label Printers (Amazon Associates 4-8%)
     thermalPrinter: {
-      name: "MUNBYN Thermal Printer",
-      title: "Save Hours Shipping with a 4x6 Thermal Label Printer",
-      description: "No ink, no toner. Print high-speed shipping labels directly from Etsy.",
-      url: process.env.NEXT_PUBLIC_MUNBYN_AFFILIATE_URL || "https://www.amazon.com/dp/B0885RLLG1?tag=feespotter-20",
+      name: "JADENS Bluetooth Thermal Printer",
+      title: "Save Hours Shipping with a 4x6 Bluetooth Thermal Printer",
+      description: "Direct wireless label printing from iPhone, Android, or Mac. Zero ink, zero toner.",
+      url:
+        process.env.NEXT_PUBLIC_PRINTER_AFFILIATE_URL ||
+        process.env.NEXT_PUBLIC_MUNBYN_AFFILIATE_URL ||
+        "https://www.amazon.com/Bluetooth-Thermal-Shipping-Label-Printer/dp/B099MLDBKJ?tag=feespotter-20&linkCode=ll2&linkId=6f91121640066af7fd37104da8e3246e&language=en_US&ref_=as_li_ss_tl",
       payoutNote: "Amazon Associates",
     },
   },
