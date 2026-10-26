@@ -22,6 +22,65 @@ interface MarketplaceComparatorProps {
   onSelectStore: (store: "etsy" | "tiktok" | "amazon" | "ebay" | "shopify") => void;
 }
 
+interface ComparatorInputProps {
+  id: string;
+  label: string;
+  value: number;
+  onChange: (val: number) => void;
+}
+
+function ComparatorInput({ id, label, value, onChange }: ComparatorInputProps) {
+  const [localText, setLocalText] = useState<string | null>(null);
+
+  const displayVal =
+    localText !== null
+      ? localText
+      : Number.isInteger(value)
+      ? String(value)
+      : value.toFixed(2);
+
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5"
+      >
+        {label}
+      </label>
+      <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2 focus-within:border-emerald-500 transition-colors">
+        <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
+        <input
+          id={id}
+          type="text"
+          inputMode="decimal"
+          value={displayVal}
+          onFocus={(e) => {
+            setLocalText(String(value));
+            e.target.select();
+          }}
+          onChange={(e) => {
+            const raw = e.target.value;
+            setLocalText(raw);
+            const parsed = parseFloat(raw);
+            if (!isNaN(parsed) && parsed >= 0) {
+              onChange(Math.round(parsed * 100) / 100);
+            }
+          }}
+          onBlur={() => {
+            if (localText !== null) {
+              const parsed = parseFloat(localText);
+              const valid = isNaN(parsed) || parsed < 0 ? 0 : Math.round(parsed * 100) / 100;
+              onChange(valid);
+              setLocalText(null);
+            }
+          }}
+          className="w-full bg-transparent text-white font-black text-sm focus:outline-none"
+        />
+      </div>
+    </div>
+  );
+}
+
 export function MarketplaceComparator({
   onSelectStore,
 }: MarketplaceComparatorProps) {
@@ -196,76 +255,31 @@ export function MarketplaceComparator({
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div>
-          <label htmlFor="comp-selling-price" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
-            Selling Price
-          </label>
-          <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
-            <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
-            <input
-              id="comp-selling-price"
-              type="number"
-              value={inputs.sellingPrice}
-              onChange={(e) => update("sellingPrice", parseFloat(e.target.value) || 0)}
-              step={1}
-              className="w-full bg-transparent text-white font-black text-sm focus:outline-none"
-            />
-          </div>
+          <ComparatorInput
+            id="comp-selling-price"
+            label="Selling Price"
+            value={inputs.sellingPrice}
+            onChange={(val) => update("sellingPrice", val)}
+          />
+          <ComparatorInput
+            id="comp-cogs"
+            label="Product Cost (COGS)"
+            value={inputs.cogs}
+            onChange={(val) => update("cogs", val)}
+          />
+          <ComparatorInput
+            id="comp-shipping"
+            label="Postage / Shipping Cost"
+            value={inputs.actualShippingCost}
+            onChange={(val) => update("actualShippingCost", val)}
+          />
+          <ComparatorInput
+            id="comp-packaging"
+            label="Packaging / Labels"
+            value={inputs.packagingCost}
+            onChange={(val) => update("packagingCost", val)}
+          />
         </div>
-
-        <div>
-          <label htmlFor="comp-cogs" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
-            Product Cost (COGS)
-          </label>
-          <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
-            <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
-            <input
-              id="comp-cogs"
-              type="number"
-              value={inputs.cogs}
-              onChange={(e) => update("cogs", parseFloat(e.target.value) || 0)}
-              step={0.5}
-              className="w-full bg-transparent text-white font-black text-sm focus:outline-none"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="comp-shipping" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
-            Postage / Shipping Cost
-          </label>
-          <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
-            <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
-            <input
-              id="comp-shipping"
-              type="number"
-              value={inputs.actualShippingCost}
-              onChange={(e) =>
-                update("actualShippingCost", parseFloat(e.target.value) || 0)
-              }
-              step={0.5}
-              className="w-full bg-transparent text-white font-black text-sm focus:outline-none"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="comp-packaging" className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block mb-1.5">
-            Packaging / Labels
-          </label>
-          <div className="flex items-center bg-zinc-950 border border-zinc-700/70 rounded-xl px-3 py-2">
-            <span className="text-zinc-500 font-bold mr-1 text-sm">$</span>
-            <input
-              id="comp-packaging"
-              type="number"
-              value={inputs.packagingCost}
-              onChange={(e) => update("packagingCost", parseFloat(e.target.value) || 0)}
-              step={0.25}
-              className="w-full bg-transparent text-white font-black text-sm focus:outline-none"
-            />
-          </div>
-        </div>
-      </div>
     </div>
 
       {/* 5 Ranked Platform Cards */}

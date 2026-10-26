@@ -14,6 +14,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${siteUrl}/terms`,
   },
+  openGraph: {
+    title: "Terms of Service | FeeSpotter",
+    description:
+      "FeeSpotter Terms of Service and user agreement. Review our terms of use, financial estimate disclaimers, and liability policies.",
+    url: `${siteUrl}/terms`,
+    siteName: "FeeSpotter",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service | FeeSpotter",
+    description:
+      "FeeSpotter Terms of Service and user agreement. Review our terms of use, financial estimate disclaimers, and liability policies.",
+  },
 };
 
 export default function TermsPage() {
@@ -98,9 +112,12 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-2">
-            <h2 className="text-base font-bold text-white">6. Pro Memberships &amp; Subscriptions</h2>
+            <h2 className="text-base font-bold text-white">6. Pro Memberships, Billing &amp; Refunds</h2>
             <p>
-              FeeSpotter offers optional Pro memberships providing unblurred batch catalog audits and executive PDF exports. During promotional periods, Pro features may be temporarily unlocked for all users at our discretion. Paid subscriptions can be managed or cancelled at any time through your account portal.
+              FeeSpotter offers optional paid Pro memberships providing unblurred batch catalog audits, executive PDF exports, and advanced pricing solver features. Subscription billing is handled securely through PCI-DSS Level 1 certified processors (such as Stripe).
+            </p>
+            <p>
+              During promotional launch periods, Pro access may be temporarily unlocked for registered accounts at our sole discretion. Paid subscriptions can be cancelled at any time through your customer billing portal; upon cancellation, you retain full Pro access through the conclusion of your current prepaid billing cycle. Payments are generally non-refundable once billed, but if you encounter technical disruptions or billing errors, please contact support@feespotter.com within 7 days for a prompt review.
             </p>
           </section>
 

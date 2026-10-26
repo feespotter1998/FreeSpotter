@@ -3,66 +3,66 @@ import { getSiteUrl } from "@/lib/siteUrl";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getSiteUrl();
-  const currentDate = new Date();
+  const lastReleaseDate = new Date("2026-10-25T00:00:00.000Z");
 
   return [
     {
       url: baseUrl,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "weekly",
       priority: 1.0,
     },
     {
       url: `${baseUrl}/etsy-fee-calculator`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/tiktok-shop-fee-calculator`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/amazon-fba-fee-calculator`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/ebay-fee-calculator`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shopify-fee-calculator`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: `${baseUrl}/contact`,
-      lastModified: currentDate,
+      lastModified: lastReleaseDate,
       changeFrequency: "monthly",
       priority: 0.6,
     },

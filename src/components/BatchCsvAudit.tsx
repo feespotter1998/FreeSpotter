@@ -2,8 +2,6 @@
 
 import React, { useState, useRef, useMemo, ChangeEvent, DragEvent, useEffect } from "react";
 import Papa from "papaparse";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
 import {
   Download,
   UploadCloud,
@@ -512,6 +510,12 @@ export function BatchCsvAudit({
       return;
     }
 
+    const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB guard
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      showNotification("File size exceeds the 5MB safety limit. Please upload a smaller CSV.", "error");
+      return;
+    }
+
     setIsParsing(true);
     setFileName(file.name);
 
@@ -530,7 +534,17 @@ export function BatchCsvAudit({
           return;
         }
 
-        const processed = processRows(results.data, platform);
+        const MAX_AUDIT_ROWS = 5000;
+        let dataToProcess = results.data;
+        if (dataToProcess.length > MAX_AUDIT_ROWS) {
+          dataToProcess = dataToProcess.slice(0, MAX_AUDIT_ROWS);
+          showNotification(
+            `Catalog capped to first ${MAX_AUDIT_ROWS.toLocaleString()} items for optimal browser performance.`,
+            "info"
+          );
+        }
+
+        const processed = processRows(dataToProcess, platform);
         if (processed.length === 0) {
           showNotification("No valid inventory rows found in the CSV.", "error");
           return;
@@ -693,7 +707,7 @@ export function BatchCsvAudit({
   // ─────────────────────────────────────────────────────────────
   // 5. EXPORT OFFICIAL PROFIT AUDIT PDF
   // ─────────────────────────────────────────────────────────────
-  const handleExportPdf = () => {
+  const handleExportPdf = async () => {
     if (auditedItems.length === 0) {
       showNotification("Please upload a CSV or load demo inventory first.", "error");
       return;
@@ -711,6 +725,11 @@ export function BatchCsvAudit({
 
     try {
       setIsExportingPdf(true);
+
+      const [{ jsPDF }, { default: autoTable }] = await Promise.all([
+        import("jspdf"),
+        import("jspdf-autotable"),
+      ]);
 
       const doc = new jsPDF({
         orientation: "landscape",
@@ -1038,9 +1057,9 @@ export function BatchCsvAudit({
 
         {/* Platform & Engine Selector */}
         <div className="pt-3 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="text-zinc-400 font-medium">Marketplace:</span>
-            <div className="inline-flex bg-zinc-950 p-1 rounded-xl border border-zinc-800">
+          <div className="flex flex-wrap items-center gap-2 max-w-full">
+            <span className="text-zinc-400 font-medium shrink-0">Marketplace:</span>
+            <div className="inline-flex flex-wrap sm:flex-nowrap bg-zinc-950 p-1 rounded-xl border border-zinc-800 overflow-x-auto max-w-full">
               <button
                 onClick={() => handlePlatformChange("etsy")}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${

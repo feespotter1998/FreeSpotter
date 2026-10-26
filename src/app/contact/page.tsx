@@ -22,6 +22,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${siteUrl}/contact`,
   },
+  openGraph: {
+    title: "Contact & Support | FeeSpotter",
+    description:
+      "Have questions about marketplace fee calculations, feature requests, or partnership inquiries? Contact the FeeSpotter engineering team.",
+    url: `${siteUrl}/contact`,
+    siteName: "FeeSpotter",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact & Support | FeeSpotter",
+    description:
+      "Have questions about marketplace fee calculations, feature requests, or partnership inquiries? Contact the FeeSpotter engineering team.",
+  },
 };
 
 export default function ContactPage() {

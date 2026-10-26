@@ -22,6 +22,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${siteUrl}/about`,
   },
+  openGraph: {
+    title: "About FeeSpotter — Multi-Marketplace Profit Auditor",
+    description:
+      "FeeSpotter gives Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a deterministic calculator to expose hidden fees and protect net profit.",
+    url: `${siteUrl}/about`,
+    siteName: "FeeSpotter",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About FeeSpotter — Multi-Marketplace Profit Auditor",
+    description:
+      "FeeSpotter gives Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a deterministic calculator to expose hidden fees and protect net profit.",
+  },
 };
 
 export default function AboutPage() {

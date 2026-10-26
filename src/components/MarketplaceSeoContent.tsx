@@ -120,6 +120,26 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         answer:
           "Use FeeSpotter's built-in 'What Should I Charge?' Price Solver tab. It calculates the exact retail price required to cover all multi-tiered fees, listing renewals, actual postage, and your target margin percentage.",
       },
+      {
+        question: "Why was my Etsy bank payout lower than my total sales?",
+        answer:
+          "Etsy operates on a continuous running statement balance ledger rather than issuing payments order-by-order. When customer funds arrive, Etsy immediately docks your accumulated listing fees ($0.20 per item), 4-month auto-renewals, Offsite Ads charges, and Etsy shipping labels directly from your balance before releasing deposits.",
+      },
+      {
+        question: "How do Etsy Offsite Ads really work and can I turn them off?",
+        answer:
+          "If your shop's trailing 365-day gross sales are under $10,000, Etsy takes a 15% cut on any sale driven by Google or Facebook ads, and you can opt out in Shop Settings > Offsite Ads. If your shop has ever crossed $10,000 in any 365-day period, Offsite Ads drop to 12% and become permanently mandatory. Note: the fee is capped at $100 per transaction.",
+      },
+      {
+        question: "What happens to Etsy fees if a buyer requests a refund or cancellation?",
+        answer:
+          "When you issue a full refund through Etsy, Etsy credits back the 6.5% transaction fee and processing fee to your account. However, the $0.20 listing fee is non-refundable. You also absorb the cost of packaging materials and outbound shipping postage if the carrier label was already scanned.",
+      },
+      {
+        question: "Should I offer 'Free Shipping over $35' on Etsy?",
+        answer:
+          "Only if you incorporate the shipping cost into your retail item price! Offering free shipping without adjusting your prices means you eat the $4–$6 commercial postage entirely out of your profit margin. Use FeeSpotter's reverse solver to compute the exact price needed to protect your profit.",
+      },
     ],
   },
 
@@ -197,6 +217,26 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         question: "Can I use FeeSpotter to solve for my minimum TikTok price?",
         answer:
           "Yes! Switch to the 'What Should I Charge?' tab to solve for the exact selling price needed to hit your target profit margin after creator fees, ads, and TikTok commission.",
+      },
+      {
+        question: "What is the TikTok Settlement Reserve and when do I get paid?",
+        answer:
+          "TikTok Shop places seller revenues into a rolling Settlement Reserve (typically 10 to 14 days after carrier delivery confirmation, or longer for newly registered shops) to guard against customer chargebacks and returns. This makes early bank deposits look deceptively small until your shop builds a clean delivery track record.",
+      },
+      {
+        question: "Why did TikTok charge me retroactive shipping fees weeks later?",
+        answer:
+          "Carriers (USPS, UPS, FedEx) scan parcel weights and dimensions with automated conveyor scales. If your box is even 1 ounce heavier or 0.5 inches larger than what was entered on your listing, TikTok automatically docks the dimensional weight difference directly from your settlement statement weeks later. Always enter rounded-up box dimensions to protect your margins.",
+      },
+      {
+        question: "Who pays for TikTok 'Free Shipping' vouchers and platform discounts?",
+        answer:
+          "Platform-subsidized vouchers (green badges funded by TikTok) are reimbursed to the seller, meaning TikTok absorbs the discount or reimburses shipping. However, seller-funded promotions or flash sales come 100% out of your pocket. Always verify in Promotions Manager whether an offer is 'TikTok-Funded' before participating.",
+      },
+      {
+        question: "How do creator affiliate samples affect my bottom line?",
+        answer:
+          "Sending free samples to TikTok creators costs your landed COGS + shipping postage + packaging. If you send 20 samples ($15 each in total cost = $300) and only 2 creators post videos generating 10 sales, your sample customer acquisition cost was $30 per order! Always factor creator sample allowances into your unit economics.",
       },
     ],
   },
@@ -276,6 +316,21 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         answer:
           "Yes! Use FeeSpotter's 'Catalog Audit' tab to upload your active Amazon inventory report. It instantly flags unprofitable ASINs and cash-bleeding products across your catalog.",
       },
+      {
+        question: "What is Break-Even ACoS % and how do I set my Amazon PPC target?",
+        answer:
+          "Break-Even ACoS (Advertising Cost of Sales) is your net profit margin before ad spend: (Net Margin Before Ads ÷ Selling Price) × 100. If your margin before ads is 32%, your Break-Even ACoS is exactly 32%. If your Sponsored Products campaign ACoS is 38%, you are paying Amazon more in ad spend than you earn in gross profit.",
+      },
+      {
+        question: "How do customer returns affect Amazon FBA fees?",
+        answer:
+          "When an Amazon customer returns an item, Amazon refunds the category referral fee minus a 20% Refund Administration Fee (capped at $5.00). However, Amazon retains the original FBA Pick & Pack fee, and on apparel/shoes categories, charges a Returns Processing Fee ($1.85+). If the item is marked customer damaged, you also absorb the lost COGS.",
+      },
+      {
+        question: "When is FBM (Merchant Fulfilled) more profitable than FBA?",
+        answer:
+          "FBM is typically more profitable for heavy or oversized products (where FBA fees jump to $10–$25+ per unit), slow-moving SKUs with high storage duration, or during Q4 holiday storage surges (Oct–Dec) when Amazon nearly quadruples monthly warehouse storage rates from $0.87 to $2.40 per cubic foot.",
+      },
     ],
   },
 
@@ -354,6 +409,16 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         answer:
           "FeeSpotter dynamically models the 13.60% rate, store tier discounts, Promoted Listings ad rate, and shipping margins in real time with 100% deterministic arithmetic.",
       },
+      {
+        question: "What happens to eBay fees when a buyer returns an item?",
+        answer:
+          "If you issue a full refund to a buyer, eBay credits back your percentage Final Value Fee, BUT eBay retains the fixed per-order fee ($0.30 or $0.40). Furthermore, if you offer free returns or the buyer opens an 'Item Not as Described' (INAD) claim, you must pay for both the original outbound postage and the return label postage, plus absorb any packaging or restocking damage.",
+      },
+      {
+        question: "What is eBay's International Fee and Currency Conversion Fee?",
+        answer:
+          "If a buyer is registered outside the US or uses a non-US credit card, eBay tacks on an extra 1.65% International Fee on the total order amount. If eBay converts currency for payouts, an additional 3.0% currency conversion charge applies.",
+      },
     ],
   },
 
@@ -431,6 +496,11 @@ export const MARKETPLACE_SEO_DATA: Record<Exclude<StoreId, "hub">, MarketplaceSe
         question: "How do I calculate Break-Even ROAS for Meta & Google Ads?",
         answer:
           "FeeSpotter calculates your exact Break-Even ROAS by dividing your selling price by your gross margin before advertising. If your result is 2.8x, your ad campaigns must generate at least $2.80 in revenue per $1.00 spent to break even.",
+      },
+      {
+        question: "When should I upgrade from Shopify Basic ($39) to the Shopify ($105) or Advanced ($399) plan?",
+        answer:
+          "The upgrade decision is pure math based on credit card fee rate savings. Basic charges 2.9% + 30¢, while the Shopify plan charges 2.7% + 30¢ (a 0.2% savings for an extra $66/month). You break even on upgrading to the $105 plan once your monthly gross revenue exceeds $33,000. Upgrading to Advanced (2.5%) breaks even once monthly revenue crosses $147,000.",
       },
     ],
   },

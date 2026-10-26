@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   DollarSign,
   TrendingDown,
@@ -69,7 +70,17 @@ import {
   DEFAULT_SHOPIFY_INPUTS,
 } from "@/lib/calculations";
 import { WaterfallChart } from "./WaterfallChart";
-import { BatchCsvAudit } from "./BatchCsvAudit";
+
+const BatchCsvAudit = dynamic(
+  () => import("./BatchCsvAudit").then((mod) => mod.BatchCsvAudit),
+  {
+    loading: () => (
+      <div className="p-12 text-center rounded-3xl border border-zinc-800 bg-zinc-950/60 animate-pulse text-zinc-400 text-sm">
+        Loading Batch Catalog Auditor...
+      </div>
+    ),
+  }
+);
 import { ProUpgradeModal } from "./ProUpgradeModal";
 import {
   EtsyEverbeeSponsorCard,
@@ -3199,7 +3210,8 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
           { label: "Referral Fee", value: res.breakdown.referralFee, note: `${(amazonInputs.referralFeeRate * 100).toFixed(0)}%` },
           { label: "FBA Pick & Pack Fee", value: res.breakdown.fulfillmentFee, note: amazonInputs.fulfillmentMode === "fba" ? "FBA" : "FBM" },
           { label: "Storage & Inbound Placement", value: res.breakdown.storageAndInboundFee, note: "Monthly per unit" },
-          { label: "Return & Damage Buffer", value: res.breakdown.returnLoss, note: "3.0%" },
+          ...(amazonInputs.adSpendPerSale > 0 ? [{ label: "Target Ad Spend (CAC)", value: res.breakdown.adSpend, note: "Per Order" }] : []),
+          { label: `Return & Damage Buffer (${(amazonInputs.returnRate * 100).toFixed(0)}%)`, value: res.breakdown.returnLoss, note: "Shrinkage & dispute reserve" },
           { label: "COGS", value: amazonInputs.cogs, isCost: true },
           ...(amazonInputs.fulfillmentMode === "fbm" ? [{ label: "Actual Postage", value: amazonInputs.actualShippingCost, isCost: true }] : []),
           { label: "Packaging", value: amazonInputs.packagingCost, isCost: true },
@@ -3245,6 +3257,7 @@ function ReverseTab({ platform, isPro, onOpenProModal }: ReverseTabProps) {
           { label: "Shopify Payments Processing", value: res.breakdown.paymentProcessingFee, note: `${shopifyInputs.planTier.toUpperCase()} + $0.30` },
           ...(shopifyInputs.adSpendPerSale > 0 ? [{ label: "Target Ad Spend (CAC)", value: res.breakdown.adSpend, note: "Per Order" }] : []),
           { label: "Apps & Plan Overhead", value: res.breakdown.subscriptionPerUnit + res.breakdown.appsPerUnit, note: "Per Unit" },
+          ...(shopifyInputs.returnRate > 0 ? [{ label: `Return Reserve (${(shopifyInputs.returnRate * 100).toFixed(0)}%)`, value: res.breakdown.returnLoss, note: "Dispute & return buffer" }] : []),
           { label: "COGS", value: shopifyInputs.cogs, isCost: true },
           { label: "Actual Postage", value: shopifyInputs.actualShippingCost, isCost: true },
           { label: "Packaging", value: shopifyInputs.packagingCost, isCost: true },
