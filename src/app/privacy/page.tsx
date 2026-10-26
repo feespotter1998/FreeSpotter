@@ -110,7 +110,7 @@ export default function PrivacyPage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-white">6. Affiliate Disclosure</h2>
             <p>
-              FeeSpotter participates in select partner and affiliate programs (including EverBee, TrueProfit, and Amazon Associates). Some links on this site may be affiliate links. If you click a sponsor card and choose to purchase a subscription or product, FeeSpotter may receive an affiliate commission at no additional cost to you. We strive to highlight reputable, battle-tested tools and services commonly utilized by marketplace sellers to maximize profitability.
+              FeeSpotter participates in select e-commerce software, analytics, and hardware affiliate programs (including PartnerStack, TrueProfit, Kalodata, EverBee, and Amazon Associates). Some links on this site may be affiliate links. If you click a sponsor card and choose to purchase a subscription or product, FeeSpotter may receive an affiliate commission at no additional cost to you. We strive to highlight reputable, battle-tested tools and services commonly utilized by marketplace sellers to maximize profitability.
             </p>
           </section>
 

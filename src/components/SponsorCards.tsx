@@ -31,7 +31,7 @@ export function EtsyEverbeeSponsorCard({ isPro = false }: SponsorProps = {}) {
             <Search className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[10px] font-black uppercase tracking-wider text-orange-400 bg-orange-950/90 px-2 py-0.5 rounded border border-orange-800/80">
                 Etsy Seller Tool
               </span>
@@ -79,7 +79,7 @@ export function EtsyThermalPrinterSponsorCard({ isPro = false }: SponsorProps = 
           <Printer className="w-4 h-4 text-emerald-400" />
         </div>
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">
               Essential Seller Hardware
             </span>
@@ -158,7 +158,7 @@ export function TrueProfitSponsorCard({
             <TrendingUp className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-950/90 px-2 py-0.5 rounded border border-emerald-800/80">
                 {badgeText}
               </span>

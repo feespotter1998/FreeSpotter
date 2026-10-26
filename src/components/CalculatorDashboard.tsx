@@ -1305,19 +1305,21 @@ function TikTokTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
           icon={<Percent className="w-4 h-4" />}
           negative={isNegative}
         />
-        <KpiCard
-          label="Break-Even ROAS"
-          value={result.breakEvenRoasDisplay}
-          subValue={
-            result.grossRevenue === 0
-              ? "Min target ROAS"
-              : result.breakEvenRoas
-              ? `Need ${result.breakEvenRoas.toFixed(2)}x on TikTok Ads`
-              : "Losing $ before ad spend"
-          }
-          icon={<Target className="w-4 h-4" />}
-          negative={result.grossRevenue > 0 && result.breakEvenRoas === null}
-        />
+        <div className="col-span-2 sm:col-span-1">
+          <KpiCard
+            label="Break-Even ROAS"
+            value={result.breakEvenRoasDisplay}
+            subValue={
+              result.grossRevenue === 0
+                ? "Min target ROAS"
+                : result.breakEvenRoas
+                ? `Need ${result.breakEvenRoas.toFixed(2)}x on TikTok Ads`
+                : "Losing $ before ad spend"
+            }
+            icon={<Target className="w-4 h-4" />}
+            negative={result.grossRevenue > 0 && result.breakEvenRoas === null}
+          />
+        </div>
       </div>
 
       {/* Viral Product Intelligence Tool (Hidden on Pro) */}
@@ -3892,7 +3894,7 @@ export default function CalculatorDashboard({
   }, [activeStore]);
 
   return (
-    <div className="min-h-dvh bg-transparent text-white flex flex-col selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-dvh bg-transparent text-white flex flex-col overflow-x-clip selection:bg-emerald-500 selection:text-black">
       {/* Ambient background glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px]" />
@@ -3915,7 +3917,7 @@ export default function CalculatorDashboard({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-emerald-400 transition-colors">
+                  <span className={`${activeStore !== "hub" ? "hidden sm:inline" : "inline"} text-base sm:text-lg font-black tracking-tight text-white group-hover:text-emerald-400 transition-colors`}>
                     FeeSpotter
                   </span>
                   <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-800/60 rounded-full">
@@ -3936,7 +3938,7 @@ export default function CalculatorDashboard({
                   onClick={() => setIsStoreMenuOpen(!isStoreMenuOpen)}
                   aria-expanded={isStoreMenuOpen}
                   aria-haspopup="true"
-                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700/80 hover:border-zinc-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-700/80 hover:border-zinc-500 text-xs font-bold text-white shadow-sm transition-all cursor-pointer whitespace-nowrap shrink-0"
                   aria-label="Switch Marketplace"
                 >
                   <span className="shrink-0">{currentStoreConfig.icon}</span>
@@ -4032,9 +4034,9 @@ export default function CalculatorDashboard({
           </div>
 
           {/* Launch Special & Pro Status */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             {isPro && isPromoActive && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs whitespace-nowrap shrink-0">
                 <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span className="hidden sm:inline">Pro Unlocked (Free Thru Dec 1)</span>
                 <span className="sm:hidden">Pro Active</span>
@@ -4042,7 +4044,7 @@ export default function CalculatorDashboard({
             )}
 
             {isPro && !isPromoActive && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 text-emerald-300 border border-emerald-700/60 font-bold text-xs shadow-xs whitespace-nowrap shrink-0">
                 <Crown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span>FeeSpotter Pro Active</span>
               </div>
@@ -4052,7 +4054,7 @@ export default function CalculatorDashboard({
               <button
                 type="button"
                 onClick={() => setIsProModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
               >
                 <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                 <span className="hidden sm:inline">Unlock Free Pro (Thru Dec 1)</span>
@@ -4064,7 +4066,7 @@ export default function CalculatorDashboard({
               <button
                 type="button"
                 onClick={() => setIsProModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
               >
                 <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                 <span>Upgrade to Pro ($5/mo)</span>
@@ -4072,12 +4074,12 @@ export default function CalculatorDashboard({
             )}
 
             {/* Clerk Authentication Controls */}
-            <div className="flex items-center gap-2 pl-2 border-l border-zinc-800/80 ml-1">
+            <div className="flex items-center gap-2 pl-2 border-l border-zinc-800/80 ml-1 shrink-0">
               <Show when="signed-out">
                 <SignInButton mode="modal">
                   <button
                     type="button"
-                    className="px-3 py-1.5 rounded-xl text-xs font-bold text-zinc-300 hover:text-white bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/70 transition-all cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl text-xs font-bold text-zinc-300 hover:text-white bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700/70 transition-all cursor-pointer whitespace-nowrap shrink-0"
                   >
                     Sign In
                   </button>
@@ -4118,23 +4120,23 @@ export default function CalculatorDashboard({
           /* VIEW 2: DEDICATED STORE WORKSPACE */
           <div className="space-y-6">
             {/* Store Header & Sub-Navigation */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-800/80">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-zinc-800/80 w-full min-w-0">
+              <div className="flex items-start sm:items-center gap-3 min-w-0">
                 <Link
                   href="/"
                   prefetch={true}
-                  className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
+                  className="p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer shrink-0 mt-0.5 sm:mt-0"
                   title="Back to All Marketplaces"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </Link>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h1 className="text-lg sm:text-2xl font-black text-white tracking-tight">
                       {currentStoreConfig.h1Title || currentStoreConfig.name}
                     </h1>
                     <span
-                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${currentStoreConfig.badgeColor}`}
+                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0 ${currentStoreConfig.badgeColor}`}
                     >
                       {currentStoreConfig.badge}
                     </span>
@@ -4146,7 +4148,7 @@ export default function CalculatorDashboard({
               </div>
 
               {/* Sub-Tab Navigation for Selected Store */}
-              <div className="flex items-center gap-1 p-1 bg-zinc-900/90 border border-zinc-800 rounded-xl overflow-x-auto no-scrollbar shadow-inner self-start sm:self-auto">
+              <div className="flex items-center gap-1 p-1 bg-zinc-900/90 border border-zinc-800 rounded-xl overflow-x-auto no-scrollbar shadow-inner w-full sm:w-auto max-w-full shrink-0">
                 <button
                   type="button"
                   onClick={() => setActiveSubTab("calculator")}
