@@ -1123,6 +1123,7 @@ export function BatchCsvAudit({
             <div className="flex items-center gap-2">
               <span className="text-zinc-400">Offsite Ads:</span>
               <select
+                aria-label="Etsy Offsite Ads Rate"
                 value={etsyOffsiteAdsRate}
                 onChange={(e) => {
                   const val = parseFloat(e.target.value) as 0 | 0.12 | 0.15;
@@ -1167,6 +1168,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Affiliate:</span>
                 <select
+                  aria-label="TikTok Creator Affiliate Commission Rate"
                   value={tiktokCommissionRate}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1210,6 +1212,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Return Rate:</span>
                 <select
+                  aria-label="TikTok Return Rate"
                   value={tiktokReturnRate}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1255,6 +1258,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Final Value Fee:</span>
                 <select
+                  aria-label="eBay Final Value Fee Rate"
                   value={ebayFvfRate}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1301,6 +1305,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Promoted Listings:</span>
                 <select
+                  aria-label="eBay Promoted Listings Rate"
                   value={ebayPromotedRate}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1350,6 +1355,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Plan Tier:</span>
                 <select
+                  aria-label="Shopify Plan Tier"
                   value={shopifyPlanTier}
                   onChange={(e) => {
                     const val = e.target.value as "basic" | "shopify" | "advanced";
@@ -1395,6 +1401,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Ad CAC:</span>
                 <select
+                  aria-label="Shopify Ad CAC"
                   value={shopifyAdSpend}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1444,6 +1451,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">Referral:</span>
                 <select
+                  aria-label="Amazon Referral Rate"
                   value={amazonReferralRate}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1493,6 +1501,7 @@ export function BatchCsvAudit({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-400">FBA Size:</span>
                 <select
+                  aria-label="Amazon FBA Size Tier"
                   value={amazonFbaFee}
                   onChange={(e) => {
                     const val = parseFloat(e.target.value);
@@ -1544,11 +1553,20 @@ export function BatchCsvAudit({
 
       {/* Upload Zone */}
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="Upload inventory CSV file"
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            fileInputRef.current?.click();
+          }
+        }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-3 ${
+        className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-3 focus:outline-none focus:border-emerald-500 ${
           isDragging
             ? "border-emerald-400 bg-emerald-950/20 scale-[1.01]"
             : "border-zinc-800 bg-zinc-900/40 hover:bg-zinc-900/70 hover:border-zinc-700"
@@ -1778,6 +1796,7 @@ export function BatchCsvAudit({
               <div className="inline-flex bg-zinc-900 p-1 rounded-xl border border-zinc-800">
                 <button
                   onClick={() => setViewMode("cards")}
+                  aria-label="Card View (Mobile Friendly)"
                   className={`p-1.5 rounded-lg transition-all ${
                     viewMode === "cards"
                       ? "bg-zinc-800 text-white"
@@ -1789,6 +1808,7 @@ export function BatchCsvAudit({
                 </button>
                 <button
                   onClick={() => setViewMode("table")}
+                  aria-label="Table View (Full Columns)"
                   className={`p-1.5 rounded-lg transition-all ${
                     viewMode === "table"
                       ? "bg-zinc-800 text-white"

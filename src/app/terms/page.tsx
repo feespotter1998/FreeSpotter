@@ -20,6 +20,7 @@ export const metadata: Metadata = {
       "FeeSpotter Terms of Service and user agreement. Review our terms of use, financial estimate disclaimers, and liability policies.",
     url: `${siteUrl}/terms`,
     siteName: "FeeSpotter",
+    images: [`${siteUrl}/og-image.png`],
     type: "website",
   },
   twitter: {
@@ -27,12 +28,13 @@ export const metadata: Metadata = {
     title: "Terms of Service | FeeSpotter",
     description:
       "FeeSpotter Terms of Service and user agreement. Review our terms of use, financial estimate disclaimers, and liability policies.",
+    images: [`${siteUrl}/og-image.png`],
   },
 };
 
 export default function TermsPage() {
   return (
-    <div className="min-h-dvh bg-[#07080a] text-white flex flex-col selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-dvh bg-transparent text-white flex flex-col selection:bg-emerald-500 selection:text-black">
       {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-zinc-950/85 border-b border-zinc-800/80">
         <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">

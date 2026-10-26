@@ -69,7 +69,17 @@ import {
   DEFAULT_EBAY_INPUTS,
   DEFAULT_SHOPIFY_INPUTS,
 } from "@/lib/calculations";
-import { WaterfallChart } from "./WaterfallChart";
+const WaterfallChart = dynamic(
+  () => import("./WaterfallChart").then((mod) => mod.WaterfallChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-64 sm:h-80 flex items-center justify-center bg-zinc-900/30 rounded-xl border border-zinc-800/40 animate-pulse">
+        <span className="text-xs text-zinc-400 font-medium">Loading Profit Waterfall...</span>
+      </div>
+    ),
+  }
+);
 
 const BatchCsvAudit = dynamic(
   () => import("./BatchCsvAudit").then((mod) => mod.BatchCsvAudit),
@@ -1792,7 +1802,7 @@ function AmazonTab({ isPro, onOpenProModal }: { isPro: boolean; onOpenProModal: 
                 {(inputs.referralFeeRate * 100).toFixed(0)}%
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {[
                 { label: "15% Standard", rate: 0.15, note: "Home/Beauty" },
                 { label: "8% Electronics", rate: 0.08, note: "Devices" },
@@ -3877,7 +3887,7 @@ export default function CalculatorDashboard({
   }, [activeStore]);
 
   return (
-    <div className="min-h-dvh bg-[#09090b] text-white flex flex-col selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-dvh bg-transparent text-white flex flex-col selection:bg-emerald-500 selection:text-black">
       {/* Ambient background glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px]" />

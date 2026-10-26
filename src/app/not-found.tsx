@@ -52,7 +52,7 @@ export default function NotFound() {
   ];
 
   return (
-    <div className="min-h-dvh bg-[#09090b] text-white flex flex-col selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-dvh bg-transparent text-white flex flex-col selection:bg-emerald-500 selection:text-black">
       {/* Top Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-zinc-950/85 border-b border-zinc-800/80">
         <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">

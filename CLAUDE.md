@@ -1,15 +1,15 @@
-# TrueMargin — Architecture Rules
+# FeeSpotter — Architecture Rules
 
 ## Project Overview
-TrueMargin is a marketplace seller profit calculator & audit SaaS for Etsy and TikTok Shop sellers.
+FeeSpotter (feespotter.com) is a multi-marketplace seller profit calculator & audit SaaS for Etsy, TikTok Shop, Amazon FBA, eBay, and Shopify sellers.
 
 ## Tech Stack
-- **Framework:** Next.js 15 (App Router), TypeScript, Tailwind CSS
+- **Framework:** Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS v4
+- **Auth:** Clerk (@clerk/nextjs)
 - **Icons:** Lucide React
 - **Charts:** Recharts (Waterfall breakdown charts)
 - **CSV Parsing:** PapaParse
-- **PDF Generation:** jsPDF + jspdf-autotable
-- **Backend & Auth:** Supabase (Auth + PostgreSQL)
+- **PDF Generation:** jsPDF + jspdf-autotable (dynamic import on-demand)
 
 ## Architectural Rules
 

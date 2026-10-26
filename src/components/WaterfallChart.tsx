@@ -47,7 +47,8 @@ function getShortLabel(name: string): string {
   if (name.includes("COGS")) return "COGS";
   if (name.includes("Shipping Cost") || name.includes("Actual Shipping")) return "Shipping";
   if (name.includes("Packaging")) return "Packaging";
-  if (name.includes("Referral")) return "Ref. 6%";
+  if (name.includes("Referral Fee (6%)")) return "Ref. 6%";
+  if (name.includes("Referral")) return "Referral";
   if (name.includes("Affiliate")) return "Affiliate";
   if (name.includes("Ad Spend")) return "Ad Spend";
   if (name.includes("Return")) return "Returns";

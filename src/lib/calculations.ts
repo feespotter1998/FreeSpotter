@@ -2362,73 +2362,52 @@ export function compareAllMarketplaces(
   } = inputs;
 
   const etsy = calculateEtsyProfit({
+    ...DEFAULT_ETSY_INPUTS,
     sellingPrice,
     cogs,
     shippingCharged,
     actualShippingCost,
     packagingCost,
     miscCost,
-    offsiteAdsRate: 0,
-    quantity: 1,
-    monthlyVolume: 100,
   });
 
   const tiktok = calculateTikTokProfit({
+    ...DEFAULT_TIKTOK_INPUTS,
     sellingPrice,
     cogs,
     shippingCost: actualShippingCost,
     packagingCost,
     miscCost,
-    affiliateCommissionRate: 0.1, // 10% standard creator affiliate
-    adSpendPerSale: 0,
-    returnRate: 0.03,
-    monthlyVolume: 100,
   });
 
   const amazon = calculateAmazonProfit({
+    ...DEFAULT_AMAZON_INPUTS,
     sellingPrice,
     cogs,
-    fulfillmentMode: "fba",
-    referralFeeRate: 0.15,
-    fbaFee: 4.75,
-    storageAndInboundFee: 0.65,
-    shippingCharged: 0,
+    shippingCharged,
     actualShippingCost,
     packagingCost,
     miscCost,
-    adSpendPerSale: 0,
-    returnRate: 0.03,
-    monthlyVolume: 100,
   });
 
   const ebay = calculateEbayProfit({
+    ...DEFAULT_EBAY_INPUTS,
     sellingPrice,
     cogs,
     shippingCharged,
     actualShippingCost,
     packagingCost,
     miscCost,
-    finalValueFeeRate: 0.136,
-    promotedListingRate: 0.03,
-    storeSubscriptionMonthlyCost: 21.95,
-    insertionFee: 0,
-    returnRate: 0.03,
-    monthlyVolume: 100,
   });
 
   const shopify = calculateShopifyProfit({
+    ...DEFAULT_SHOPIFY_INPUTS,
     sellingPrice,
     cogs,
     shippingCharged,
     actualShippingCost,
     packagingCost,
     miscCost,
-    planTier: "basic",
-    isThirdPartyPaymentGateway: false,
-    monthlyAppsCost: 89,
-    adSpendPerSale: 0,
-    returnRate: 0.04,
-    monthlyVolume: 100,
   });
 
   const rawPlatforms: Omit<PlatformRankItem, "rank" | "isBest">[] = [

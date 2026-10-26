@@ -28,6 +28,7 @@ export const metadata: Metadata = {
       "FeeSpotter gives Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a deterministic calculator to expose hidden fees and protect net profit.",
     url: `${siteUrl}/about`,
     siteName: "FeeSpotter",
+    images: [`${siteUrl}/og-image.png`],
     type: "website",
   },
   twitter: {
@@ -35,12 +36,13 @@ export const metadata: Metadata = {
     title: "About FeeSpotter — Multi-Marketplace Profit Auditor",
     description:
       "FeeSpotter gives Etsy, TikTok Shop, Amazon, eBay, and Shopify sellers a deterministic calculator to expose hidden fees and protect net profit.",
+    images: [`${siteUrl}/og-image.png`],
   },
 };
 
 export default function AboutPage() {
   return (
-    <div className="min-h-dvh bg-[#09090b] text-white flex flex-col selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-dvh bg-transparent text-white flex flex-col selection:bg-emerald-500 selection:text-black">
       {/* Ambient background glow */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[120px]" />
